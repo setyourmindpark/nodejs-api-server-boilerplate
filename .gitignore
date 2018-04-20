@@ -1,0 +1,41 @@
+# OS X
+.DS_Store*
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+*~
+
+# npm
+node_modules
+
+*.gz
+
+#log
+*.log
+log/*
+
+# Coveralls
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+#upload
+app/public/upload/**
+!app/public/upload/jaehunpark.jpeg
+
+#env
+env/*.env
+
+#docker image
+*-*.*
+
+#docker env
+docker.env
