@@ -42,7 +42,7 @@ async function initialize(){
             }            
         });       
         
-        app.use(express.static(__dirname + '/static'));        
+        app.use(express.static(__dirname + '/public'));        
         app.use((req, res, next) => {
             response.notFoundResponse(res);
         });
