@@ -1,5 +1,5 @@
-const auth = reqlib('/app/base/auth');
-const assistant = reqlib('/app/base/assistant')
+const authorizer = reqlib('/base/authorizer');
+const assistant = reqlib('/base/assistant')
 const router = require('express').Router();
 const userCtrl = require('./user.ctrl');
 
@@ -45,7 +45,7 @@ router.post(
 
 router.post(
     '/new/token',
-    auth.refreshTokenIsAuthenticated(),
+    authorizer.refreshTokenIsAuthenticated(),
     assistant.validate({
         body: {
             accesstoken: { require: true, v_type: 'any'}            
@@ -57,7 +57,7 @@ router.post(
 
 router.get(
     '/info',
-    auth.accessTokenIsAuthenticated(),
+    authorizer.accessTokenIsAuthenticated(),
     assistant.unifyAllProps(),
     userCtrl.info
 );

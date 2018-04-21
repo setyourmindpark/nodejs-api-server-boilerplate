@@ -1,14 +1,14 @@
 const rootPath = require('app-root-path');
 global.reqlib = rootPath.require;
-const conf = reqlib('/app/conf');
+const config = reqlib('/config');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const app = reqlib('/app');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const queryHelper = reqlib('/app/base/queryHelper');
-const loggerHelper = reqlib('/app/base/logger');
+const queryHelper = reqlib('/base/queryHelper');
+const loggerHelper = reqlib('/base/logger');
 
 (async () => {
     await init();
@@ -16,7 +16,7 @@ const loggerHelper = reqlib('/app/base/logger');
 
 async function init() {
     try {
-        const env = conf.env;
+        const env = config.env;
         const master = cluster.isMaster;
         global.logger = await loggerHelper.getLogger();
 
@@ -41,7 +41,7 @@ async function init() {
             }
 
         } else {
-            const apiServer = http.createServer(app).listen(conf.context.port);
+            const apiServer = http.createServer(app).listen(config.context.port);
             apiServer.on('error', (err) => {
                 throw err;
             });

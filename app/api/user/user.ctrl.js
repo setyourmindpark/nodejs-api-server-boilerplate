@@ -1,9 +1,8 @@
-const queryHelper = reqlib('/app/base/queryHelper');
+const queryHelper = reqlib('/base/queryHelper');
 const userSql = reqlib('/app/model/sql/user.sql');
-const response = reqlib('/app/base/response');
-const constant = reqlib('/app/base/constant');
-const conf = reqlib("/app/conf");
-const auth = reqlib('/app/base/auth');
+const response = reqlib('/base/response');
+const constant = reqlib('/base/constant');
+const authorizer = reqlib('/base/authorizer');
 
 exports.checkEmail = async (req, res, next) => {
     try {
@@ -73,8 +72,8 @@ exports.login = async (req, res, next) => {
             msg: 'logined, take care this token',
             code: constant.CODE_SERVICE_PROCESS_1,
             data: {
-                accesstoken: auth.generateAccessToken(tokenBody),
-                refreshtoken: auth.generateRefreshToken(tokenBody)
+                accesstoken: authorizer.generateAccessToken(tokenBody),
+                refreshtoken: authorizer.generateRefreshToken(tokenBody)
             }
         });
     } catch (err) {
@@ -87,7 +86,7 @@ exports.newToken = async ( req, res, next ) => {
         const { accesstoken, id } = req.prop;
 
         try{
-            const decoded = auth.decodeAccessToken(accesstoken);
+            const decoded = authorizer.decodeAccessToken(accesstoken);
 
             if (decoded.id !== id){
                 const error = new Error(constant.JWT_NOT_MATCH_TWO_TOKEN.msg);
@@ -100,8 +99,8 @@ exports.newToken = async ( req, res, next ) => {
                 msg: 'take care this token',
                 code: constant.CODE_SERVICE_PROCESS_1,
                 data: {                    
-                    accesstoken: auth.generateAccessToken(tokenBody),
-                    refreshtoken: auth.generateRefreshToken(tokenBody)
+                    accesstoken: authorizer.generateAccessToken(tokenBody),
+                    refreshtoken: authorizer.generateRefreshToken(tokenBody)
                 }
             });
         }catch(err){
