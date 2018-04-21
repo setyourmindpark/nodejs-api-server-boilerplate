@@ -1,3 +1,6 @@
+
+exports.initialize = initialize;
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -9,8 +12,8 @@ const queryHelper = reqlib('/base/queryHelper');
 const authorizer = reqlib('/base/authorizer');
 const env = config.env;
 
-(async() => {
-    try{
+async function initialize(){
+    try {
         // service module initialize. initialize module you want to use.    
         await queryHelper.initialize();
         authorizer.initialize();
@@ -41,10 +44,9 @@ const env = config.env;
         app.use((req, res, next) => {
             response.notFoundResponse(res);
         });
-    }catch(err){
+
+        return app;
+    } catch (err) {
         throw err;
     }
-})();
-
-
-module.exports = app;
+}

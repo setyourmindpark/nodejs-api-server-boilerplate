@@ -17,8 +17,8 @@ const master = cluster.isMaster;
         // system module initialize        
         loggerHelper.initialize();
         global.logger = await loggerHelper.getLogger();        
-        const app = reqlib('/app');
-
+        
+        const app = await reqlib('/app').initialize();
         if (master) {
             cluster.on('online', (worker) => {
                 //logger.info('생성된 워커의 아이디 : ' + worker.process.pid);
