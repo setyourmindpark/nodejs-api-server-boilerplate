@@ -12,7 +12,6 @@ const bytes = require('bytes');
 const checker = require('./checker');
 const moment = require('moment');
 const fs = require('fs');
-const file = require('./file');
 const Busboy = require('busboy');
 
 //숫자만 존재하는지 체크

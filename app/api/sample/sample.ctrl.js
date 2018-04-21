@@ -1,6 +1,6 @@
 const queryHelper = reqlib('/base/queryHelper');
 const smplSql = reqlib('/app/model/sql/smpl.sql');
-const response = reqlib('/base/response');
+const response = reqlib('/base/common/response');
 const constant = reqlib('/base/constant');
 const config = reqlib('/config');
 

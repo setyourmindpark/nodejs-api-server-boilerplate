@@ -4,7 +4,7 @@ const app = express();
 const config = reqlib('/config');
 const constant = reqlib('/base/constant');
 const rootPath = require('app-root-path').path;
-const response = reqlib('/base/response');
+const response = reqlib('/base/common/response');
 const env = config.env;
 
 //cross doamin handling

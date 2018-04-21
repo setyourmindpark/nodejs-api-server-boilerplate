@@ -16,7 +16,7 @@ exports.unifyAllProps = unifyAllProps;
 const validator = require('./validator');
 const uploader = require('./uploader');
 const constant = reqlib('/base/constant');
-const response = reqlib('/base/response');
+const response = reqlib('/base/common/response');
 
 /**
 * 유효성검사를 수행
