@@ -9,6 +9,8 @@ const constant = reqlib('/base/common/constant');
 const response = reqlib('/base/common/response');
 const queryHelper = reqlib('/base/queryHelper');
 const authorizer = reqlib('/base/authorizer');
+//const shell = require('shelljs');
+const toRouteRouters = reqlib('/app/api');
 const env = config.env;
 
 async function initialize(){
@@ -32,13 +34,15 @@ async function initialize(){
 
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
-
-        app.use('/swagger', reqlib('/app/api/swagger/router'));     // swagger는 dev mode일때만 사용할것 .
-        app.use('/api/sample', reqlib('/app/api/sample/router'));
-        app.use('/api/user', reqlib('/app/api/user/router'));
-
-        app.use(express.static(__dirname + '/static'));
+        const { routers, commonRoute } = toRouteRouters;
+        routers.forEach(({ customRoute, toRoute, folder, router, activate }) => {
+            if (activate){
+                const callRoute = customRoute ? customRoute : commonRoute + toRoute;
+                app.use(callRoute, reqlib('/app/api' + folder + router));                
+            }            
+        });       
         
+        app.use(express.static(__dirname + '/static'));        
         app.use((req, res, next) => {
             response.notFoundResponse(res);
         });
