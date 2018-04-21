@@ -7,8 +7,6 @@ const https = require('https');
 const http = require('http');
 const cluster = require('cluster');
 const loggerHelper = reqlib('/base/logger');
-const queryHelper = reqlib('/base/queryHelper');
-const authorizer = reqlib('/base/authorizer');
 const numCPUs = require('os').cpus().length;
 const port = config.context.port;
 const env = config.env;
@@ -16,11 +14,9 @@ const master = cluster.isMaster;
 
 (async () => {    
     try {
-        // initialize module you want to use.
+        // system module initialize        
         loggerHelper.initialize();
-        global.logger = await loggerHelper.getLogger();
-        await queryHelper.initialize();
-        authorizer.initialize();
+        global.logger = await loggerHelper.getLogger();        
         const app = reqlib('/app');
 
         if (master) {
