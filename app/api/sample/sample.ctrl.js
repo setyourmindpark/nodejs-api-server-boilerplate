@@ -101,12 +101,12 @@ exports.remove = (req, res, next) => {
 exports.getPI = async (req, res, next) => {
     try {
         const { where, pageNo } = req.prop;
-        const { recordCountPerPage, paegSize } = config.setting.pagenation;
+        const { recordCountPerPage, pageSize } = config.setting.pagenation;        
         const data = {
             where: where,
-            pageNo: parseInt(pageNo),
-            recordCountPerPage: parseInt(recordCountPerPage),   // 없으면 default 10으로 동작
-            pageSize: parseInt(paegSize)                        // 없으면 default 10으로 동작
+            pageNo: pageNo,
+            recordCountPerPage: recordCountPerPage,   // 없으면 default 10으로 동작
+            pageSize: pageSize                        // 없으면 default 10으로 동작
         };
         response.apiResponse(res, {
             code: constant.CODE_SERVICE_PROCESS_1,
@@ -120,12 +120,12 @@ exports.getPI = async (req, res, next) => {
 exports.getPR = async (req, res, next) => {
     try {
         const { where, pageNo } = req.prop;
-        const { recordCountPerPage, paegSize } = config.setting.pagenation;
+        const { recordCountPerPage, pageSize } = config.setting.pagenation;
         const data = {
             where: where,
-            pageNo: parseInt(pageNo),
-            recordCountPerPage: parseInt(recordCountPerPage),   // 없으면 default 10으로 동작
-            pageSize: parseInt(paegSize)                        // 없으면 default 10으로 동작
+            pageNo: pageNo,
+            recordCountPerPage: recordCountPerPage,   // 없으면 default 10으로 동작
+            pageSize: pageSize                        // 없으면 default 10으로 동작
         };
         response.apiResponse(res, {
             code: constant.CODE_SERVICE_PROCESS_1,
@@ -139,12 +139,12 @@ exports.getPR = async (req, res, next) => {
 exports.getPIWithPR = async (req, res, next) => {
     try {
         const { where, pageNo } = req.prop;
-        const { recordCountPerPage, paegSize } = config.setting.pagenation;
+        const { recordCountPerPage, pageSize } = config.setting.pagenation;
         const data = {
             where: where,
-            pageNo: parseInt(pageNo),
-            recordCountPerPage: parseInt(recordCountPerPage),   // 없으면 default 10으로 동작
-            pageSize: parseInt(paegSize)                        // 없으면 default 10으로 동작
+            pageNo: pageNo,
+            recordCountPerPage: recordCountPerPage,   // 없으면 default 10으로 동작
+            pageSize: pageSize                        // 없으면 default 10으로 동작
         };
         response.apiResponse(res, {
             code: constant.CODE_SERVICE_PROCESS_1,
