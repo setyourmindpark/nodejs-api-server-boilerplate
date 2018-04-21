@@ -1,7 +1,7 @@
 
 exports.createModule = createModule;
 
-const constant = reqlib('/base/constant');
+const constant = reqlib('/base/common/constant');
 const jwt = require('jsonwebtoken');
 const response = reqlib('/base/common/response');
 

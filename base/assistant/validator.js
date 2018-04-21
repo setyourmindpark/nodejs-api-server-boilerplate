@@ -7,7 +7,7 @@ exports.validateQuery = validateQuery;
 exports.validateBody = validateBody;
 exports.validateMultipart = validateMultipart;
 
-const constant = reqlib('/base/constant')
+const constant = reqlib('/base/common/constant');
 const bytes = require('bytes');
 const checker = require('./checker');
 const moment = require('moment');

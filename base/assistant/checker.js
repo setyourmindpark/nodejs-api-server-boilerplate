@@ -1,5 +1,5 @@
 
-const constant = reqlib('/base/constant');
+const constant = reqlib('/base/common/constant');
 
 /**
 * 이메일 패턴유효성 검사 수행

@@ -1,7 +1,7 @@
 const queryHelper = reqlib('/base/queryHelper');
 const smplSql = reqlib('/app/model/sql/smpl.sql');
 const response = reqlib('/base/common/response');
-const constant = reqlib('/base/constant');
+const constant = reqlib('/base/common/constant');
 const config = reqlib('/config');
 
 exports.select1 = (req, res, next) => {

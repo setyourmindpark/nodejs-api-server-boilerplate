@@ -1,7 +1,7 @@
 const queryHelper = reqlib('/base/queryHelper');
 const userSql = reqlib('/app/model/sql/user.sql');
 const response = reqlib('/base/common/response');
-const constant = reqlib('/base/constant');
+const constant = reqlib('/base/common/constant');
 const authorizer = reqlib('/base/authorizer');
 
 exports.checkEmail = async (req, res, next) => {

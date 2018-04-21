@@ -3,7 +3,7 @@ exports.apiResponse = apiResponse;
 exports.apiErrResponse = apiErrResponse;
 exports.notFoundResponse = notFoundResponse;
 
-const constant = reqlib('/base/constant');
+const constant = reqlib('/base/common/constant');
 
 // contoller에서 처리된 response body 에 실어서보낼 데이터들을 response
 // 예측할수있는 에러에대한 정보까지 이곳에서 처리한다. default는 constant.CODE_PROCESS_JOB_WELL_DONE
