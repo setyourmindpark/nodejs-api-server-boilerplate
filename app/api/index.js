@@ -1,3 +1,6 @@
+const config = reqlib('/config');
+const env = config.env;
+
 module.exports = {
     commonRoute : '/api',
     routers : [
@@ -5,7 +8,7 @@ module.exports = {
             customRoute: '/swagger',
             folder : '/swagger',
             router : '/router.js',
-            activate : true
+            activate : env === 'dev' ? true : false
         },
         {
             toRoute: '/sample',

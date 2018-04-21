@@ -11,7 +11,6 @@ const authorizer = reqlib('/base/authorizer');
 const queryHelper = reqlib('/base/queryHelper');
 const sequelize = reqlib('/base/sequelize');
 const toRouteRouters = reqlib('/app/api');
-const env = config.env;
 
 async function initialize(){
     await initializeModule();
@@ -27,6 +26,9 @@ async function initializeModule(){
     await sequelize.initialize();
     authorizer.initialize();    
     const sequelizeModule = sequelize.getSequelize();
+    // 여기서 sequelize 객체연결할것 ..
+
+
 }
 
 function initializeProtocol(){
