@@ -1,30 +1,29 @@
 const rootPath = require('app-root-path');
 global.reqlib = rootPath.require;
+
 const config = reqlib('/config');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
-const app = reqlib('/app');
 const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
-const queryHelper = reqlib('/base/queryHelper');
 const loggerHelper = reqlib('/base/logger');
+const queryHelper = reqlib('/base/queryHelper');
+const authorizer = reqlib('/base/authorizer');
+const numCPUs = require('os').cpus().length;
+const port = config.context.port;
+const env = config.env;
+const master = cluster.isMaster;   
 
-(async () => {
-    await init();
-})();
-
-async function init() {
+(async () => {    
     try {
-        const env = config.env;
-        const master = cluster.isMaster;
+        // initialize module you want to use.
+        loggerHelper.initialize();
         global.logger = await loggerHelper.getLogger();
+        await queryHelper.initialize();
+        authorizer.initialize();
+        const app = reqlib('/app');
 
         if (master) {
-            const whatTimeIs = await queryHelper.execute({ query: 'SELECT NOW() AS now FROM DUAL', expect: 'single' });
-            const now = whatTimeIs.now;
-            logger.info('Hello There ! | ' + now);
-
             cluster.on('online', (worker) => {
                 //logger.info('생성된 워커의 아이디 : ' + worker.process.pid);
             });
@@ -41,7 +40,7 @@ async function init() {
             }
 
         } else {
-            const apiServer = http.createServer(app).listen(config.context.port);
+            const apiServer = http.createServer(app).listen(port);
             apiServer.on('error', (err) => {
                 throw err;
             });
@@ -50,4 +49,5 @@ async function init() {
         console.log(err);
         process.exit(1)
     }
-}
+
+})()

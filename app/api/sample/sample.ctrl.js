@@ -1,5 +1,5 @@
 const queryHelper = reqlib('/base/queryHelper');
-const smplSql = reqlib('/app/model/sql/smpl.sql');
+const sampleSql = reqlib('/app/model/queryHelper/sample.sql');
 const response = reqlib('/base/common/response');
 const constant = reqlib('/base/common/constant');
 const config = reqlib('/config');
@@ -110,7 +110,7 @@ exports.getPI = async (req, res, next) => {
         };
         response.apiResponse(res, {
             code: constant.CODE_SERVICE_PROCESS_1,
-            pagenationInfo: await queryHelper.executePI({ query: smplSql.examplePagenationCnt, data: data })
+            pagenationInfo: await queryHelper.executePI({ query: sampleSql.examplePagenationCnt, data: data })
         });
     } catch (err) {
         response.apiErrResponse(res, err);
@@ -129,7 +129,7 @@ exports.getPR = async (req, res, next) => {
         };
         response.apiResponse(res, {
             code: constant.CODE_SERVICE_PROCESS_1,
-            data: await queryHelper.executePR({ query: smplSql.examplePagenation, data: data })
+            data: await queryHelper.executePR({ query: sampleSql.examplePagenation, data: data })
         });
     } catch (err) {
         response.apiErrResponse(res, err);
@@ -148,8 +148,8 @@ exports.getPIWithPR = async (req, res, next) => {
         };
         response.apiResponse(res, {
             code: constant.CODE_SERVICE_PROCESS_1,
-            pagenationInfo: await queryHelper.executePI({ query: smplSql.examplePagenationCnt, data: data }),
-            data: await queryHelper.executePR({ query: smplSql.examplePagenation, data: data })
+            pagenationInfo: await queryHelper.executePI({ query: sampleSql.examplePagenationCnt, data: data }),
+            data: await queryHelper.executePR({ query: sampleSql.examplePagenation, data: data })
         });
     } catch (err) {
         response.apiErrResponse(res, err);
@@ -163,9 +163,9 @@ exports.transaction = async (req, res, next) => {
             code: constant.CODE_SERVICE_PROCESS_1,
             data: await queryHelper.transaction(
                 [
-                    { query: smplSql.transaction, data: { id: null, col1: 'a', col2: 'b', col3: 'c', col4: 'd', col5: 'e' }, expect: 'single' }
-                    , { query: smplSql.transaction, data: { id: null, col1: 'a', col2: 'b', col3: 'c', col4: 'd', col5: 'e' }, expect: 'single' }
-                    , { query: smplSql.transaction, data: { id: null, col1: 'a', col2: 'b', col3: 'c', col4: 'd', col5: 'e' }, expect: 'single' }
+                    { query: sampleSql.transaction, data: { id: null, col1: 'a', col2: 'b', col3: 'c', col4: 'd', col5: 'e' }, expect: 'single' }
+                    , { query: sampleSql.transaction, data: { id: null, col1: 'a', col2: 'b', col3: 'c', col4: 'd', col5: 'e' }, expect: 'single' }
+                    , { query: sampleSql.transaction, data: { id: null, col1: 'a', col2: 'b', col3: 'c', col4: 'd', col5: 'e' }, expect: 'single' }
                 ]
             )
         });

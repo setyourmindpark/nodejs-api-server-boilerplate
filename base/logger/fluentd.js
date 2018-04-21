@@ -1,26 +1,25 @@
 const winston = require('winston');
 const config = reqlib('/config');
-
 exports.getLogger = getLogger;
 
 async function getLogger() {
-    try {
-        const fluentdConfig = config.setting.logger.fluentd;        
-        const { level, tag, host } = fluentdConfig;
-        const port = parseInt(fluentdConfig.port);
-        const timeout = parseInt(fluentdConfig.timeout);
+    try {        
+        const settingConfig = config.setting.logger.fluentd;         
+        const { level, tag, host, port, timeout} = settingConfig;
+        const toNumPort = parseInt(port);
+        const toNumTimeout = parseInt(timeout);
 
-        await isConnected(tag, host, port, timeout);
-        const config = {
+        await isConnected(tag, host, toNumPort, toNumTimeout);
+        const flunetdConfig = {
             host: host,
-            port: port,
-            timeout: timeout,
+            port: toNumPort,
+            timeout: toNumTimeout,
             requireAckResponse: true // Add this option to wait response from Fluentd certainly
         };
         const fluentTransport = require('fluent-logger').support.winstonTransport();
         const logger = new (winston.Logger)({
             level: level,            // error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
-            transports: [new fluentTransport(tag, config), new (winston.transports.Console)()]
+            transports: [new fluentTransport(tag, flunetdConfig), new (winston.transports.Console)()]
         });
         return logger;
     } catch (err) {

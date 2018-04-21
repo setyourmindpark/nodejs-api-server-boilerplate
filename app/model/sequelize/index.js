@@ -1,0 +1,1 @@
+// to query using sequelize module. so you have to query model in here
