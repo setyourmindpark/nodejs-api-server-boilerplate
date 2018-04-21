@@ -7,13 +7,14 @@ exports.executePR = executePR;
 const config = reqlib('/config');
 const mysql = require('./mysql');
 const type = config.context.db;
-let mainDbModile = undefined;
+let mainDbModule = undefined;
 
+// db가 여러개일경우 함수 추가하고 module명 새롭게 정의하여 createModule하면됨 .
 async function initialize() {
     if (type === 'mysql') {
-        try{
+        try{            
             const mysqlConfig = config.setting.db.mysql;
-            mainDbModile = mysql.createModule(mysqlConfig);
+            mainDbModule = mysql.createModule(mysqlConfig);
             await execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })
         }catch(err){
             throw err;
@@ -22,17 +23,17 @@ async function initialize() {
 }
 
 function execute(...args) {
-    return mainDbModile.execute(args[0], args[1], args[2], args[3], args[4]);
+    return mainDbModule.execute(args[0], args[1], args[2], args[3], args[4]);
 }
 
 function transaction(...args) {
-    return mainDbModile.transaction(args[0], args[1], args[2], args[3], args[4]);
+    return mainDbModule.transaction(args[0], args[1], args[2], args[3], args[4]);
 }
 
 function executePI(...args) {
-    return mainDbModile.executePI(args[0], args[1], args[2], args[3], args[4]);
+    return mainDbModule.executePI(args[0], args[1], args[2], args[3], args[4]);
 }
 
 function executePR(...args) {
-    return mainDbModile.executePR(args[0], args[1], args[2], args[3], args[4]);
+    return mainDbModule.executePR(args[0], args[1], args[2], args[3], args[4]);
 }

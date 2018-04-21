@@ -7,9 +7,9 @@ const app = express();
 const config = reqlib('/config');
 const constant = reqlib('/base/common/constant');
 const response = reqlib('/base/common/response');
-const queryHelper = reqlib('/base/queryHelper');
 const authorizer = reqlib('/base/authorizer');
-//const shell = require('shelljs');
+const queryHelper = reqlib('/base/queryHelper');
+const sequelize = reqlib('/base/sequelize');
 const toRouteRouters = reqlib('/app/api');
 const env = config.env;
 
@@ -17,9 +17,13 @@ async function initialize(){
     try {
         // service module initialize. 
         // initialize module you want to use.    
-        await queryHelper.initialize();
         authorizer.initialize();
-                
+        // 기본적으로 sequelize를 사용. sequelize에서 언급에따라 퍼포먼스나 트랜잭션 이슈와같은 사항으로는 queryHelper를 사용.
+        // 2개의 모듈 모두 load. 경우에따라 사용하는 모듈이 달라질수있음. 
+        await queryHelper.initialize();
+        await sequelize.initialize();
+        const sequelizeModule = sequelize.getSequelize();       //default main module
+                        
         //cross doamin handling
         app.use((req, res, next) => {
             if (req.originalUrl === '/favicon.ico') return false;        //브라우저 사이트 아이콘 favicon 현재정의하지않기에 return false.
