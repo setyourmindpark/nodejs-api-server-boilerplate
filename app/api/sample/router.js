@@ -1,7 +1,7 @@
 const authorizer = reqlib('/base/authorizer')
 const assistant = reqlib('/base/assistant')
 const router = require('express').Router();
-const sampleCtrl = require('./sample.ctrl');
+const sampleCtrl = require('./controller');
 
 //restful spec의 get 방식 . params
 router.get(

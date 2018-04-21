@@ -1,7 +1,7 @@
 const authorizer = reqlib('/base/authorizer');
 const assistant = reqlib('/base/assistant')
 const router = require('express').Router();
-const userCtrl = require('./user.ctrl');
+const userCtrl = require('./controller');
 
 // RESTFUL SPEC을 지키려합니다
 // http://meetup.toast.com/posts/92

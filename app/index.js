@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const config = reqlib('/config');
 const constant = reqlib('/base/common/constant');
-const rootPath = require('app-root-path').path;
 const response = reqlib('/base/common/response');
 const queryHelper = reqlib('/base/queryHelper');
 const authorizer = reqlib('/base/authorizer');
@@ -18,7 +17,7 @@ async function initialize(){
         // initialize module you want to use.    
         await queryHelper.initialize();
         authorizer.initialize();
-
+                
         //cross doamin handling
         app.use((req, res, next) => {
             if (req.originalUrl === '/favicon.ico') return false;        //브라우저 사이트 아이콘 favicon 현재정의하지않기에 return false.
@@ -34,14 +33,12 @@ async function initialize(){
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
 
-        // swagger는 dev mode일때만 사용할것 .
-        app.use('/swagger', reqlib('/app/api/swagger/router'));
+        app.use('/swagger', reqlib('/app/api/swagger/router'));     // swagger는 dev mode일때만 사용할것 .
+        app.use('/api/sample', reqlib('/app/api/sample/router'));
+        app.use('/api/user', reqlib('/app/api/user/router'));
 
-        app.use('/api/sample', reqlib('/app/api/sample/sample.router'));
-        app.use('/api/user', reqlib('/app/api/user/user.router'));
-
-        app.use(express.static(rootPath + '/app/public'));          // static files. upload 접근 포함
-
+        app.use(express.static(__dirname + '/static'));
+        
         app.use((req, res, next) => {
             response.notFoundResponse(res);
         });
