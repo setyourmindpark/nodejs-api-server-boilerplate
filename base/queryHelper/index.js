@@ -12,13 +12,9 @@ let mainDbModule = undefined;
 // db가 여러개일경우 함수 추가하고 module명 새롭게 정의하여 createModule하면됨 .
 async function initialize() {
     if (type === 'mysql') {
-        try{            
-            const mysqlConfig = config.setting.db.mysql;
-            mainDbModule = mysql.createModule(mysqlConfig);
-            await execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })
-        }catch(err){
-            throw err;
-        }        
+        const mysqlConfig = config.setting.db.mysql;
+        mainDbModule = mysql.createModule(mysqlConfig);
+        await execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })        
     }
 }
 
