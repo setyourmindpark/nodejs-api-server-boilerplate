@@ -14,7 +14,8 @@ const env = config.env;
 
 async function initialize(){
     try {
-        // service module initialize. initialize module you want to use.    
+        // service module initialize. 
+        // initialize module you want to use.    
         await queryHelper.initialize();
         authorizer.initialize();
 
