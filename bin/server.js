@@ -8,6 +8,7 @@ const http = require('http');
 const cluster = require('cluster');
 const loggerHelper = reqlib('/base/logger');
 const numCPUs = require('os').cpus().length;
+const app =  reqlib('/app');
 const port = config.context.port;
 const env = config.env;
 const master = cluster.isMaster;   
@@ -18,7 +19,9 @@ const master = cluster.isMaster;
         loggerHelper.initialize();
         global.logger = await loggerHelper.getLogger();        
         
-        const app = await reqlib('/app').initialize();
+        await app.initializeModule();
+        const protocol = app.configureProtocol();
+        
         if (master) {
             cluster.on('online', (worker) => {
                 //logger.info('생성된 워커의 아이디 : ' + worker.process.pid);
@@ -36,7 +39,7 @@ const master = cluster.isMaster;
             }
 
         } else {
-            const apiServer = http.createServer(app).listen(port);
+            const apiServer = http.createServer(protocol).listen(port);
             apiServer.on('error', (err) => {
                 throw err;
             });
