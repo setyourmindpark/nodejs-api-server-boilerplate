@@ -1,9 +1,10 @@
 const modules ={};
-modules.initialize = ( queryHelperModule1, sequelizeModule1, jwtAccess, jwtRefresh ) => {
-    modules.queryHelperModule = queryHelperModule1;
-    modules.sequelizeModule = sequelizeModule1;
-    modules.jwtAccessModule = jwtAccess;
-    modules.jwtRefreshModule = jwtRefresh;    
+
+modules.initialize = ({ queryHelperModules, sequelizeModules, jwtModules }) => {   
+    modules.queryHelperModule = queryHelperModules.queryHelperModule1;
+    modules.sequelizeModule = sequelizeModules.sequelizeModule1;
+    modules.jwtAccessModule = jwtModules.jwtAccess;
+    modules.jwtRefreshModule = jwtModules.jwtRefresh;
 }
 
 module.exports = modules;

@@ -1,6 +1,5 @@
 
-exports.initializeModule = initializeModule;
-exports.configureProtocol = configureProtocol;
+exports.initialize = initialize;
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,7 +10,13 @@ const authorizer = reqlib('/base/authorizer');
 const queryHelper = reqlib('/base/queryHelper');
 const sequelize = reqlib('/base/sequelize');
 const sequelizeModel = reqlib('/app/model/sequelize');
+const modules = reqlib('/app/common/modules');
 const toRouteRouters = reqlib('/app/api');
+
+async function initialize(){
+    await initializeModule();
+    return configureProtocol();
+}
 
 async function initializeModule(){
     // service module initialize. 
@@ -20,7 +25,7 @@ async function initializeModule(){
     // 2개의 모듈 모두 load. 경우에따라 사용하는 모듈이 달라질수있음.
     const { queryHelperModule1 } = await queryHelper.createModules();
     const { sequelizeModule1 } = await sequelize.createModules();
-    const { jwtAcess, jwtRefresh } = authorizer.createModules();
+    const { jwtAccess, jwtRefresh } = authorizer.createModules();
     for (let model in sequelizeModel){
         const { sync, tableName, define } = sequelizeModel[model];
         if (sync){           
@@ -31,13 +36,19 @@ async function initializeModule(){
         }        
     }
     sequelizeModule1.sync();
-            
-    reqlib('/app/common/modules').initialize(
-        queryHelperModule1,
-        sequelizeModule1,
-        jwtAcess,
-        jwtRefresh
-    )    
+    
+    modules.initialize({
+        queryHelperModules : {
+            queryHelperModule1 : queryHelperModule1
+        },
+        sequelizeModules : {
+            sequelizeModule1: sequelizeModule1
+        },
+        jwtModules : {
+            jwtAccess: jwtAccess,
+            jwtRefresh: jwtRefresh
+        }
+    })
 }
 
 function configureProtocol(){

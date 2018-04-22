@@ -5,17 +5,17 @@ const jwt = require('./jwt');
 const type = config.context.auth;
 
 function createModules(){
-    let jwtAcess = undefined;
+    let jwtAccess = undefined;
     let jwtRefresh = undefined;
 
     if (type === 'jwt') {
         const jwtAccessConfig = config.setting.auth.jwt.access;
         const jwtRefreshConfig = config.setting.auth.jwt.refresh;
-        jwtAcess = jwt.createModule(jwtAccessConfig);
+        jwtAccess = jwt.createModule(jwtAccessConfig);
         jwtRefresh = jwt.createModule(jwtRefreshConfig);    
     }
     return {
-        jwtAcess: jwtAcess,
+        jwtAccess: jwtAccess,
         jwtRefresh: jwtRefresh,
         // ..
     }

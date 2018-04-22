@@ -18,9 +18,8 @@ const master = cluster.isMaster;
         // system module initialize        
         loggerHelper.initialize();
         global.logger = await loggerHelper.getLogger();        
-        
-        await app.initializeModule();
-        const protocol = app.configureProtocol();
+                
+        const protocol = await app.initialize();
         
         if (master) {
             cluster.on('online', (worker) => {
