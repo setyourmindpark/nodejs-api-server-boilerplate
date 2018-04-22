@@ -1,22 +1,21 @@
-exports.initialize = initialize;
-exports.getSequelize = getSequelize;
+exports.createModules = createModules;
 
 const Sequelize = require('sequelize');
 const config = reqlib('/config');
 const type = config.context.db;
-let mainDbSequelize = undefined;
 
-// db가 여러개일경우 함수 추가하고 module명 새롭게 정의하여 createModule하면됨 .
-async function initialize(){
+async function createModules() {
+    let sequelizeModule1 = undefined;
     if (type === 'mysql') {
         const mysqlConfig = Object.assign({ dialect: type }, config.setting.db.mysql);
-        mainDbSequelize = createModule(mysqlConfig);
-        await mainDbSequelize.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
+        sequelizeModule1 = createModule(mysqlConfig);
+        await sequelizeModule1.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
+        
     }
-}
-
-function getSequelize(){
-    return mainDbSequelize;
+    return {
+        sequelizeModule1: sequelizeModule1,
+        // ..
+    }
 }
 
 function createModule({ dialect, host, port, user, database, password, connectionLimit, logging }){
@@ -31,4 +30,3 @@ function createModule({ dialect, host, port, user, database, password, connectio
     });
     return sequelize;  
 }
-

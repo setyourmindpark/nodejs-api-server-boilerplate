@@ -1,4 +1,4 @@
-const authorizer = reqlib('/base/authorizer');
+const { jwtAccessModule, jwtRefreshModule } = reqlib('/app/common/modules');
 const assistant = reqlib('/base/assistant')
 const router = require('express').Router();
 const userCtrl = require('./controller');
@@ -45,7 +45,7 @@ router.post(
 
 router.post(
     '/new/token',
-    authorizer.refreshTokenIsAuthenticated(),
+    jwtRefreshModule.isAuthenticated(),
     assistant.validate({
         body: {
             accesstoken: { require: true, v_type: 'any'}            
@@ -57,7 +57,7 @@ router.post(
 
 router.get(
     '/info',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.unifyAllProps(),
     userCtrl.info
 );

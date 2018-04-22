@@ -1,4 +1,4 @@
-const authorizer = reqlib('/base/authorizer')
+const { jwtAccessModule, jwtRefreshModule } = reqlib('/app/common/modules');
 const assistant = reqlib('/base/assistant')
 const router = require('express').Router();
 const sampleCtrl = require('./controller');
@@ -6,7 +6,7 @@ const sampleCtrl = require('./controller');
 //restful spec의 get 방식 . params
 router.get(
     '/select1/:param1',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             param1: { v_type: 'onlyChar' }
@@ -18,7 +18,7 @@ router.get(
 
 router.get(
     '/select2/:param1/:param2',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             param1: { v_type: 'onlyChar' },
@@ -32,7 +32,7 @@ router.get(
 //get 방식의 고전 querystring 방식 지원하기위해 예제를 작성함. query, post 의 body validate format과 같음
 router.get(
     '/select3',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         query: {
             param1: { require: true, v_type: 'any' },
@@ -47,7 +47,7 @@ router.get(
 
 router.post(
     '/insert',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         body: {
             param1: { require: true, v_type: 'any' },
@@ -61,7 +61,7 @@ router.post(
 
 router.put(
     '/update/:where',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             where: { v_type: 'any' }
@@ -78,7 +78,7 @@ router.put(
 
 router.delete(
     '/remove/:where',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             where: { v_type: 'any' }
@@ -90,7 +90,7 @@ router.delete(
 
 router.get(
     '/getPI/:where/:pageNo',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             where: { v_type: 'any' },
@@ -103,7 +103,7 @@ router.get(
 
 router.get(
     '/getPR/:where/:pageNo',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             where: { v_type: 'any' },
@@ -116,7 +116,7 @@ router.get(
 
 router.get(
     '/getPIWithPR/:where/:pageNo',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         params: {
             where: { v_type: 'any' },
@@ -129,14 +129,14 @@ router.get(
 
 router.post(
     '/transaction',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.unifyAllProps(),
     sampleCtrl.transaction
 );
 
 router.post(
     '/checkEmail',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         body: {
             email: { require: true, v_type: 'any', extra: 'checkEmailRules' },
@@ -156,7 +156,7 @@ router.post(
 // s3 ex) fileFeild1 : { require : true, allowExt : 'any', uptoSize : '20mb', upload : { target : 's3', bucket : 'jaehunpark' , thumbnail : { width:200, height : 200, bucket : 'jaehunpark'} } },
 router.post(
     '/localUpload',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         multipart: {
             files: {
@@ -177,7 +177,7 @@ router.post(
 //s3 업로드 예제
 router.post(
     '/s3Upload',
-    authorizer.accessTokenIsAuthenticated(),
+    jwtAccessModule.isAuthenticated(),
     assistant.validate({
         multipart: {
             files: {

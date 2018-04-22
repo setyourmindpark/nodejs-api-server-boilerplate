@@ -1,4 +1,4 @@
-const queryHelper = reqlib('/base/queryHelper');
+const { queryHelperModule } = reqlib('/app/common/modules');
 const sampleSql = reqlib('/app/model/queryHelper/sample.sql');
 const response = reqlib('/base/common/response');
 const constant = reqlib('/base/common/constant');
