@@ -23,8 +23,8 @@ const Promise = require('bluebird');
 * @return {queryModule}
 * @public
 */
-function createModule({ host, port, user, database, password, connectionLimit, logging }) {
-    const pool = mysql.createPool({ host, port, user, database, password, connectionLimit, logging });
+function createModule({ host, port, user, database, password, connectionLimit}) {
+    const pool = mysql.createPool({ host, port, user, database, password, connectionLimit});
 
     /**
     * pool을 생성함과동시에 conn 객체 반환

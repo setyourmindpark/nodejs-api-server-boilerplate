@@ -48,7 +48,7 @@ module.exports = {
                 database: env.DB_MYSQL_DATABASE,
                 password: env.DB_MYSQL_PASSWORD,
                 connectionLimit: env.DB_MYSQL_CONNECTION_LIMIT,
-                logging: env.DB_MYSQL_LOGGING,
+                connectionLeast: env.DB_MYSQL_CONNECTION_LEAST
             },
             // other db will be here ..
         },

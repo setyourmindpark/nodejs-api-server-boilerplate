@@ -18,15 +18,19 @@ async function createModules() {
     }
 }
 
-function createModule({ dialect, host, port, user, database, password, connectionLimit, logging }){
+function createModule({ dialect, host, port, user, database, password, connectionLimit, connectionLeast }){
     const sequelize = new Sequelize(database, user, password, {
         host: host,
         dialect: dialect,
         pool: {
             max: connectionLimit,
-            min: 0,
+            min: connectionLeast,
         },
-        operatorsAliases: false // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
+        define:{            
+            freezeTableName: true,
+        },
+        logging: false,
+        operatorsAliases: false
     });
     return sequelize;  
 }

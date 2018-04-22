@@ -10,6 +10,7 @@ const response = reqlib('/base/common/response');
 const authorizer = reqlib('/base/authorizer');
 const queryHelper = reqlib('/base/queryHelper');
 const sequelize = reqlib('/base/sequelize');
+const sequelizeModel = reqlib('/app/model/sequelize');
 const toRouteRouters = reqlib('/app/api');
 
 async function initializeModule(){
@@ -20,6 +21,17 @@ async function initializeModule(){
     const { queryHelperModule1 } = await queryHelper.createModules();
     const { sequelizeModule1 } = await sequelize.createModules();
     const { jwtAcess, jwtRefresh } = authorizer.createModules();
+    for (let model in sequelizeModel){
+        const { sync, tableName, define } = sequelizeModel[model];
+        if (sync){           
+            sequelizeModule1.define(
+                tableName,
+               define
+            );
+        }        
+    }
+    sequelizeModule1.sync();
+            
     reqlib('/app/common/modules').initialize(
         queryHelperModule1,
         sequelizeModule1,
