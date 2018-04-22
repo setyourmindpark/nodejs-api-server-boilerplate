@@ -15,8 +15,9 @@ const master = cluster.isMaster;
 
 (async () => {    
     try {
-        // system module initialize                
-        global.logger = await loggerHelper.initialize().getLogger();
+        // system module initialize        
+        loggerHelper.initialize();
+        global.logger = await loggerHelper.getLogger();        
         
         await app.initializeModule();
         const protocol = app.configureProtocol();
