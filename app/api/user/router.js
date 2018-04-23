@@ -32,7 +32,7 @@ router.post(
 );
 
 router.post(
-    '/login',
+    '/token/me',
     assistant.validate({
         body: {            
             email: { require: true, v_type: 'any', extra: 'checkEmailRules' },
@@ -40,34 +40,26 @@ router.post(
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.login
+    userCtrl.tokenMe
 );
 
 router.post(
-    '/:id/new/token',
+    '/token/new',
     jwtRefreshModule.isAuthenticated(),
-    assistant.validate({
-        params: {
-            id: { v_type: 'onlyNum' }
-        },
+    assistant.validate({        
         body: {
             accesstoken: { require: true, v_type: 'any'}            
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.newToken
+    userCtrl.tokenNew
 );
 
 router.get(
-    '/:id',
+    '/me',
     jwtAccessModule.isAuthenticated(),
-    assistant.validate({
-        params: {
-            id: { v_type: 'onlyNum' }
-        }
-    }),
     assistant.unifyAllProps(),
-    userCtrl.info
+    userCtrl.me
 );
 
 module.exports = router;

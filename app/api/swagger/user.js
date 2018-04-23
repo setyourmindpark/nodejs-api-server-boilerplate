@@ -32,45 +32,45 @@ const paths = {
         }
     },
 
-    '/api/user/login': {
+    '/api/user/token/me': {
         post: {
             tags: ['USER API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/login' }],
+            parameters: [{ $ref: '#/parameters/tokenMe' }],
             responses: {
                 200: {
-                    description: 'login',
+                    description: 'tokenMe',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
 
-    '/api/user/{id}/new/token': {
+    '/api/user/token/new': {
         post: {
             tags: ['USER API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/refreshtoken' }, { $ref: '#/parameters/newToken' }, { $ref: '#/parameters/id' }],
+            parameters: [{ $ref: '#/parameters/refreshtoken' }, { $ref: '#/parameters/tokenNew' }],
             responses: {
                 200: {
-                    description: 'login',
+                    description: 'tokenMe',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
 
-    '/api/user/{id}': {
+    '/api/user/me': {
         get: {
             tags: ['USER API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/accesstoken' }, { $ref: '#/parameters/id' }],
+            parameters: [{ $ref: '#/parameters/accesstoken' }],
             responses: {
                 200: {
                     description: 'get user info',
@@ -98,8 +98,8 @@ const parameters = {
         default: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNMb2dpbmVkIjp0cnVlLCJpYXQiOjE1MjAwNjgzMzV9.KyRKCWKw_zmJc9glvBdDmrogI_wv4SiW-xpEZGSde5w'
     },
 
-    newToken: {
-        name: 'newToken',
+    tokenNew: {
+        name: 'tokenNew',
         in: 'body',
         required: true,
         schema: {
@@ -116,16 +116,8 @@ const parameters = {
         type: 'string'
     },
 
-    id: {
-        name: 'id',
-        in: 'path',
-        default: '1',
-        required: true,
-        type: 'integer'
-    },
-
-    login: {
-        name: 'login',
+    tokenMe: {
+        name: 'tokenMe',
         in: 'body',
         required: true,
         schema: {

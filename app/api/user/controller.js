@@ -3,7 +3,6 @@ const userSql = reqlib('/app/model/queryHelper/user.sql');
 const response = reqlib('/base/common/response');
 const constant = reqlib('/base/common/constant');
 
-
 exports.validityEmail = async (req, res, next) => {
     try {
         let code = constant.CODE_SERVICE_PROCESS_1;
@@ -51,7 +50,7 @@ exports.new = async (req, res, next) => {
     }
 }
 
-exports.login = async (req, res, next) => {
+exports.tokenMe = async (req, res, next) => {
     try {        
         const { email, passwd } = req.prop;
         const params1 = { email: email, passwd: passwd };
@@ -81,9 +80,9 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.newToken = async ( req, res, next ) => {
+exports.tokenNew = async ( req, res, next ) => {
     try{
-        const { accesstoken, tokenId, id } = req.prop;
+        const { accesstoken, tokenId } = req.prop;
 
         try{
             const decoded = jwtAccessModule.decode(accesstoken);
@@ -94,7 +93,7 @@ exports.newToken = async ( req, res, next ) => {
                 throw error;
             }
 
-            const tokenBody = { tokenId: id };
+            const tokenBody = { tokenId: tokenId };
             response.apiResponse(res, {
                 msg: 'take care this token',
                 code: constant.CODE_SERVICE_PROCESS_1,
@@ -116,9 +115,9 @@ exports.newToken = async ( req, res, next ) => {
     }
 }
 
-exports.info = async (req, res, next) => {
+exports.me = async (req, res, next) => {
     try {
-        const userId = req.prop.id;        
+        const userId = req.prop.tokenId;        
         const params = { id: userId };
         const result = await queryHelperModule.execute({ query: userSql.selectUserInfo, data: params, expect: 'single' });        
         response.apiResponse(res, {
