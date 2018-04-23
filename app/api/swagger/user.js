@@ -1,6 +1,6 @@
 
 const paths = {
-    '/api/user/check/email/{email}': {
+    '/api/user/validity/email/{email}': {
         get: {
             tags: ['USER API'],
             summary: 'RESTFUL FORMAT',
@@ -64,13 +64,13 @@ const paths = {
         }
     },
 
-    '/api/user/info': {
+    '/api/user/{id}': {
         get: {
             tags: ['USER API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/accesstoken' }],
+            parameters: [{ $ref: '#/parameters/accesstoken' }, { $ref: '#/parameters/id' }],
             responses: {
                 200: {
                     description: 'get user info',
@@ -97,6 +97,7 @@ const parameters = {
         type: 'string',
         default: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNMb2dpbmVkIjp0cnVlLCJpYXQiOjE1MjAwNjgzMzV9.KyRKCWKw_zmJc9glvBdDmrogI_wv4SiW-xpEZGSde5w'
     },
+
     newToken: {
         name: 'newToken',
         in: 'body',
@@ -108,12 +109,19 @@ const parameters = {
             }
         }
     },
-
     email: {
         name: 'email',
         in: 'path',
         required: true,
         type: 'string'
+    },
+
+    id: {
+        name: 'id',
+        in: 'path',
+        default: '1',
+        required: true,
+        type: 'integer'
     },
 
     login: {

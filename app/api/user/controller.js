@@ -4,7 +4,7 @@ const response = reqlib('/base/common/response');
 const constant = reqlib('/base/common/constant');
 
 
-exports.checkEmail = async (req, res, next) => {
+exports.validityEmail = async (req, res, next) => {
     try {
         let code = constant.CODE_SERVICE_PROCESS_1;
         let msg = 'you can create user by using this email';
@@ -66,7 +66,7 @@ exports.login = async (req, res, next) => {
         }
 
         const userId = result.id;
-        const tokenBody = { id: userId };
+        const tokenBody = { tokenId: userId };
 
         response.apiResponse(res, {
             msg: 'logined, take care this token',
@@ -83,18 +83,18 @@ exports.login = async (req, res, next) => {
 
 exports.newToken = async ( req, res, next ) => {
     try{
-        const { accesstoken, id } = req.prop;
+        const { accesstoken, tokenId } = req.prop;
 
         try{
             const decoded = jwtAccessModule.decode(accesstoken);
 
-            if (decoded.id !== id){
+            if (decoded.tokenId !== tokenId){
                 const error = new Error(constant.JWT_NOT_MATCH_TWO_TOKEN.msg);
                 error.errorCode = constant.JWT_NOT_MATCH_TWO_TOKEN.code;
                 throw error;
             }
 
-            const tokenBody = { id: id };
+            const tokenBody = { tokenId: tokenId };
             response.apiResponse(res, {
                 msg: 'take care this token',
                 code: constant.CODE_SERVICE_PROCESS_1,

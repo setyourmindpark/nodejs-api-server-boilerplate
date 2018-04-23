@@ -8,14 +8,14 @@ const userCtrl = require('./controller');
 // https://spoqa.github.io/2012/02/27/rest-introduction.html
 
 router.get(
-    '/check/email/:email',
+    '/validity/email/:email',
     assistant.validate({
         params: {
             email: { v_type: 'any', extra: 'checkEmailRules' }
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.checkEmail
+    userCtrl.validityEmail
 );
 
 router.post(
@@ -56,8 +56,13 @@ router.post(
 );
 
 router.get(
-    '/info',
+    '/:id',
     jwtAccessModule.isAuthenticated(),
+    assistant.validate({
+        params: {
+            id: { v_type: 'onlyNum' }
+        }
+    }),
     assistant.unifyAllProps(),
     userCtrl.info
 );
