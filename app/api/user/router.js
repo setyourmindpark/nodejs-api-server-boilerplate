@@ -44,9 +44,12 @@ router.post(
 );
 
 router.post(
-    '/new/token',
+    '/:id/new/token',
     jwtRefreshModule.isAuthenticated(),
     assistant.validate({
+        params: {
+            id: { v_type: 'onlyNum' }
+        },
         body: {
             accesstoken: { require: true, v_type: 'any'}            
         }

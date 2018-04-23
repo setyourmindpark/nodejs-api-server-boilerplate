@@ -83,7 +83,7 @@ exports.login = async (req, res, next) => {
 
 exports.newToken = async ( req, res, next ) => {
     try{
-        const { accesstoken, tokenId } = req.prop;
+        const { accesstoken, tokenId, id } = req.prop;
 
         try{
             const decoded = jwtAccessModule.decode(accesstoken);
@@ -94,7 +94,7 @@ exports.newToken = async ( req, res, next ) => {
                 throw error;
             }
 
-            const tokenBody = { tokenId: tokenId };
+            const tokenBody = { tokenId: id };
             response.apiResponse(res, {
                 msg: 'take care this token',
                 code: constant.CODE_SERVICE_PROCESS_1,

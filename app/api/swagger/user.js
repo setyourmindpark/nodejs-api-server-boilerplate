@@ -48,13 +48,13 @@ const paths = {
         }
     },
 
-    '/api/user/new/token': {
+    '/api/user/{id}/new/token': {
         post: {
             tags: ['USER API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/refreshtoken' }, { $ref: '#/parameters/newToken' }],
+            parameters: [{ $ref: '#/parameters/refreshtoken' }, { $ref: '#/parameters/newToken' }, { $ref: '#/parameters/id' }],
             responses: {
                 200: {
                     description: 'login',
