@@ -49,7 +49,7 @@ async function initializeModule(){
         }        
     }
     sequelizeModule1.sync({ force : false });   
-    sequelizeModels.models = models;
+    sequelizeModule1.models = models;
    
     modules.initialize({
         queryHelperModules : {

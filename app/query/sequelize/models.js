@@ -81,6 +81,5 @@ syncModels.File = {
 }
 
 module.exports = {
-    syncModels: syncModels,
-    models: {} // inject models after sync sequelizing in app/index.js
+    syncModels: syncModels
 }
