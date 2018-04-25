@@ -32,10 +32,9 @@ async function initializeModule(){
     const { queryHelperModule1 } = await queryHelper.createModules();
     const { sequelizeModule1 } = await sequelize.createModules();
     const { jwtAccess, jwtRefresh } = authorizer.createModules();
-    const syncModels = sequelizeModels.syncModels;
     const models = {};
-    for (let model in syncModels){
-        const { sync, defaultPrimaryKey, sqzModelSet } = syncModels[model];
+    for (let model in sequelizeModels){
+        const { sync, defaultPrimaryKey, sqzModelSet } = sequelizeModels[model];
         const { tableName, define, config } = sqzModelSet;
         if (sync){            
             const defineModel = sequelizeModule1.define(

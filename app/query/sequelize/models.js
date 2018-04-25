@@ -1,12 +1,12 @@
 // to query using sequelize module. so you have to query model in here
 
 const Sequelize = require('sequelize');
-const syncModels = {};
+const sequelizeModels = {};
 
 //  http://docs.sequelizejs.com/variable/index.html
 // datatype document
 
-syncModels.User = {    
+sequelizeModels.User = {    
     sync: true,
     defaultPrimaryKey : true,
     sqzModelSet : {
@@ -23,7 +23,7 @@ syncModels.User = {
 }
 
 // for system
-syncModels.Common = {    
+sequelizeModels.Common = {    
     sync: true,
     defaultPrimaryKey: false,
     sqzModelSet : {
@@ -41,7 +41,7 @@ syncModels.Common = {
 }
 
 // for service constant
-syncModels.Constant = {    
+sequelizeModels.Constant = {    
     sync: true,
     defaultPrimaryKey: false,
     sqzModelSet : {
@@ -62,7 +62,7 @@ syncModels.Constant = {
     }
 }
 
-syncModels.File = {    
+sequelizeModels.File = {    
     sync: true,
     defaultPrimaryKey: true,
     sqzModelSet : {
@@ -80,6 +80,4 @@ syncModels.File = {
     }    
 }
 
-module.exports = {
-    syncModels: syncModels
-}
+module.exports = sequelizeModels;
