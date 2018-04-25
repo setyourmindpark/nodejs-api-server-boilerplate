@@ -1,15 +1,19 @@
 
+// ***************************************************
+// start service initialize and configure here to need
+// ***************************************************
+
+
 exports.initialize = initialize;
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-// const config = reqlib('/config');
 const response = reqlib('/base/common/response');
 const authorizer = reqlib('/base/authorizer');
 const queryHelper = reqlib('/base/queryHelper');
 const sequelize = reqlib('/base/sequelize');
-const sequelizeModel = reqlib('/app/model/sequelize');
+const sequelizeModels = reqlib('/app/query/sequelize/models');
 const modules = reqlib('/app/common/modules');
 const toRouteRouters = reqlib('/app/api');
 
@@ -26,17 +30,26 @@ async function initializeModule(){
     const { queryHelperModule1 } = await queryHelper.createModules();
     const { sequelizeModule1 } = await sequelize.createModules();
     const { jwtAccess, jwtRefresh } = authorizer.createModules();
-    for (let model in sequelizeModel){
-        const { sync, tableName, define } = sequelizeModel[model];
-        if (sync){           
-            sequelizeModule1.define(
+    const syncModels = sequelizeModels.syncModels;
+    const models = {};
+    for (let model in syncModels){
+        const { sync, defaultPrimaryKey, sqzModelSet } = syncModels[model];
+        const { tableName, define, config } = sqzModelSet;
+        if (sync){            
+            const defineModel = sequelizeModule1.define(
                 tableName,
-               define
+                define,
+                config
             );
+            if (!defaultPrimaryKey){
+                defineModel.removeAttribute('id');
+            }
+            models[model] = defineModel;            
         }        
     }
-    sequelizeModule1.sync();
-    
+    sequelizeModule1.sync({ force : false });   
+    sequelizeModels.models = models;
+   
     modules.initialize({
         queryHelperModules : {
             queryHelperModule1 : queryHelperModule1

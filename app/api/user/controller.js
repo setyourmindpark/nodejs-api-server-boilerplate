@@ -1,5 +1,5 @@
 const { queryHelperModule, jwtAccessModule, jwtRefreshModule } = reqlib('/app/common/modules');
-const userSql = reqlib('/app/model/queryHelper/user.sql');
+const userSql = reqlib('/app/query/queryHelper/user.sql');
 const response = reqlib('/base/common/response');
 const constant = reqlib('/base/common/constant');
 

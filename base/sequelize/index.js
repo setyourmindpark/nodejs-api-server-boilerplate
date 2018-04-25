@@ -26,7 +26,7 @@ function createModule({ dialect, host, port, user, database, password, connectio
             max: connectionLimit,
             min: connectionLeast,
         },
-        define:{            
+        define: {            
             freezeTableName: true,
         },
         logging: false,
