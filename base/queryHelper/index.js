@@ -13,9 +13,9 @@ async function createModules(){
         
     }
 
-    // const linkDb1 = config.setting.linkdb1;
+    // let sequelizeModule2 = undefined;
     // ..
-    
+
     return {
         queryHelperModule1: queryHelperModule1,
         // ..

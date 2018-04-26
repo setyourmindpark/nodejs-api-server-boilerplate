@@ -12,8 +12,8 @@ async function createModules() {
         await sequelizeModule1.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
         
     }
-    
-    // const linkDb1 = config.setting.linkdb1;
+
+    // let sequelizeModule2 = undefined;
     // ..
 
     return {
