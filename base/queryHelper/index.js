@@ -3,6 +3,7 @@ exports.createModules = createModules;
 const config = reqlib('/config');
 const mysql = require('./mysql');
 const baseType = config.base.db;
+// const linkDb1 = config.setting.linkdb1;
 
 async function createModules(){
     let queryHelperModule1 = undefined;
