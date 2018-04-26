@@ -56,7 +56,14 @@ function sleep(ms) {
         }
 
         models.User.hasMany(models.Article, { foreignKey: 'userId', sourceKey: 'id' });
+        models.User.hasMany(models.UserBook, { foreignKey: 'userId', sourceKey: 'id' });
+
         models.Article.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+
+        models.Book.hasMany(models.UserBook, { foreignKey: 'bookId', sourceKey: 'id' });
+
+        models.UserBook.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+        models.UserBook.belongsTo(models.Book, { foreignKey: 'bookId', targetKey: 'id' });
 
         await sequelize.sync({ force: true });      
         
@@ -225,11 +232,32 @@ function sleep(ms) {
             where: {
                 id: 1
             },
-            include: { model: models.User}
+            include: { model: models.User }
         })
         console.log('######################### belongsTo')
         console.log(belongsTo.get({ plain: true }));
         console.log('######################### belongsTo')
+
+        const hasMany2 = await models.UserBook.findAll({
+            raw: true,
+            attributes: {
+                //include: ['createAt'],
+                exclude: ['userId','bookId','updateAt']
+            },
+            where: {
+                userId: 1
+            },
+            include: [{ 
+                    model: models.User,
+                    attributes: ['name', 'email']
+                }, { 
+                    model: models.Book,
+                    attributes: ['name']
+                }]
+        })
+        console.log('######################### hasMany2')
+        console.log(hasMany2);
+        console.log('######################### hasMany2')
 
         process.exit(1)
 
