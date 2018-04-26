@@ -6,20 +6,87 @@ const sequelizeModels = {};
 //  http://docs.sequelizejs.com/variable/index.html
 // datatype document
 
-sequelizeModels.User = {    
+sequelizeModels.User = {
     sync: true,
-    defaultPrimaryKey : true,
+    defaultPrimaryKey: true,       // false = { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true }
     sqzModelSet : {
         tableName: 'user',
         define: {
             email: { type: Sequelize.STRING(100), allowNull: false, },
             passwd:{ type: Sequelize.STRING(200), allowNull: false, }, 
             name: { type: Sequelize.STRING(20), allowNull: false, },
-            createAt : { type: Sequelize.DATE, allowNull: true, defaultValue: Sequelize.fn('NOW') },
-            updateAt : { type: Sequelize.DATE, allowNull: true, defaultValue: Sequelize.fn('NOW') } 
+            createAt : { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updateAt : { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') } 
         },
-        config: { timestamps: false } 
+        config: {} 
     },    
+}
+
+sequelizeModels.Article = {
+    sync: true,
+    defaultPrimaryKey: true,
+    sqzModelSet: {
+        tableName: 'article',
+        define: {
+            userId: { type: Sequelize.INTEGER, allowNull: false },
+            title: { type: Sequelize.STRING(50), allowNull: false },
+            content: { type: Sequelize.STRING(50), allowNull: true },
+            pid: { type: Sequelize.STRING(50), allowNull: true },
+            useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
+            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+        },
+        config: {}
+    }
+}
+
+sequelizeModels.Book = {
+    sync: true,
+    defaultPrimaryKey: true,
+    sqzModelSet: {
+        tableName: 'book',
+        define: {
+            name: { type: Sequelize.STRING(50), allowNull: false },
+            publish: { type: Sequelize.STRING(50), allowNull: true },            
+            useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
+            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+        },
+        config: {}
+    }
+}
+
+sequelizeModels.UserBook = {
+    sync: true,
+    defaultPrimaryKey: false,
+    sqzModelSet: {
+        tableName: 'userBook',
+        define: {
+            userId: { type: Sequelize.INTEGER, primaryKey: true },
+            bookId: { type: Sequelize.INTEGER, primaryKey: true },            
+            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+        },
+        config: {}
+    }
+}
+
+sequelizeModels.File = {
+    sync: true,
+    defaultPrimaryKey: true,
+    sqzModelSet: {
+        tableName: 'file',
+        define: {
+            dirName: { type: Sequelize.STRING(50), allowNull: true },
+            subDirName: { type: Sequelize.STRING(50), allowNull: false },
+            viewFileName: { type: Sequelize.STRING(200), allowNull: false },
+            phisicalFileName: { type: Sequelize.STRING(200), allowNull: false },
+            useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
+            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+        },
+        config: {}
+    }
 }
 
 // for system
@@ -36,7 +103,7 @@ sequelizeModels.Common = {
             useYn: { type: Sequelize.CHAR(1),allowNull: false, defaultValue:'y' },
             description: {type: Sequelize.STRING(200), allowNull: false, },          
         },
-        config: { timestamps: false }
+        config: {}
     }    
 }
 
@@ -58,26 +125,8 @@ sequelizeModels.Constant = {
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
             description: { type: Sequelize.STRING(200), allowNull: false, },            
         },
-        config: { timestamps: false }
+        config: {}
     }
-}
-
-sequelizeModels.File = {    
-    sync: true,
-    defaultPrimaryKey: true,
-    sqzModelSet : {
-        tableName: 'file',
-        define: {
-            dirName: { type: Sequelize.STRING(50),allowNull : true },
-            subDirName: { type: Sequelize.STRING(50), allowNull: false },
-            viewFileName: { type: Sequelize.STRING(200), allowNull: false },
-            phisicalFileName: { type: Sequelize.STRING(200), allowNull: false},
-            useYn: { type: Sequelize.CHAR(1), allowNull : false, defaultValue : 'y'},
-            createAt: { type: Sequelize.DATE, allowNull: true, defaultValue: Sequelize.fn('NOW') },
-            updateAt: { type: Sequelize.DATE, allowNull: true, defaultValue: Sequelize.fn('NOW') }
-        },
-        config: { timestamps: false }
-    }    
 }
 
 module.exports = sequelizeModels;

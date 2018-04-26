@@ -26,14 +26,19 @@ function createModule({ dialect, host, port, user, database, password, connectio
     const sequelize = new Sequelize(database, user, password, {
         host: host,
         dialect: dialect,
+        dialectOptions: {           // https://github.com/sequelize/sequelize/issues/854
+            dateStrings: true,
+            typeCast: true
+        },
         pool: {
             max: connectionLimit,
             min: connectionLeast,
         },
         define: {            
             freezeTableName: true,
+            timestamps: false
         },
-        timezone: '+09:00',     // set default now() timezone // default is south korea
+        timezone: 'Asia/Seoul',     // set default now() timezone // default is seoul korea
         logging: false,
         operatorsAliases: false        
     });
