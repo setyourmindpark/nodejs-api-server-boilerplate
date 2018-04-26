@@ -55,6 +55,9 @@ function sleep(ms) {
             }
         }
 
+        models.User.hasMany(models.Article, { foreignKey: 'userId', sourceKey: 'id' });
+        models.Article.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+
         await sequelize.sync({ force: true });      
         
         //################## insert start ##################
@@ -200,20 +203,33 @@ function sleep(ms) {
         const someone = await models.User.findOne({
             raw: true,
             where: {
-                email: 'chulsookim@gmail.com'
-            }
+                email: 'update setyourmindpark@gmail.com'
+            },            
         })
         console.log('######################### findOne')
         console.log(someone);
         console.log('######################### findOne')
-                
-        //################## select end ##################
-        //User.belongsTo(Company, { foreignKey: 'fk_companyname', targetKey: 'name' }); // Adds fk_companyname to User
 
-        // hasMany
-        // const aa = models.User.hasMany(models.Article, { primaryKey: [1]});
-        // console.log(aa)
+        // hasMany    
+        const hasMany = await models.User.find({
+            where: {
+                id: 1
+            },
+            include: { model: models.Article }
+        })
+        console.log('######################### hasMany')
+        console.log(hasMany.get({ plain: true }));
+        console.log('######################### hasMany')
 
+        const belongsTo = await models.Article.find({
+            where: {
+                id: 1
+            },
+            include: { model: models.User}
+        })
+        console.log('######################### belongsTo')
+        console.log(belongsTo.get({ plain: true }));
+        console.log('######################### belongsTo')
 
         process.exit(1)
 
