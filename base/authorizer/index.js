@@ -2,7 +2,7 @@ exports.createModules = createModules;
 
 const config = reqlib('/config');
 const jwt = require('./jwt');
-const type = config.context.auth;
+const type = config.base.auth;
 
 function createModules(){
     let jwtAccess = undefined;

@@ -9,7 +9,7 @@ const cluster = require('cluster');
 const loggerHelper = reqlib('/base/logger');
 const numCPUs = require('os').cpus().length;
 const app =  reqlib('/app');
-const port = config.context.port;
+const port = config.base.port;
 const env = config.env;
 const master = cluster.isMaster;   
 

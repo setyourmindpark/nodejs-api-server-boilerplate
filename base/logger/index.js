@@ -4,7 +4,7 @@ exports.initialize = initialize;
 exports.getLogger = getLogger;
 
 let logger = undefined;
-const type = config.context.logger;
+const type = config.base.logger;
 
 function initialize(){
     if (type === 'local') logger = require('./local');

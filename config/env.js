@@ -6,11 +6,11 @@ const env = process.env;
 //https://www.xetown.com/slope/135905
 
 module.exports = {
-    context: {
-        port: env.CONTEXT_PORT,
-        db: env.CONTEXT_DB,
-        auth: env.CONTEXT_AUTH,
-        logger: env.CONTEXT_LOGGER,
+    base: {
+        port: env.BASE_PORT,
+        logger: env.BASE_LOGGER,
+        db: env.BASE_DB,
+        auth: env.BASE_AUTH,        
     },
     setting: {
         upload: {

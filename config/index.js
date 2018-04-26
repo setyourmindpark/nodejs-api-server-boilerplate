@@ -1,6 +1,5 @@
 
 const rootPath = require('app-root-path');
-const fs = require('fs');
 
 require('dotenv').config();
 

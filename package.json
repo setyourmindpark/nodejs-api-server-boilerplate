@@ -22,6 +22,7 @@
     "express": "~4.16.2",
     "file-type": "^7.5.0",
     "fluent-logger": "^2.6.1",
+    "is-root": "^2.0.0",
     "jsonwebtoken": "^8.1.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.20.1",

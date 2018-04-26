@@ -48,7 +48,7 @@ async function initializeModule(){
             models[model] = defineModel;            
         }        
     }
-    sequelizeModule1.sync({ force : false });   
+    sequelizeModule1.sync();
     sequelizeModule1.models = models;
    
     modules.initialize({

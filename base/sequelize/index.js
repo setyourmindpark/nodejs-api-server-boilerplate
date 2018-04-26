@@ -2,7 +2,7 @@ exports.createModules = createModules;
 
 const Sequelize = require('sequelize');
 const config = reqlib('/config');
-const type = config.context.db;
+const type = config.base.db;
 
 async function createModules() {
     let sequelizeModule1 = undefined;
