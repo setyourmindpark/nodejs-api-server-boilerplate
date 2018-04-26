@@ -2,16 +2,20 @@ exports.createModules = createModules;
 
 const Sequelize = require('sequelize');
 const config = reqlib('/config');
-const type = config.base.db;
+const baseType = config.base.db;
 
 async function createModules() {
     let sequelizeModule1 = undefined;
-    if (type === 'mysql') {
-        const mysqlConfig = Object.assign({ dialect: type }, config.setting.db.mysql);
+    if (baseType === 'mysql') {
+        const mysqlConfig = Object.assign({ dialect: baseType }, config.setting.db.mysql);
         sequelizeModule1 = createModule(mysqlConfig);
         await sequelizeModule1.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
         
     }
+    
+    // const linkDb1 = config.setting.linkdb1;
+    // ..
+
     return {
         sequelizeModule1: sequelizeModule1,
         // ..
