@@ -11,7 +11,6 @@ async function createModules() {
         const mysqlConfig = Object.assign({ dialect: baseType }, config.setting.db.mysql);
         sequelizeModule1 = createModule(mysqlConfig);
         await sequelizeModule1.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
-        
     }
 
     // let sequelizeModule2 = undefined;
@@ -34,8 +33,9 @@ function createModule({ dialect, host, port, user, database, password, connectio
         define: {            
             freezeTableName: true,
         },
+        timezone: '+09:00',     // set default now() timezone // default is south korea
         logging: false,
-        operatorsAliases: false
+        operatorsAliases: false        
     });
     return sequelize;  
 }

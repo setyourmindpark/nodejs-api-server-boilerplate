@@ -10,7 +10,8 @@ async function createModules(){
     if (baseType === 'mysql') {
         const mysqlConfig = config.setting.db.mysql;
         queryHelperModule1 = mysql.createModule(mysqlConfig);
-        await queryHelperModule1.execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })        
+        await queryHelperModule1.execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })  
+        await queryHelperModule1.execute({ query: "insert into user values(null, 'setyourmindpark@gmail.com', '000022', '박재훈', now(), now())", expect: 'single' })  
         
     }
 
