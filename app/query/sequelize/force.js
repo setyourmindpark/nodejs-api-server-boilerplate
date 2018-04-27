@@ -8,6 +8,7 @@ const Sequelize = require('sequelize');
 const isRoot = require('is-root');
 const sqzSync = require('./sync');
 const rootPath = require('app-root-path');
+const dottie = require('dottie');
 require('dotenv').config({ path: rootPath.path + '/env/dev.env' });
 const config = require('../../../config');
 const { host, port, user, database, password } = config.setting.db.mysql;
@@ -205,14 +206,16 @@ function sleep(ms) {
             where: {
                 id: 1
             },
-            include: { model: syncdModule.models.User }
+            include: [{ 
+                model: syncdModule.models.User, 
+                attributes: ['name', 'email'],
+            }]
         })
         console.log('######################### belongsTo')
         console.log(belongsTo.get({ plain: true }));
         console.log('######################### belongsTo')
 
         const hasMany2 = await syncdModule.models.MemoTag.findAll({
-            raw: true,
             attributes: {
                 //include: ['createAt'],
                 exclude: ['memoId','tagId','updatedAt']
@@ -232,9 +235,12 @@ function sleep(ms) {
                 }]
         })
         console.log('######################### hasMany2')
-        console.log(hasMany2);
+        const data = hasMany2.map(node => {
+            return node.get({ plain: true });
+        })
+        console.log(data);
+        // console.log(dottie.transform(hasMany2));
         console.log('######################### hasMany2')
-
 
         console.log('######################### findOrCreate')
         const findOrCreate = await syncdModule.models.Tag.findOrCreate({     
