@@ -32,14 +32,14 @@ async function initializeModule(){
     const { queryHelperModule1 } = await queryHelper.createModules();
     const { sequelizeModule1 } = await sequelize.createModules();
     const { jwtAccess, jwtRefresh } = authorizer.createModules();
-    const syncdSzqModule1 = await sqzSync.sync(sequelizeModule1);       // syncdSzqModule1.models 에 entity binded
+    const syncdSqzModule1 = await sqzSync.sync(sequelizeModule1);       // syncdSzqModule1.models 에 entity binded
    
     modules.initialize({
         queryHelperModules : {
             queryHelperModule1 : queryHelperModule1
         },
         sequelizeModules : {
-            sequelizeModule1: syncdSzqModule1
+            sequelizeModule1: syncdSqzModule1
         },
         jwtModules : {
             jwtAccess: jwtAccess,
