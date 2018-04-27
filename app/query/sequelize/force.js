@@ -217,15 +217,18 @@ function sleep(ms) {
                 //include: ['createAt'],
                 exclude: ['memoId','tagId','updatedAt']
             },
-            where: {
-                memoId: 1
-            },
+            where: { memoId: 1 },
             include: [{ 
                     model: syncdModule.models.Memo,
-                    attributes: ['title','content']
+                    attributes: ['title','content'],
+                    include: [{
+                        model: syncdModule.models.User,
+                        attributes: ['email','name']
+                    }]
                 }, { 
                     model: syncdModule.models.Tag,
-                    attributes: ['name']
+                    attributes: ['name'],
+                    where : { name : '자바의정석' }
                 }]
         })
         console.log('######################### hasMany2')
