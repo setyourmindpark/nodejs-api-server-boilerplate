@@ -1,8 +1,8 @@
 exports.sync = sync;
 
-const { models, associations } = reqlib('/app/query/sequelize/blueprint');
+const { models, associations } = require('./blueprint');
 
-async function sync(sequelizeModule){
+async function sync(sequelizeModule, option){
     const sqzModels = {};
     for (let model in models) {                     // model define
         const { defaultPrimaryKey, modelSet } = models[model];
@@ -39,8 +39,8 @@ async function sync(sequelizeModule){
             });
         }
     }
-    await sequelizeModule.sync();
+    await sequelizeModule.sync({force : option});
     sequelizeModule.models = sqzModels;
-    
+
     return sequelizeModule;
 }

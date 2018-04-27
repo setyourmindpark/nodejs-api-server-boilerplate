@@ -124,7 +124,6 @@ sqz.models.Constant = {
     }
 }
 
-
 sqz.associations.User = {
     hasMany: [{
         model: 'Article',
@@ -133,13 +132,6 @@ sqz.associations.User = {
         model: 'UserBook',
         config: { foreignKey: 'userId', sourceKey: 'id' }
     }]
-}
-
-sqz.associations.Article = {
-    belongsTo: [{
-        model: 'User',
-        config: { foreignKey: 'userId', targetKey: 'id' }
-    }],
 }
 
 sqz.associations.Article = {

@@ -6,13 +6,12 @@
 
 const Sequelize = require('sequelize');
 const isRoot = require('is-root');
-const { models, associations } = require('./blueprint');
+const sqzSync = require('./sync');
 const rootPath = require('app-root-path');
 require('dotenv').config({ path: rootPath.path + '/env/dev.env' });
 const config = require('../../../config');
 const { host, port, user, database, password } = config.setting.db.mysql;
 const dialect = 'mysql';
-
 
 function sleep(ms) {
     return new Promise(resolve => {
@@ -37,66 +36,11 @@ function sleep(ms) {
             },                  
             timezone: 'Asia/Seoul'      // set default now() timezone // default is seoul korea
         });
-        const sqzModels = {};
 
-        for (let model in models) {
-            const { defaultPrimaryKey, modelSet } = models[model];
-            const { tableName, define, config } = modelSet;
-            const defineModel = sequelize.define(
-                tableName,
-                define,
-                config
-            );
-            if (!defaultPrimaryKey) {
-                defineModel.removeAttribute('id');
-            }
-            sqzModels[model] = defineModel;
-        }
-        
-        for (let association in associations) {
-            // belongsToMany는 사용하지않음 . 명시적어주는게 좋다고생각함. 
-            const { hasMany, hasOne, belongsTo } = associations[association];
-            if (hasMany){
-                hasMany.forEach(({model, config}) => {
-                    sqzModels[association].hasMany(sqzModels[model],config)
-                });
-            }
-            
-            if (hasOne){
-                hasOne.forEach(({ model, config }) => {
-                    sqzModels[association].hasOne(sqzModels[model], config)
-                });
-            }
-
-            if (belongsTo) {
-                belongsTo.forEach(({ model, config }) => {
-                    sqzModels[association].belongsTo(sqzModels[model], config)
-                });
-            }
-        }
-        //return;
-
-
-        // models.User.hasMany(models.Article, { foreignKey: 'userId', sourceKey: 'id' });
-        // models.User.hasMany(models.UserBook, { foreignKey: 'userId', sourceKey: 'id' });
-
-        // models.Article.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
-
-        // models.Book.hasMany(models.UserBook, { foreignKey: 'bookId', sourceKey: 'id' });
-
-        // // models.User.belongsToMany(models.Book, { through: 'userBook', foreignKey: 'userId'});
-        // // models.Book.belongsToMany(models.User, { through: 'userBook', foreignKey: 'bookId'});
-
-        // models.UserBook.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
-        // models.UserBook.belongsTo(models.Book, { foreignKey: 'bookId', targetKey: 'id' });
-
-        // // models.UserBook.hasMany(models.User, { foreignKey: 'userId'});
-        // // models.UserBook.hasMany(models.Book, { foreignKey: 'bookId'});
-
-        await sequelize.sync({ force: true });      
-        
+        const syncdModule = await sqzSync.sync(sequelize, true);
+               
         //################## insert start ##################
-        const resultEntity1 = await sqzModels.User.create({
+        const resultEntity1 = await syncdModule.models.User.create({
             id : null,
             email: 'setyourmindpark@gmail.com',
             passwd : '0000',
@@ -104,62 +48,62 @@ function sleep(ms) {
         });
         console.log(resultEntity1.get({ plain: true }))
 
-        await sqzModels.User.create({
+        await syncdModule.models.User.create({
             id: null,
             email: 'chulsookim@gmail.com',
             passwd: '0000',
             name: '김철수'
         });
 
-        await sqzModels.Book.create({
+        await syncdModule.models.Book.create({
             name: '자바의정석',
             publish: '남궁성'
         });
 
-        await sqzModels.Book.create({
+        await syncdModule.models.Book.create({
             name: '토비의스프링'            
         });
 
-        await sqzModels.Book.create({            
+        await syncdModule.models.Book.create({            
             name: 'docker'            
         });
-        await sqzModels.Book.create({
+        await syncdModule.models.Book.create({
             name: 'kubernetes'
         });
 
-        await sqzModels.UserBook.create({
+        await syncdModule.models.UserBook.create({
             userId: 1,
             bookId : 1
         });
 
-        await sqzModels.UserBook.create({
+        await syncdModule.models.UserBook.create({
             userId: 1,
             bookId: 2
         });
 
-        await sqzModels.UserBook.create({
+        await syncdModule.models.UserBook.create({
             userId: 2,
             bookId: 2
         });
 
-        await sqzModels.UserBook.create({
+        await syncdModule.models.UserBook.create({
             userId: 2,
             bookId: 3
         });
 
-        await sqzModels.Article.create({
+        await syncdModule.models.Article.create({
             userId: 1,
             title: '게시글1',
             content: '내용1'
         });
 
-        await sqzModels.Article.create({
+        await syncdModule.models.Article.create({
             userId: 1,
             title: '게시글2',
             content: '내용2'
         });
 
-        await sqzModels.Article.create({
+        await syncdModule.models.Article.create({
             userId: 1,
             title: '게시글3',
             content: '내용3'
@@ -167,7 +111,7 @@ function sleep(ms) {
         //################## insert end ##################
 
         //################## update start ##################
-        const resultEntity2 = await sqzModels.User.update({            
+        const resultEntity2 = await syncdModule.models.User.update({            
             email: 'update setyourmindpark@gmail.com',
             updateAt: Sequelize.fn('NOW')
         },{
@@ -182,21 +126,21 @@ function sleep(ms) {
             transaction = await sequelize.transaction();
             
             await sleep(1000)
-            await sqzModels.User.create({                
+            await syncdModule.models.User.create({                
                 email: '2setyourmindpark@gmail.com',
                 passwd: '0000',
                 name: '박재훈'
             }, { transaction });
 
             await sleep(1000)
-            await sqzModels.User.create({                
+            await syncdModule.models.User.create({                
                 email: '3setyourmindpark@gmail.com',
                 passwd: '0000',
                 name: '박재훈'
             }, { transaction });
 
             await sleep(1000)
-            await sqzModels.User.create({
+            await syncdModule.models.User.create({
                 email: '4setyourmindpark@gmail.com',
                 passwd: '0000',
                 name: '박재훈'
@@ -209,7 +153,7 @@ function sleep(ms) {
 
         //################## select start ##################
         // count
-        const count = await sqzModels.User.count({
+        const count = await syncdModule.models.User.count({
             where : {
                 name : '박재훈'
             }
@@ -219,7 +163,7 @@ function sleep(ms) {
         console.log('######################### count')
 
         // findAll // http://docs.sequelizejs.com/manual/tutorial/models-usage.html
-        const users = await sqzModels.User.findAll({
+        const users = await syncdModule.models.User.findAll({
             raw: true,
             where : {
                 name: '박재훈'
@@ -235,7 +179,7 @@ function sleep(ms) {
         console.log('######################### findAll')
 
         //findOne
-        const someone = await sqzModels.User.findOne({
+        const someone = await syncdModule.models.User.findOne({
             raw: true,
             where: {
                 email: 'update setyourmindpark@gmail.com'
@@ -246,27 +190,27 @@ function sleep(ms) {
         console.log('######################### findOne')
 
         // hasMany    
-        const hasMany = await sqzModels.User.find({
+        const hasMany = await syncdModule.models.User.find({
             where: {
                 id: 1
             },
-            include: { model: sqzModels.Article }
+            include: { model: syncdModule.models.Article }
         })
         console.log('######################### hasMany')
         console.log(hasMany.get({ plain: true }));
         console.log('######################### hasMany')
 
-        const belongsTo = await sqzModels.Article.find({
+        const belongsTo = await syncdModule.models.Article.find({
             where: {
                 id: 1
             },
-            include: { model: sqzModels.User }
+            include: { model: syncdModule.models.User }
         })
         console.log('######################### belongsTo')
         console.log(belongsTo.get({ plain: true }));
         console.log('######################### belongsTo')
 
-        const hasMany2 = await sqzModels.UserBook.findAll({
+        const hasMany2 = await syncdModule.models.UserBook.findAll({
             raw: true,
             attributes: {
                 //include: ['createAt'],
@@ -276,10 +220,10 @@ function sleep(ms) {
                 userId: 1
             },
             include: [{ 
-                    model: sqzModels.User,
+                    model: syncdModule.models.User,
                     attributes: ['name', 'email']
                 }, { 
-                    model: sqzModels.Book,
+                    model: syncdModule.models.Book,
                     attributes: ['name']
                 }]
         })
