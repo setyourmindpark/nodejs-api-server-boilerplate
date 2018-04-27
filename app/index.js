@@ -14,7 +14,7 @@ const response = reqlib('/base/common/response');
 const authorizer = reqlib('/base/authorizer');
 const queryHelper = reqlib('/base/queryHelper');
 const sequelize = reqlib('/base/sequelize');
-const sequelizeModels = reqlib('/app/query/sequelize/models');
+const sqzSync = reqlib('/app/query/sequelize/sync');
 const modules = reqlib('/app/common/modules');
 const toRouteRouters = reqlib('/app/api');
 
@@ -32,31 +32,14 @@ async function initializeModule(){
     const { queryHelperModule1 } = await queryHelper.createModules();
     const { sequelizeModule1 } = await sequelize.createModules();
     const { jwtAccess, jwtRefresh } = authorizer.createModules();
-    const models = {};
-    for (let model in sequelizeModels){
-        const { sync, defaultPrimaryKey, sqzModelSet } = sequelizeModels[model];
-        const { tableName, define, config } = sqzModelSet;
-        if (sync){            
-            const defineModel = sequelizeModule1.define(
-                tableName,
-                define,
-                config
-            );
-            if (!defaultPrimaryKey){
-                defineModel.removeAttribute('id');
-            }
-            models[model] = defineModel;            
-        }        
-    }
-    await sequelizeModule1.sync();
-    sequelizeModule1.models = models;
+    const syncdSzqModule1 = await sqzSync.sync(sequelizeModule1);       // syncdSzqModule1.models 에 entity binded
    
     modules.initialize({
         queryHelperModules : {
             queryHelperModule1 : queryHelperModule1
         },
         sequelizeModules : {
-            sequelizeModule1: sequelizeModule1
+            sequelizeModule1: syncdSzqModule1
         },
         jwtModules : {
             jwtAccess: jwtAccess,

@@ -6,7 +6,7 @@
 
 const Sequelize = require('sequelize');
 const isRoot = require('is-root');
-const sequelizeModels = require('./models');
+const { models, associations } = require('./blueprint');
 const rootPath = require('app-root-path');
 require('dotenv').config({ path: rootPath.path + '/env/dev.env' });
 const config = require('../../../config');
@@ -37,38 +37,66 @@ function sleep(ms) {
             },                  
             timezone: 'Asia/Seoul'      // set default now() timezone // default is seoul korea
         });
-        const models = {};
+        const sqzModels = {};
 
-        for (let model in sequelizeModels) {
-            const { sync, defaultPrimaryKey, sqzModelSet } = sequelizeModels[model];
-            const { tableName, define, config } = sqzModelSet;
-            if (sync) {
-                const defineModel = sequelize.define(
-                    tableName,
-                    define,
-                    config
-                );
-                if (!defaultPrimaryKey) {
-                    defineModel.removeAttribute('id');
-                }
-                models[model] = defineModel;
+        for (let model in models) {
+            const { defaultPrimaryKey, modelSet } = models[model];
+            const { tableName, define, config } = modelSet;
+            const defineModel = sequelize.define(
+                tableName,
+                define,
+                config
+            );
+            if (!defaultPrimaryKey) {
+                defineModel.removeAttribute('id');
+            }
+            sqzModels[model] = defineModel;
+        }
+        
+        for (let association in associations) {
+            // belongsToMany는 사용하지않음 . 명시적어주는게 좋다고생각함. 
+            const { hasMany, hasOne, belongsTo } = associations[association];
+            if (hasMany){
+                hasMany.forEach(({model, config}) => {
+                    sqzModels[association].hasMany(sqzModels[model],config)
+                });
+            }
+            
+            if (hasOne){
+                hasOne.forEach(({ model, config }) => {
+                    sqzModels[association].hasOne(sqzModels[model], config)
+                });
+            }
+
+            if (belongsTo) {
+                belongsTo.forEach(({ model, config }) => {
+                    sqzModels[association].belongsTo(sqzModels[model], config)
+                });
             }
         }
+        //return;
 
-        models.User.hasMany(models.Article, { foreignKey: 'userId', sourceKey: 'id' });
-        models.User.hasMany(models.UserBook, { foreignKey: 'userId', sourceKey: 'id' });
 
-        models.Article.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+        // models.User.hasMany(models.Article, { foreignKey: 'userId', sourceKey: 'id' });
+        // models.User.hasMany(models.UserBook, { foreignKey: 'userId', sourceKey: 'id' });
 
-        models.Book.hasMany(models.UserBook, { foreignKey: 'bookId', sourceKey: 'id' });
+        // models.Article.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
 
-        models.UserBook.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
-        models.UserBook.belongsTo(models.Book, { foreignKey: 'bookId', targetKey: 'id' });
+        // models.Book.hasMany(models.UserBook, { foreignKey: 'bookId', sourceKey: 'id' });
+
+        // // models.User.belongsToMany(models.Book, { through: 'userBook', foreignKey: 'userId'});
+        // // models.Book.belongsToMany(models.User, { through: 'userBook', foreignKey: 'bookId'});
+
+        // models.UserBook.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+        // models.UserBook.belongsTo(models.Book, { foreignKey: 'bookId', targetKey: 'id' });
+
+        // // models.UserBook.hasMany(models.User, { foreignKey: 'userId'});
+        // // models.UserBook.hasMany(models.Book, { foreignKey: 'bookId'});
 
         await sequelize.sync({ force: true });      
         
         //################## insert start ##################
-        const resultEntity1 = await models.User.create({
+        const resultEntity1 = await sqzModels.User.create({
             id : null,
             email: 'setyourmindpark@gmail.com',
             passwd : '0000',
@@ -76,62 +104,62 @@ function sleep(ms) {
         });
         console.log(resultEntity1.get({ plain: true }))
 
-        await models.User.create({
+        await sqzModels.User.create({
             id: null,
             email: 'chulsookim@gmail.com',
             passwd: '0000',
             name: '김철수'
         });
 
-        await models.Book.create({
+        await sqzModels.Book.create({
             name: '자바의정석',
             publish: '남궁성'
         });
 
-        await models.Book.create({
+        await sqzModels.Book.create({
             name: '토비의스프링'            
         });
 
-        await models.Book.create({            
+        await sqzModels.Book.create({            
             name: 'docker'            
         });
-        await models.Book.create({
+        await sqzModels.Book.create({
             name: 'kubernetes'
         });
 
-        await models.UserBook.create({
+        await sqzModels.UserBook.create({
             userId: 1,
             bookId : 1
         });
 
-        await models.UserBook.create({
+        await sqzModels.UserBook.create({
             userId: 1,
             bookId: 2
         });
 
-        await models.UserBook.create({
+        await sqzModels.UserBook.create({
             userId: 2,
             bookId: 2
         });
 
-        await models.UserBook.create({
+        await sqzModels.UserBook.create({
             userId: 2,
             bookId: 3
         });
 
-        await models.Article.create({
+        await sqzModels.Article.create({
             userId: 1,
             title: '게시글1',
             content: '내용1'
         });
 
-        await models.Article.create({
+        await sqzModels.Article.create({
             userId: 1,
             title: '게시글2',
             content: '내용2'
         });
 
-        await models.Article.create({
+        await sqzModels.Article.create({
             userId: 1,
             title: '게시글3',
             content: '내용3'
@@ -139,7 +167,7 @@ function sleep(ms) {
         //################## insert end ##################
 
         //################## update start ##################
-        const resultEntity2 = await models.User.update({            
+        const resultEntity2 = await sqzModels.User.update({            
             email: 'update setyourmindpark@gmail.com',
             updateAt: Sequelize.fn('NOW')
         },{
@@ -154,21 +182,21 @@ function sleep(ms) {
             transaction = await sequelize.transaction();
             
             await sleep(1000)
-            await models.User.create({                
+            await sqzModels.User.create({                
                 email: '2setyourmindpark@gmail.com',
                 passwd: '0000',
                 name: '박재훈'
             }, { transaction });
 
             await sleep(1000)
-            await models.User.create({                
+            await sqzModels.User.create({                
                 email: '3setyourmindpark@gmail.com',
                 passwd: '0000',
                 name: '박재훈'
             }, { transaction });
 
             await sleep(1000)
-            await models.User.create({
+            await sqzModels.User.create({
                 email: '4setyourmindpark@gmail.com',
                 passwd: '0000',
                 name: '박재훈'
@@ -181,7 +209,7 @@ function sleep(ms) {
 
         //################## select start ##################
         // count
-        const count = await models.User.count({
+        const count = await sqzModels.User.count({
             where : {
                 name : '박재훈'
             }
@@ -191,13 +219,13 @@ function sleep(ms) {
         console.log('######################### count')
 
         // findAll // http://docs.sequelizejs.com/manual/tutorial/models-usage.html
-        const users = await models.User.findAll({
+        const users = await sqzModels.User.findAll({
             raw: true,
             where : {
                 name: '박재훈'
             },
             order: [
-                ['createAt','DESC'] // DESC 반드시 대문자
+                ['createdAt','DESC'] // DESC 반드시 대문자
             ],
             offset: 2,
             limit: 100
@@ -207,7 +235,7 @@ function sleep(ms) {
         console.log('######################### findAll')
 
         //findOne
-        const someone = await models.User.findOne({
+        const someone = await sqzModels.User.findOne({
             raw: true,
             where: {
                 email: 'update setyourmindpark@gmail.com'
@@ -218,27 +246,27 @@ function sleep(ms) {
         console.log('######################### findOne')
 
         // hasMany    
-        const hasMany = await models.User.find({
+        const hasMany = await sqzModels.User.find({
             where: {
                 id: 1
             },
-            include: { model: models.Article }
+            include: { model: sqzModels.Article }
         })
         console.log('######################### hasMany')
         console.log(hasMany.get({ plain: true }));
         console.log('######################### hasMany')
 
-        const belongsTo = await models.Article.find({
+        const belongsTo = await sqzModels.Article.find({
             where: {
                 id: 1
             },
-            include: { model: models.User }
+            include: { model: sqzModels.User }
         })
         console.log('######################### belongsTo')
         console.log(belongsTo.get({ plain: true }));
         console.log('######################### belongsTo')
 
-        const hasMany2 = await models.UserBook.findAll({
+        const hasMany2 = await sqzModels.UserBook.findAll({
             raw: true,
             attributes: {
                 //include: ['createAt'],
@@ -248,10 +276,10 @@ function sleep(ms) {
                 userId: 1
             },
             include: [{ 
-                    model: models.User,
+                    model: sqzModels.User,
                     attributes: ['name', 'email']
                 }, { 
-                    model: models.Book,
+                    model: sqzModels.Book,
                     attributes: ['name']
                 }]
         })

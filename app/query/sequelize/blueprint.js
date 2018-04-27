@@ -1,31 +1,31 @@
 // to query using sequelize module. so you have to query model in here
 
 const Sequelize = require('sequelize');
-const sequelizeModels = {};
+const sqz = {};
+sqz.models = {};
+sqz.associations = {};
 
 //  http://docs.sequelizejs.com/variable/index.html
 // datatype document
 
-sequelizeModels.User = {
-    sync: true,
+sqz.models.User = {
     defaultPrimaryKey: true,       // false = { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true }
-    sqzModelSet : {
+    modelSet : {
         tableName: 'user',
         define: {
             email: { type: Sequelize.STRING(100), allowNull: false, },
             passwd:{ type: Sequelize.STRING(200), allowNull: false, }, 
             name: { type: Sequelize.STRING(20), allowNull: false, },
-            createAt : { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
-            updateAt : { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') } 
+            createdAt : { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updatedAt : { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') } 
         },
         config: {} 
     },    
 }
 
-sequelizeModels.Article = {
-    sync: true,
+sqz.models.Article = {
     defaultPrimaryKey: true,
-    sqzModelSet: {
+    modelSet: {
         tableName: 'article',
         define: {
             userId: { type: Sequelize.INTEGER, allowNull: false },
@@ -33,48 +33,45 @@ sequelizeModels.Article = {
             content: { type: Sequelize.STRING(50), allowNull: true },
             pid: { type: Sequelize.STRING(50), allowNull: true },
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
-            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
-            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+            createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
         },
         config: {}
     }
 }
 
-sequelizeModels.Book = {
-    sync: true,
+sqz.models.Book = {
     defaultPrimaryKey: true,
-    sqzModelSet: {
+    modelSet: {
         tableName: 'book',
         define: {
             name: { type: Sequelize.STRING(50), allowNull: false },
             publish: { type: Sequelize.STRING(50), allowNull: true },            
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
-            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
-            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+            createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
         },
         config: {}
     }
 }
 
-sequelizeModels.UserBook = {
-    sync: true,
+sqz.models.UserBook = {
     defaultPrimaryKey: false,
-    sqzModelSet: {
+    modelSet: {
         tableName: 'userBook',
         define: {
             userId: { type: Sequelize.INTEGER, primaryKey: true },
             bookId: { type: Sequelize.INTEGER, primaryKey: true },            
-            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
-            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+            createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
         },
         config: {}
     }
 }
 
-sequelizeModels.File = {
-    sync: true,
+sqz.models.File = {
     defaultPrimaryKey: true,
-    sqzModelSet: {
+    modelSet: {
         tableName: 'file',
         define: {
             dirName: { type: Sequelize.STRING(50), allowNull: true },
@@ -82,18 +79,17 @@ sequelizeModels.File = {
             viewFileName: { type: Sequelize.STRING(200), allowNull: false },
             phisicalFileName: { type: Sequelize.STRING(200), allowNull: false },
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
-            createAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
-            updateAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
+            createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
+            updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
         },
         config: {}
     }
 }
 
 // for system
-sequelizeModels.Common = {    
-    sync: true,
+sqz.models.Common = {    
     defaultPrimaryKey: false,
-    sqzModelSet : {
+    modelSet : {
         tableName: 'common',
         define: {
             groupCode: { type: Sequelize.STRING(50), allowNull: false },
@@ -108,10 +104,9 @@ sequelizeModels.Common = {
 }
 
 // for service constant
-sequelizeModels.Constant = {    
-    sync: true,
+sqz.models.Constant = {    
     defaultPrimaryKey: false,
-    sqzModelSet : {
+    modelSet : {
         tableName: 'constant',
         define: {
             groupCode: { type: Sequelize.STRING(50), allowNull: false },
@@ -129,4 +124,47 @@ sequelizeModels.Constant = {
     }
 }
 
-module.exports = sequelizeModels;
+
+sqz.associations.User = {
+    hasMany: [{
+        model: 'Article',
+        config: { foreignKey: 'userId', sourceKey: 'id' }
+    }, {
+        model: 'UserBook',
+        config: { foreignKey: 'userId', sourceKey: 'id' }
+    }]
+}
+
+sqz.associations.Article = {
+    belongsTo: [{
+        model: 'User',
+        config: { foreignKey: 'userId', targetKey: 'id' }
+    }],
+}
+
+sqz.associations.Article = {
+    belongsTo: [{
+        model: 'User',
+        config: { foreignKey: 'userId', targetKey: 'id' }
+    }],
+}
+
+sqz.associations.Book = {
+    hasMany: [{
+        model: 'UserBook',
+        config: { foreignKey: 'bookId', sourceKey: 'id' }
+    }]
+}
+
+sqz.associations.UserBook = {
+    belongsTo: [{
+        model: 'User',
+        config: { foreignKey: 'userId', targetKey: 'id' }
+    }, {
+        model: 'Book',
+        config: { foreignKey: 'bookId', targetKey: 'id' }
+    }]
+}
+
+module.exports = sqz;
+
