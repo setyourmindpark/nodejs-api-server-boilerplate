@@ -55,59 +55,60 @@ function sleep(ms) {
             name: '김철수'
         });
 
-        await syncdModule.models.Book.create({
-            name: '자바의정석',
-            publish: '남궁성'
+        await syncdModule.models.Memo.create({
+            userId: 1,
+            title: '메모제목1',
+            content: '메모내용1'
         });
 
-        await syncdModule.models.Book.create({
+        await syncdModule.models.Memo.create({
+            userId: 1,
+            title: '메모제목2',
+            content: '메모내용2'
+        });
+
+        await syncdModule.models.Memo.create({
+            userId: 1,
+            title: '메모제목3',
+            content: '메모내용3'
+        });
+
+        await syncdModule.models.Tag.create({
+            name: '자바의정석'            
+        });
+
+        await syncdModule.models.Tag.create({
             name: '토비의스프링'            
         });
 
-        await syncdModule.models.Book.create({            
+        await syncdModule.models.Tag.create({            
             name: 'docker'            
         });
-        await syncdModule.models.Book.create({
+        
+        await syncdModule.models.Tag.create({
             name: 'kubernetes'
         });
 
-        await syncdModule.models.UserBook.create({
-            userId: 1,
-            bookId : 1
+        await syncdModule.models.MemoTag.create({
+            memoId: 1,
+            tagId : 1
         });
 
-        await syncdModule.models.UserBook.create({
-            userId: 1,
-            bookId: 2
+        await syncdModule.models.MemoTag.create({
+            memoId: 1,
+            tagId: 2
         });
 
-        await syncdModule.models.UserBook.create({
-            userId: 2,
-            bookId: 2
+        await syncdModule.models.MemoTag.create({
+            memoId: 2,
+            tagId: 2
         });
 
-        await syncdModule.models.UserBook.create({
-            userId: 2,
-            bookId: 3
+        await syncdModule.models.MemoTag.create({
+            memoId: 2,
+            tagId: 3
         });
 
-        await syncdModule.models.Article.create({
-            userId: 1,
-            title: '게시글1',
-            content: '내용1'
-        });
-
-        await syncdModule.models.Article.create({
-            userId: 1,
-            title: '게시글2',
-            content: '내용2'
-        });
-
-        await syncdModule.models.Article.create({
-            userId: 1,
-            title: '게시글3',
-            content: '내용3'
-        });
         //################## insert end ##################
 
         //################## update start ##################
@@ -194,13 +195,13 @@ function sleep(ms) {
             where: {
                 id: 1
             },
-            include: { model: syncdModule.models.Article }
+            include: { model: syncdModule.models.Memo }
         })
         console.log('######################### hasMany')
         console.log(hasMany.get({ plain: true }));
         console.log('######################### hasMany')
 
-        const belongsTo = await syncdModule.models.Article.find({
+        const belongsTo = await syncdModule.models.Memo.find({
             where: {
                 id: 1
             },
@@ -210,26 +211,45 @@ function sleep(ms) {
         console.log(belongsTo.get({ plain: true }));
         console.log('######################### belongsTo')
 
-        const hasMany2 = await syncdModule.models.UserBook.findAll({
+        const hasMany2 = await syncdModule.models.MemoTag.findAll({
             raw: true,
             attributes: {
                 //include: ['createAt'],
-                exclude: ['userId','bookId','updateAt']
+                exclude: ['memoId','tagId','updatedAt']
             },
             where: {
-                userId: 1
+                memoId: 1
             },
             include: [{ 
-                    model: syncdModule.models.User,
-                    attributes: ['name', 'email']
+                    model: syncdModule.models.Memo,
+                    attributes: ['title','content']
                 }, { 
-                    model: syncdModule.models.Book,
+                    model: syncdModule.models.Tag,
                     attributes: ['name']
                 }]
         })
         console.log('######################### hasMany2')
         console.log(hasMany2);
         console.log('######################### hasMany2')
+
+
+        console.log('######################### findOrCreate')
+        const findOrCreate = await syncdModule.models.Tag.findOrCreate({     
+            where: { name: 'docker1' },
+            defaults: { name: 'Technical Lead JavaScript' }
+        })
+        
+        const isCreated = findOrCreate[1];
+        if (isCreated){            
+            console.log('생성됨');
+            console.log(findOrCreate[0].dataValues) //기존정보가져옴
+        }else{
+            console.log('생성되지않음')
+            console.log(findOrCreate[0].dataValues) //생성된정보가져옴
+        }
+        
+        console.log('######################### findOrCreate')
+        
 
         process.exit(1)
 

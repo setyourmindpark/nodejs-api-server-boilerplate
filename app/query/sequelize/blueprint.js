@@ -23,15 +23,14 @@ sqz.models.User = {
     },    
 }
 
-sqz.models.Article = {
+sqz.models.Memo = {
     defaultPrimaryKey: true,
     modelSet: {
-        tableName: 'article',
+        tableName: 'memo',
         define: {
             userId: { type: Sequelize.INTEGER, allowNull: false },
             title: { type: Sequelize.STRING(50), allowNull: false },
             content: { type: Sequelize.STRING(50), allowNull: true },
-            pid: { type: Sequelize.STRING(50), allowNull: true },
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
             createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
             updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
@@ -40,13 +39,12 @@ sqz.models.Article = {
     }
 }
 
-sqz.models.Book = {
+sqz.models.Tag = {
     defaultPrimaryKey: true,
     modelSet: {
-        tableName: 'book',
+        tableName: 'tag',
         define: {
             name: { type: Sequelize.STRING(50), allowNull: false },
-            publish: { type: Sequelize.STRING(50), allowNull: true },            
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
             createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
             updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
@@ -55,13 +53,13 @@ sqz.models.Book = {
     }
 }
 
-sqz.models.UserBook = {
+sqz.models.MemoTag = {
     defaultPrimaryKey: false,
     modelSet: {
-        tableName: 'userBook',
+        tableName: 'memoTag',
         define: {
-            userId: { type: Sequelize.INTEGER, primaryKey: true },
-            bookId: { type: Sequelize.INTEGER, primaryKey: true },            
+            memoId: { type: Sequelize.INTEGER, primaryKey: true },
+            tagId: { type: Sequelize.INTEGER, primaryKey: true },            
             createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
             updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
         },
@@ -126,35 +124,36 @@ sqz.models.Constant = {
 
 sqz.associations.User = {
     hasMany: [{
-        model: 'Article',
-        config: { foreignKey: 'userId', sourceKey: 'id' }
-    }, {
-        model: 'UserBook',
-        config: { foreignKey: 'userId', sourceKey: 'id' }
+        model: 'Memo',
+        config: { foreignKey: 'userId', sourceKey: 'id', constraints: false }
     }]
 }
 
-sqz.associations.Article = {
+sqz.associations.Memo = {
+    hasMany: [{
+        model: 'MemoTag',
+        config: { foreignKey: 'memoId', sourceKey: 'id' ,constraints: false }
+    }],
     belongsTo: [{
         model: 'User',
-        config: { foreignKey: 'userId', targetKey: 'id' }
+        config: { foreignKey: 'userId', targetKey: 'id', constraints: false }
     }],
 }
 
-sqz.associations.Book = {
+sqz.associations.Tag = {
     hasMany: [{
-        model: 'UserBook',
-        config: { foreignKey: 'bookId', sourceKey: 'id' }
+        model: 'MemoTag',
+        config: { foreignKey: 'tagId', sourceKey: 'id', constraints: false }
     }]
 }
 
-sqz.associations.UserBook = {
+sqz.associations.MemoTag = {
     belongsTo: [{
-        model: 'User',
-        config: { foreignKey: 'userId', targetKey: 'id' }
+        model: 'Memo',
+        config: { foreignKey: 'memoId', targetKey: 'id', constraints: false }
     }, {
-        model: 'Book',
-        config: { foreignKey: 'bookId', targetKey: 'id' }
+        model: 'Tag',
+        config: { foreignKey: 'tagId', targetKey: 'id' , constraints: false }
     }]
 }
 
