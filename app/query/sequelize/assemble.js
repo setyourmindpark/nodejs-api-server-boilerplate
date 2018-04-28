@@ -1,13 +1,17 @@
-const User = require('./design/User');
-const Memo = require('./design/Memo');
-const Tag = require('./design/Tag');
-const MemoTag = require('./design/MemoTag');
-const Common = require('./design/Common');
-const Constant = require('./design/Constant');
-const File = require('./design/File');
+const sqzSet = {
+    models : {},
+    associations : {}
+};
 
-// http://docs.sequelizejs.com/variable/index.html
-// datatype document
+module.exports = sqzSet;
+
+require('./design/models/User');
+require('./design/models/Memo');
+require('./design/models/Tag');
+require('./design/models/MemoTag');
+require('./design/models/Common');
+require('./design/models/Constant');
+require('./design/models/File');
 
 // association define 
 // User.hasMany(Memo, { foreignKey: 'userId', sourceKey: 'id', constraints: false });
@@ -17,23 +21,7 @@ const File = require('./design/File');
 // MemoTag.belongsTo(Memo, { foreignKey: 'memoId', targetKey: 'id', constraints: false });
 // MemoTag.belongsTo(Tag, { foreignKey: 'tagId', targetKey: 'id', constraints: false });
 
-module.exports = {
-    models : Object.assign(
-        User.model,
-        Memo.model,
-        Tag.model,
-        MemoTag.model,
-        Common.model,
-        Constant.model,
-        File.model
-    ),
-    associations : Object.assign(
-        User.association,
-        Memo.association,
-        Tag.association,
-        MemoTag.association,
-        Common.association,
-        Constant.association,
-        File.association
-    ) 
-}
+require('./design/associations');
+
+// http://docs.sequelizejs.com/variable/index.html
+// datatype document
