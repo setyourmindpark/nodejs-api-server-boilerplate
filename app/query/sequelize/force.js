@@ -250,11 +250,11 @@ function sleep(ms) {
         
         const isCreated = findOrCreate[1];
         if (isCreated){            
-            console.log('생성됨');
-            console.log(findOrCreate[0].dataValues) //기존정보가져옴
-        }else{
-            console.log('생성되지않음')
+            console.log('created');
             console.log(findOrCreate[0].dataValues) //생성된정보가져옴
+        }else{
+            console.log('not created. already exist')
+            console.log(findOrCreate[0].dataValues) //기존정보가져옴
         }
         
         console.log('######################### findOrCreate')
