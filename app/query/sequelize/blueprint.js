@@ -122,6 +122,15 @@ sqz.models.Constant = {
     }
 }
 
+// to define 
+// User.hasMany(Memo, { foreignKey: 'userId', sourceKey: 'id', constraints: false });
+// Memo.hasMany(MemoTag, { foreignKey: 'memoId', sourceKey: 'id', constraints: false });
+// Memo.belongsTo(User, { foreignKey: 'userId', targetKey: 'id', constraints: false });
+// Tag.hasMany(MemoTag, { foreignKey: 'tagId', sourceKey: 'id', constraints: false });
+// MemoTag.belongsTo(Memo, { foreignKey: 'memoId', targetKey: 'id', constraints: false });
+// MemoTag.belongsTo(Tag, { foreignKey: 'tagId', targetKey: 'id', constraints: false });
+
+// set to define
 sqz.associations.User = {
     hasMany: [{
         model: 'Memo',
