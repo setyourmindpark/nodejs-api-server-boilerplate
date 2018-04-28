@@ -11,8 +11,7 @@ module.exports = {
         require('./models/Common'),
         require('./models/Constant'),
         require('./models/File'),
-        // ...
-        
+        // ...        
     ),
 
     // association define 
