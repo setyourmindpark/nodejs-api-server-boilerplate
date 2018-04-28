@@ -5,7 +5,7 @@ const sqz = {};
 sqz.models = {};
 sqz.associations = {};
 
-//  http://docs.sequelizejs.com/variable/index.html
+// http://docs.sequelizejs.com/variable/index.html
 // datatype document
 
 sqz.models.User = {
