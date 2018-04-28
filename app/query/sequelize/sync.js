@@ -1,8 +1,8 @@
 exports.sync = sync;
 
-const { models, associations } = require('./assemble');
+const { models, associations } = require('./design');
 
-async function sync(sequelizeModule, option){      
+async function sync(sequelizeModule, option){
     const sqzModels = {};
     for (let model in models) {                     // model define
         const { defaultPrimaryKey, modelSet } = models[model];
