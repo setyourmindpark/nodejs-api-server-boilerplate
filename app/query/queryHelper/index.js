@@ -1,1 +1,0 @@
-// to query using queryHelper module. so you have to query model in here
