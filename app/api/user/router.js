@@ -53,7 +53,7 @@ router.post(
         body: {
             accesstoken: { require: true, v_type: 'any' }
         }
-    }, ),
+    }),
     assistant.unifyAllProps(),
     userCtrl.tokenNew()
 );
