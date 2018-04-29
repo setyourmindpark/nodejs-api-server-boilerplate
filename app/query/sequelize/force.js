@@ -44,7 +44,7 @@ function sleep(ms) {
         const resultEntity1 = await syncdModule.models.User.create({
             id : null,
             email: 'setyourmindpark@gmail.com',
-            passwd : '0000',
+            passwd: '0000',
             name : '박재훈'
         });
         console.log(resultEntity1.get({ plain: true }))
@@ -52,7 +52,7 @@ function sleep(ms) {
         await syncdModule.models.User.create({
             id: null,
             email: 'chulsookim@gmail.com',
-            passwd: '0000',
+            passwd: '4a7d1ed414474e4033ac29ccb8653d9b',
             name: '김철수'
         });
 
@@ -113,8 +113,8 @@ function sleep(ms) {
         //################## insert end ##################
 
         //################## update start ##################
-        const resultEntity2 = await syncdModule.models.User.update({            
-            email: 'update setyourmindpark@gmail.com',
+        const resultEntity2 = await syncdModule.models.User.update({                        
+            passwd: '4a7d1ed414474e4033ac29ccb8653d9b',
             updateAt: Sequelize.fn('NOW')
         },{
             where : { id : 1 }
@@ -182,13 +182,13 @@ function sleep(ms) {
 
         //findOne
         const someone = await syncdModule.models.User.findOne({
-            raw: true,
+            //raw: true,
             where: {
-                email: 'update setyourmindpark@gmail.com'
+                email: 'setyourmindpark@gmail.com'
             },            
         })
         console.log('######################### findOne')
-        console.log(someone);
+        console.log(someone.get({ plain: true }));
         console.log('######################### findOne')
 
         // hasMany    

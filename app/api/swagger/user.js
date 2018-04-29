@@ -137,7 +137,7 @@ const parameters = {
             properties: {
                 name: { type: 'string', default: '박재훈' },
                 email: { type: 'string', default: 'setyourmindpark@gmail.com' },
-                passwd: { type: 'string', default: '0000' }
+                passwd: { type: 'string', default: '4a7d1ed414474e4033ac29ccb8653d9b' }
             }
         }
     },

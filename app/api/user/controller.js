@@ -31,10 +31,17 @@ exports.new = () => {
     return async (req, res, next) => {
         try {
             const { name, email, passwd } = req.prop;
-            const params = { name: name, email: email, passwd: passwd };
 
-            const result1 = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
-            if (result1.cnt >= 1) {
+            //const result1 = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
+            const count = await sequelize.models.User.count({
+                where: {
+                    name : name,
+                    email: email,
+                    passwd : passwd
+                }
+            })
+
+            if (count >= 1) {
                 res.send(formatter.apiResponse({
                     code: constant.CODE_SERVICE_PROCESS_2,
                     msg: 'sorry . you can not this email'
@@ -42,7 +49,12 @@ exports.new = () => {
                 return;
             };
 
-            const result2 = await queryHelper.execute({ query: userSql.insertUser, data: params, expect: 'single' });
+            const create = await sequelize.models.User.create({
+                name: name,
+                email: email,
+                passwd: passwd
+            });
+
             res.send(formatter.apiResponse({
                 msg: 'created user. login now',
                 code: constant.CODE_SERVICE_PROCESS_1,
@@ -57,10 +69,14 @@ exports.tokenMe = () => {
     return async(req, res, next) => {
         try {
             const { email, passwd } = req.prop;
-            const params1 = { email: email, passwd: passwd };
-            const result = await queryHelper.execute({ query: userSql.selectUserInfo, data: params1, expect: 'single' });
+            const someone = await sequelize.models.User.findOne({
+                where: {
+                    email: email,
+                    passwd: passwd
+                },
+            })
 
-            if (!result) {
+            if (!someone) {
                 res.send(formatter.apiResponse({
                     code: constant.CODE_SERVICE_PROCESS_2,
                     msg: 'sorry . check login email and password'
@@ -68,8 +84,8 @@ exports.tokenMe = () => {
                 return;
             }
 
-            const userId = result.id;
-            const tokenBody = { tokenId: userId };
+            const { id } = someone.get({plain:true});
+            const tokenBody = { tokenId: id };
             res.send(formatter.apiResponse({
                 msg: 'logined, take care this token',
                 code: constant.CODE_SERVICE_PROCESS_1,
@@ -124,13 +140,18 @@ exports.tokenNew = () => {
 exports.me = () => {
     return async(req, res, next) => {
         try {
-            const userId = req.prop.tokenId;
-            const params = { id: userId };
-            const result = await queryHelper.execute({ query: userSql.selectUserInfo, data: params, expect: 'single' });
+            const id = req.prop.tokenId;            
+            const someone = await sequelize.models.User.findOne({
+                attributes: {
+                    exclude: ['passwd']
+                },
+                where: { id : id },
+            })
+
             res.send(formatter.apiResponse({
                 msg: 'user info here',
                 code: constant.CODE_SERVICE_PROCESS_1,
-                data: result
+                data: someone.get({plain:true})
             }));
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
