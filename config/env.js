@@ -36,7 +36,6 @@ module.exports = {
                     secret: env.AUTH_JWT_REFRESH_SECRET,
                     expire: env.AUTH_JWT_REFRESH_EXPIRE,
                 }
-
             },
             // other auth will be here ..
         },
@@ -51,11 +50,7 @@ module.exports = {
                 connectionLeast: env.DB_MYSQL_CONNECTION_LEAST
             },
             // other db will be here ..
-        },
-        pagenation: {
-            recordCountPerPage: env.PAGENATION_RECORD_COUNT_PER_PAGE,
-            pageSize: env.PAGENATION_PAGE_SIZE,
-        },
+        },       
         mailSender: {
             mailId: env.MAIL_SENDER_MAIL_ID,
             passwd: env.MAIL_SENDER_MAIL_PASSWD,
