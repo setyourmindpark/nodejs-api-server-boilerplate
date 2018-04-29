@@ -35,16 +35,14 @@ exports.new = () => {
             //const result1 = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
             const count = await sequelize.models.User.count({
                 where: {
-                    name : name,
                     email: email,
-                    passwd : passwd
                 }
             })
 
             if (count >= 1) {
                 res.send(formatter.apiResponse({
                     code: constant.CODE_SERVICE_PROCESS_2,
-                    msg: 'sorry . you can not this email'
+                    msg: 'sorry . you can not use this email'
                 }));
                 return;
             };
