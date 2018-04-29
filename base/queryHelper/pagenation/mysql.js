@@ -1,8 +1,8 @@
-exports.createModule = createModule;
+exports.initialize = initialize;
 
 // 해당 모듈을 n 개생성할수있도록 초기화하여 생성함. pagenation 초기값에따라 로직이달라질수있음. 
 // 이곳에 환경변수설정시 기본적으로 caching되기에 필요할때마다 object 생성함
-function createModule(recordCountPerPage = 10, pageSize = 10) {
+function initialize(recordCountPerPage = 10, pageSize = 10) {
 	if (typeof (recordCountPerPage) === 'string') recordCountPerPage = parseInt(recordCountPerPage);
 	if (typeof (pageSize) === 'string') pageSize = parseInt(pageSize);
 

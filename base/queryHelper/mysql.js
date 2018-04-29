@@ -81,7 +81,7 @@ function createModule({ host, port, user, database, password, connectionLimit}) 
             if (pageNo == 0) return undefined;
 
             const cnt = ( await queryModule.execute({ query: resource.query, data: resource.data, expect: 'single' }) ).cnt;
-            const pagenationInfo = pagenation.createModule(
+            const pagenationInfo = pagenation.initialize(
                 resource.data.recordCountPerPage,
                 resource.data.pageSize
             ).getPagenationInfo(pageNo, cnt);
@@ -98,7 +98,7 @@ function createModule({ host, port, user, database, password, connectionLimit}) 
             const pageNo = resource.data.pageNo;
             if (resource.data.pageNo == 0) return undefined;
 
-            const recordIndex = pagenation.createModule(
+            const recordIndex = pagenation.initialize(
                 resource.data.recordCountPerPage,
                 resource.data.pageSize
             ).getQueryIndex(pageNo);
