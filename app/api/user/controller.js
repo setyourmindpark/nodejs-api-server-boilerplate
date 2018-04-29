@@ -1,5 +1,4 @@
 const { response, queryHelper, sequelize, jwtAccess, jwtRefresh, formatter } = reqlib('/app/common/modules');
-const userSql = reqlib('/app/query/queryHelper/user.sql');
 const constant = reqlib('/app/common/constant');
 
 exports.validityEmail = () => {

@@ -1,5 +1,4 @@
 const { queryHelper, formatter } = reqlib('/app/common/modules');
-const sampleSql = reqlib('/app/query/queryHelper/sample.sql');
 const constant = reqlib('/app/common/constant');
 const config = reqlib('/config');
 
