@@ -1,194 +1,94 @@
 
 const paths = {
-    '/api/sample/select1/{param1}': {
+    '/api/sample/path/{param1}': {
         get: {
             tags: ['SAMPLE API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/param1' }],
+            parameters: [{ $ref: '#/parameters/param1' }],
             responses: {
                 200: {
-                    description: 'select1',
+                    description: 'path',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
 
-    '/api/sample/select2/{param1}/{param2}': {
+    '/api/sample/query': {
         get: {
             tags: ['SAMPLE API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/param1' }, { $ref: '#/parameters/param2' }],
+            parameters: [
+                { $ref: '#/parameters/query1' }, 
+                { $ref: '#/parameters/query2' }, 
+                { $ref: '#/parameters/query3' }, 
+                { $ref: '#/parameters/query4' }],
             responses: {
                 200: {
-                    description: 'select1',
+                    description: 'query',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
 
-    '/api/sample/insert': {
+    '/api/sample/post': {
         post: {
             tags: ['SAMPLE API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/insert' }],
+            parameters: [{ $ref: '#/parameters/post' }],
             responses: {
                 200: {
-                    description: 'insert',
+                    description: 'post',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
 
-    '/api/sample/update/{where}': {
+    // 전체 업데이트는 put, 일부분은 patch
+    '/api/sample/put/{where}': {
         put: {
             tags: ['SAMPLE API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/where' }, { $ref: '#/parameters/update' }],
+            parameters: [{ $ref: '#/parameters/where' }, { $ref: '#/parameters/put' }],
             responses: {
                 200: {
-                    description: 'update',
+                    description: 'put',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
 
-    '/api/sample/remove/{where}': {
+    '/api/sample/delete/{where}': {
         delete: {
             tags: ['SAMPLE API'],
             summary: 'RESTFUL FORMAT',
             operationId: 'jaehunpark',
             produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/where' }],
+            parameters: [{ $ref: '#/parameters/where' }],
             responses: {
                 200: {
-                    description: 'remove',
+                    description: 'delete',
                     schema: { "$ref": "#/definitions/definition" }
                 }
             }
         }
     },
-
-
-    '/api/sample/getPI/{where}/{pageNo}': {
-        get: {
-            tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
-            operationId: 'jaehunpark',
-            produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/where' }, { $ref: '#/parameters/pageNo' }],
-            responses: {
-                200: {
-                    description: 'getPI',
-                    schema: { "$ref": "#/definitions/definition" }
-                }
-            }
-        }
-    },
-
-    '/api/sample/getPR/{where}/{pageNo}': {
-        get: {
-            tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
-            operationId: 'jaehunpark',
-            produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/where' }, { $ref: '#/parameters/pageNo' }],
-            responses: {
-                200: {
-                    description: 'getPI',
-                    schema: { "$ref": "#/definitions/definition" }
-                }
-            }
-        }
-    },
-
-    '/api/sample/getPIWithPR/{where}/{pageNo}': {
-        get: {
-            tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
-            operationId: 'jaehunpark',
-            produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/where' }, { $ref: '#/parameters/pageNo' }],
-            responses: {
-                200: {
-                    description: 'getPI',
-                    schema: { "$ref": "#/definitions/definition" }
-                }
-            }
-        }
-    },
-
-    '/api/sample/transaction': {
-        post: {
-            tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
-            operationId: 'jaehunpark',
-            produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }],
-            responses: {
-                200: {
-                    description: 'transaction',
-                    schema: { "$ref": "#/definitions/definition" }
-                }
-            }
-        }
-    },
-
-    // '/api/sample/sendMail':{
-    //   post: {
-    //     tags: ['SAMPLE SEND MAIL API'],
-    //     summary: 'RESTFUL FORMAT',
-    //     operationId: 'jaehunpark',
-    //     produces: ['application/json'],
-    //     parameters: [{$ref: '#/parameters/token'},{$ref: '#/parameters/sendMail'}],
-    //     responses: {
-    //         200: {
-    //             description: 'transaction',
-    //             schema: {"$ref": "#/definitions/definition"}
-    //         }
-    //     }
-    //   }
-    // },
-
-    '/api/sample/checkEmail': {
-        post: {
-            tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
-            operationId: 'jaehunpark',
-            produces: ['application/json'],
-            parameters: [{ $ref: '#/parameters/token' }, { $ref: '#/parameters/checkEmail' }],
-            responses: {
-                200: {
-                    description: 'checkEmail',
-                    schema: { "$ref": "#/definitions/definition" }
-                }
-            }
-        }
-    },
-
 }
 
-const parameters = {
-    token: {
-        name: 'accesstoken',
-        in: 'header',
-        required: true,
-        type: 'string',
-        default: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTIzOTQzNjYzfQ.a6K3QxTVsArCFcpzeSUiLAL02YY5VAzenijxlJXv7Xs'
-    },
-
+const parameters = {    
     param1: {
+        //default: '1',
         name: 'param1',
         in: 'path',
         required: true,
@@ -200,23 +100,38 @@ const parameters = {
         required: true,
         type: 'string'
     },
-    where: {
-        name: 'where',
-        in: 'path',
-        default: 'a',
+    query1: {
+        name: 'param1',
+        in: 'query',
         required: true,
         type: 'string'
     },
-    pageNo: {
-        name: 'pageNo',
-        in: 'path',
-        default: '1',
+    query2: {
+        name: 'param2',
+        in: 'query',
         required: true,
-        type: 'integer'
+        type: 'string'
     },
-
-    insert: {
-        name: 'insert',
+    query3: {
+        name: 'param3',
+        in: 'query',
+        required: true,
+        type: 'string'
+    },
+    query4: {
+        name: 'param4',
+        in: 'query',
+        required: true,
+        type: 'string'
+    },
+    where: {
+        name: 'where',
+        in: 'path',        
+        required: true,
+        type: 'string'
+    },
+    post: {
+        name: 'post',
         in: 'body',
         required: true,
         schema: {
@@ -228,9 +143,8 @@ const parameters = {
             }
         }
     },
-
-    update: {
-        name: 'update',
+    put: {
+        name: 'put',
         in: 'body',
         required: true,
         schema: {
@@ -239,45 +153,6 @@ const parameters = {
                 param1: { type: 'string', default: 'value1' },
                 param2: { type: 'string', default: 'value2' },
                 param3: { type: 'string', default: 'value3' }
-            }
-        }
-    },
-
-    remove: {
-        name: 'remove',
-        in: 'body',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                param1: { type: 'string', default: 'value1' },
-                param2: { type: 'string', default: 'value2' }
-            }
-        }
-    },
-
-    sendMail: {
-        name: 'remove',
-        in: 'body',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                to: { type: 'string', default: 'jhpark1481@gmail.com' },
-                subject: { type: 'string', default: '제목' },
-                text: { type: 'string', default: '내용' }
-            }
-        }
-    },
-
-    checkEmail: {
-        name: 'remove',
-        in: 'body',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                email: { type: 'string', default: 'jhpark1481@gmail.com' }
             }
         }
     },

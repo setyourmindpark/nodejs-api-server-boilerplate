@@ -1,4 +1,3 @@
-
 const paths = {
     '/api/user/validity/email/{email}': {
         get: {
@@ -87,7 +86,7 @@ const parameters = {
         in: 'header',
         required: true,
         type: 'string',
-        default: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNMb2dpbmVkIjp0cnVlLCJpYXQiOjE1MjAwNjgzMzV9.KyRKCWKw_zmJc9glvBdDmrogI_wv4SiW-xpEZGSde5w'
+        default: ''
     },
 
     refreshtoken: {
@@ -95,7 +94,7 @@ const parameters = {
         in: 'header',
         required: true,
         type: 'string',
-        default: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNMb2dpbmVkIjp0cnVlLCJpYXQiOjE1MjAwNjgzMzV9.KyRKCWKw_zmJc9glvBdDmrogI_wv4SiW-xpEZGSde5w'
+        default: ''
     },
 
     tokenNew: {

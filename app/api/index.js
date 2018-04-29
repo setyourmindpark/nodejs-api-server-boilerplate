@@ -15,19 +15,7 @@ module.exports = {
             folder: '/sample',
             router: '/router.js',
             activate: true
-        },
-        {
-            toRoute: '/queryHelper',
-            folder: '/queryHelper',
-            router: '/router.js',
-            activate: false
-        },
-        {
-            toRoute: '/sequelize',
-            folder: '/sequelize',
-            router: '/router.js',
-            activate: false
-        },
+        },        
         {
             toRoute: '/user',
             folder: '/user',
