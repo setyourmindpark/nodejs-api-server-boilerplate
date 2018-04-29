@@ -10,6 +10,8 @@ const formatter = reqlib('/base/common/formatter');
 // 해당 모듈을 n 개생성할수있도록 초기화하여 생성함. jwt 설정값에따라 같은비지니스로직이 쓰일수있음
 function createModule({ secret, algorithm, expire, param }) {
     const jwtModule =  {
+        // delegateFunction존재시 validate 수행결과를 callback으로 router( 호출시점 ) 에서 받을시 정의하여 사용. callback으로 보내줌.( middleware, validate result )
+        // delegateFunction없을시 default는 formatter에서 바로 response를 error code와 message를 보냄.
         isAuthenticated: (delegateFunction) => {
             return (req, res, next) => {
                 try {

@@ -20,13 +20,16 @@ const formatter = reqlib('/base/common/formatter');
 
 /**
 * 유효성검사를 수행
-* @param {JSON}   ex) {파라미터이름 : {require : true, type : 'string', extra : 'checkEmailRules'},  ...  }   //get 방식의 api 요청일경우 default는 string.
+* @param {JSON, function}   
+* ex) {파라미터이름 : {require : true, type : string or regExp},  ...  }   //get 방식의 api 요청일경우 default는 string.
+* delegateFunction존재시 validate 수행결과를 callback으로 router( 호출시점 ) 에서 받을시 정의하여 사용. callback으로 보내줌.( middleware, validate result )
+* delegateFunction없을시 default는 formatter에서 바로 response를 error code와 message를 보냄.
 * @return {express middlware}
 * @public
 */
 function validate(
     { params:toValidateParam, body:toValidateBody, query:toValidateQuery, multipart:toValidateMultipart }, 
-    delegateFunction ) {
+    delegateFunction) { 
     return (req, res, next) => {
         (async () => {
             const { params: reqParams, query: reqQuery, body: reqBody } = req;
@@ -34,13 +37,11 @@ function validate(
             if (toValidateParam) {
                 const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
                 if (!isValidate) {
-                    console.log(delegateFunction)
                     if (delegateFunction){
                         delegateFunction(
                             { req: req, res: res, next: next },
                             { code: code, msg: msg })
                     }else{
-                        console.log('없우ㅡㅁ')
                         res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
                     }                    
                     return;
