@@ -3,14 +3,14 @@ exports.createModule = createModule;
 
 const constant = reqlib('/base/common/constant');
 const jwt = require('jsonwebtoken');
-const response = reqlib('/base/common/response');
+const formatter = reqlib('/base/common/formatter');
 
 // passport를 더이상쓰지않음. api server 로만쓸것이기때문에 session관련사항은 불필요함. 
 // jsonwebtoken 모듈로두 충분히 access token과 refresh token을 구현할수있음. verify 만 하면됨..
 // 해당 모듈을 n 개생성할수있도록 초기화하여 생성함. jwt 설정값에따라 같은비지니스로직이 쓰일수있음
 function createModule({ secret, algorithm, expire, param }) {
     const jwtModule =  {
-        isAuthenticated: () => {
+        isAuthenticated: (delegateFunction) => {
             return (req, res, next) => {
                 try {
                     const token = req.headers[param];
@@ -39,11 +39,14 @@ function createModule({ secret, algorithm, expire, param }) {
                     }
 
                 } catch ({ errorCode, message }) {
-                    response.apiResponse(res, {
-                        resultCode: errorCode,
-                        msg: message
-                    });
-
+                    if (delegateFunction) {
+                        delegateFunction(
+                            { req: req, res: res, next: next },
+                            { code: errorCode, msg: message })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: errorCode, msg: message }))
+                    }
+                        
                     return false;
                 }
             }

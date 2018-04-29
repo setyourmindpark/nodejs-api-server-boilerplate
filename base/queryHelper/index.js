@@ -6,20 +6,20 @@ const baseType = config.base.db;
 // const linkDb1 = config.setting.linkdb1;
 
 async function createModules(){
-    let queryHelperModule1 = undefined;
+    let queryHelper1 = undefined;
     if (baseType === 'mysql') {
         const mysqlConfig = config.setting.db.mysql;
-        queryHelperModule1 = mysql.createModule(mysqlConfig);
-        await queryHelperModule1.execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })  
-        await queryHelperModule1.execute({ query: "insert into user values(null, 'setyourmindpark@gmail.com', '000022', '박재훈', now(), now())", expect: 'single' })  
+        queryHelper1 = mysql.createModule(mysqlConfig);
+        await queryHelper1.execute({ query: 'SELECT "ARE YOU ALIVE ?" FROM DUAL', expect: 'single' })  
+        await queryHelper1.execute({ query: "insert into user values(null, 'setyourmindpark@gmail.com', '000022', '박재훈', now(), now())", expect: 'single' })  
         
     }
 
-    // let sequelizeModule2 = undefined;
+    // let queryHelper2 = undefined;
     // ..
 
     return {
-        queryHelperModule1: queryHelperModule1,
+        queryHelper1: queryHelper1,
         // ..
     }
 }

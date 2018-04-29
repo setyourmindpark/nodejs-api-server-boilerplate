@@ -9,9 +9,6 @@ exports.validateMultipart = validateMultipart;
 
 const constant = reqlib('/base/common/constant');
 const bytes = require('bytes');
-const checker = require('./checker');
-const moment = require('moment');
-const fs = require('fs');
 const Busboy = require('busboy');
 
 //숫자만 존재하는지 체크
@@ -29,7 +26,7 @@ function validateParams(paramObj, toCheckObj) {
     for (let key of Object.keys(toCheckObj)) {
         const paramVal = paramObj[key];
         const toValidateObj = toCheckObj[key];
-        const { v_type, extra } = toValidateObj;
+        const { v_type } = toValidateObj;
 
         const { isValidate, code, msg } = validateValue(paramVal, v_type, key);
         if (!isValidate) {
@@ -40,16 +37,6 @@ function validateParams(paramObj, toCheckObj) {
             }
         }
 
-        if (extra) {
-            const { isValidate, code, msg } = validateExtra(paramVal, extra, key);            
-            if (!isValidate) {
-                return {
-                    isValidate: false,
-                    code: code,
-                    msg: msg
-                }
-            }
-        }
     }
     return {
         isValidate: true
@@ -76,7 +63,7 @@ function validateBody(paramObj, toCheckObj) {
     for (let key of Object.keys(toCheckObj)) {
         const paramVal = paramObj[key];
         const toValidateObj = toCheckObj[key];
-        const { v_type, require, extra } = toValidateObj;
+        const { v_type, require} = toValidateObj;
 
         const { isValidate, code, msg } = validateRequire(paramVal, require, key);
         if (!isValidate) {
@@ -97,16 +84,6 @@ function validateBody(paramObj, toCheckObj) {
                 }
             }
 
-            if (extra) {
-                const { isValidate, code, msg } = validateExtra(paramVal, extra, key);
-                if (!isValidate) {
-                    return {
-                        isValidate: false,
-                        code: code,
-                        msg: msg
-                    }
-                }
-            }
         }
 
     }
@@ -190,6 +167,21 @@ function validateValue(paramVal, v_type, key) {
         }
     }
 
+    if (v_type instanceof RegExp) {
+        const isValidate = v_type.test(paramVal);
+        if (!isValidate) {
+            const { code, msg } = constant.VALIDATE_WRONG_REGEXP_FORMAT(key, v_type);
+            return {
+                isValidate: false,
+                code: code,
+                msg: msg
+            }
+        }
+        return {
+            isValidate: true
+        }
+    }
+
     return {
         isValidate: true
     }
@@ -205,24 +197,6 @@ function validateRequire(paramVal, require, key) {
                 code: code,
                 msg: msg
             }
-        }
-    }
-
-    return {
-        isValidate: true
-    }
-}
-
-function validateExtra(paramVal, extra, key) {
-    const { isValidate, code, msg }  = checker[extra](paramVal);
-
-    if (!isValidate) {
-        
-        const { code:errCode, msg:errMsg } = constant.COMBINATION_PARAM_KEY_AND_CHECKER_MESSAGE(key, code, msg);        
-        return {
-            isValidate: false,
-            code: errCode,
-            msg: errMsg
         }
     }
 

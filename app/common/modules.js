@@ -1,10 +1,16 @@
 const modules ={};
 
-modules.initialize = ({ queryHelperModules, sequelizeModules, jwtModules }) => {   
-    modules.queryHelperModule = queryHelperModules.queryHelperModule1;
-    modules.sequelizeModule = sequelizeModules.sequelizeModule1;
-    modules.jwtAccessModule = jwtModules.jwtAccess;
-    modules.jwtRefreshModule = jwtModules.jwtRefresh;
+modules.initialize = ({ assistant, formatter, mysqlPagenation },
+                      { queryHelperModules, sequelizeModules, jwtModules }) => {   
+
+    modules.assistant = assistant;
+    modules.formatter = formatter;
+    modules.mysqlPagenation = mysqlPagenation;
+
+    modules.queryHelper = queryHelperModules.queryHelper1;
+    modules.sequelize = sequelizeModules.syncdSequelize1;
+    modules.jwtAccess = jwtModules.jwtAccess;
+    modules.jwtRefresh = jwtModules.jwtRefresh;
 }
 
 module.exports = modules;

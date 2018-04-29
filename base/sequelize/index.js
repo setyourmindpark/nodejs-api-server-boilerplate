@@ -6,18 +6,18 @@ const baseType = config.base.db;
 // const linkDb1 = config.setting.linkdb1;
 
 async function createModules() {
-    let sequelizeModule1 = undefined;
+    let sequelize1 = undefined;
     if (baseType === 'mysql') {
         const mysqlConfig = Object.assign({ dialect: baseType }, config.setting.db.mysql);
-        sequelizeModule1 = createModule(mysqlConfig);
-        await sequelizeModule1.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
+        sequelize1 = createModule(mysqlConfig);
+        await sequelize1.query('SELECT "ARE YOU ALIVE ?" FROM DUAL', )
     }
 
-    // let sequelizeModule2 = undefined;
+    // let sequelize2 = undefined;
     // ..
 
     return {
-        sequelizeModule1: sequelizeModule1,
+        sequelize1: sequelize1,
         // ..
     }
 }

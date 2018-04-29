@@ -16,7 +16,7 @@ exports.unifyAllProps = unifyAllProps;
 const validator = require('./validator');
 const uploader = require('./uploader');
 const constant = reqlib('/base/common/constant');
-const response = reqlib('/base/common/response');
+const formatter = reqlib('/base/common/formatter');
 
 /**
 * 유효성검사를 수행
@@ -24,65 +24,74 @@ const response = reqlib('/base/common/response');
 * @return {express middlware}
 * @public
 */
-function validate({ params:toValidateParam, body:toValidateBody, query:toValidateQuery, multipart:toValidateMultipart }) {
+function validate(
+    { params:toValidateParam, body:toValidateBody, query:toValidateQuery, multipart:toValidateMultipart }, 
+    delegateFunction ) {
     return (req, res, next) => {
         (async () => {
-            try {
+            const { params: reqParams, query: reqQuery, body: reqBody } = req;
 
-                const { params:reqParams, query:reqQuery, body:reqBody } = req;                 
-
-                if (toValidateParam){
-                    const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
-                    if(!isValidate){
-                        response.apiResponse(res, {
-                            resultCode: code,
-                            msg: msg
-                        });
-                        return;
-                    }
-                }
-
-                if (toValidateQuery){
-                    const { isValidate, code, msg } = validator.validateQuery(reqQuery, toValidateQuery);
-                    if (!isValidate) {
-                        response.apiResponse(res, {
-                            resultCode: code,
-                            msg: msg
-                        });
-                        return;
-                    }
-                }
-
-                if (toValidateBody){
-                    const { isValidate, code, msg } = validator.validateBody(reqBody, toValidateBody);
-                    if (!isValidate) {
-                        response.apiResponse(res, {
-                            resultCode: code,
-                            msg: msg
-                        });
-                        return;
-                    }
-                    
-                }
-
-                if (toValidateMultipart) {
-                    const { isValidate, inspectedObj, code, msg } = await validator.validateMultipart(req, toValidateMultipart);
-                    if (!isValidate) {
-                        response.apiResponse(res, {
-                            resultCode: code,
-                            msg: msg
-                        });
-                        return;
+            if (toValidateParam) {
+                const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
+                if (!isValidate) {
+                    console.log(delegateFunction)
+                    if (delegateFunction){
+                        delegateFunction(
+                            { req: req, res: res, next: next },
+                            { code: code, msg: msg })
                     }else{
-                        const { files: toValidateFile,feilds } = toValidateMultipart;
-                        await uploader.uploadFile(req, inspectedObj, toValidateFile);
-                    }
+                        console.log('없우ㅡㅁ')
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                    }                    
+                    return;
                 }
-
-                next();
-            } catch (err) {
-                response.apiErrResponse(res, err);
             }
+
+            if (toValidateQuery) {
+                const { isValidate, code, msg } = validator.validateQuery(reqQuery, toValidateQuery);
+                if (!isValidate) {
+                    if (delegateFunction) {
+                        delegateFunction(
+                            { req: req, res: res, next: next },
+                            { code: code, msg: msg })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                    }   
+                    return;
+                }
+            }
+
+            if (toValidateBody) {
+                const { isValidate, code, msg } = validator.validateBody(reqBody, toValidateBody);
+                if (!isValidate) {
+                    if (delegateFunction) {
+                        delegateFunction(
+                            { req: req, res: res, next: next },
+                            { code: code, msg: msg })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                    }   
+                    return;
+                }
+            }
+
+            if (toValidateMultipart) {
+                const { isValidate, inspectedObj, code, msg } = await validator.validateMultipart(req, toValidateMultipart);
+                if (!isValidate) {
+                    if (delegateFunction) {
+                        delegateFunction(
+                            { req: req, res: res, next: next },
+                            { code: code, msg: msg })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                    }   
+                    return;
+                } else {
+                    const { files: toValidateFile, feilds } = toValidateMultipart;
+                    await uploader.uploadFile(req, inspectedObj, toValidateFile);
+                }
+            }
+            next();           
         })();
     }
 }
