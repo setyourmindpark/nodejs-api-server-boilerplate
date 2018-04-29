@@ -115,4 +115,10 @@ router.post(
 //     sampleCtrl.s3Upload()
 // );
 
+router.post(
+    '/dispatch/mail',
+    assistant.unifyAllProps(),
+    sampleCtrl.dispatchMail()
+);
+
 module.exports = router;

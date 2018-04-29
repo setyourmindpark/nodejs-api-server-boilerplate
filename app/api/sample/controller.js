@@ -1,4 +1,4 @@
-const { queryHelper, formatter } = reqlib('/app/common/modules');
+const { queryHelper, formatter, senderMail } = reqlib('/app/common/modules');
 const constant = reqlib('/app/common/constant');
 const config = reqlib('/config');
 
@@ -101,6 +101,27 @@ exports.localUpload = () => {
                 code: constant.CODE_SERVICE_PROCESS_1,
                 data: req.prop
             }));            
+        } catch (err) {
+            res.status(500).send(formatter.apiErrResponse(err));
+        }
+    }
+}
+
+exports.dispatchMail = () => {
+    return async (req, res, next) => {
+        try {
+            const { subject, to, text } = req.prop;
+            await senderMail.send({                
+                subject: subject,
+                to: to,
+                text: text,
+                // html: '<b>hello world</b>'
+                // attachments: []
+            })
+            res.send(formatter.apiResponse({
+                msg: 'dispatched mail',
+                code: constant.CODE_SERVICE_PROCESS_1
+            }));
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
         }

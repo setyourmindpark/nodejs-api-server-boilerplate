@@ -84,6 +84,22 @@ const paths = {
             }
         }
     },
+
+    '/api/sample/dispatch/mail': {
+        post: {
+            tags: ['SAMPLE API'],
+            summary: 'RESTFUL FORMAT',
+            operationId: 'jaehunpark',
+            produces: ['application/json'],
+            parameters: [{ $ref: '#/parameters/dispatchMail' }],
+            responses: {
+                200: {
+                    description: 'delete',
+                    schema: { "$ref": "#/definitions/definition" }
+                }
+            }
+        }
+    },
 }
 
 const parameters = {    
@@ -140,6 +156,19 @@ const parameters = {
                 param1: { type: 'string', default: 'value1' },
                 param2: { type: 'string', default: 'value2' },
                 param3: { type: 'string', default: 'value3' }
+            }
+        }
+    },
+    dispatchMail: {
+        name: 'dispatchMail',
+        in: 'body',
+        required: true,
+        schema: {
+            type: 'object',
+            properties: {
+                subject: { type: 'string', default: 'hello world' },
+                to: { type: 'string', default: 'someone@email.com' },
+                text: { type: 'string', default: 'hello world' }
             }
         }
     },

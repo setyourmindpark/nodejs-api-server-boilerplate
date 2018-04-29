@@ -5,7 +5,6 @@ const config = reqlib('/config');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const constant = reqlib('/base/common/constant');
-const replaceall = require("replaceall");
 const sharp = require('sharp');
 const file = reqlib('/base/common/file');
 const moment = require('moment');

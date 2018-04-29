@@ -10,7 +10,7 @@ module.exports = {
         port: env.BASE_PORT,
         logger: env.BASE_LOGGER,
         db: env.BASE_DB,
-        auth: env.BASE_AUTH,        
+        auth: env.BASE_AUTH,
     },
     setting: {
         upload: {
@@ -50,12 +50,20 @@ module.exports = {
                 connectionLeast: env.DB_MYSQL_CONNECTION_LEAST
             },
             // other db will be here ..
-        },       
-        mailSender: {
-            mailId: env.MAIL_SENDER_MAIL_ID,
-            passwd: env.MAIL_SENDER_MAIL_PASSWD,
-            smtpDomain: env.MAIL_SENDER_SMTP_DOMAIN,
-            from: env.MAIL_SENDER_FROM,
+        },
+        sender: {
+            mail: {
+                service : env.SENDER_MAIL_SERVICE,
+                user: env.SENDER_MAIL_ID,
+                passwd: env.SENDER_MAIL_PASSWD,                
+                from: env.SENDER_MAIL_FROM,
+            },
+            android: {
+
+            },
+            ios: {
+                
+            }
         },
         logger: {
             local: {

@@ -11,8 +11,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const baseFormatter = reqlib('/base/common/formatter');
+const baseSenderMail = reqlib('/base/sender/mail');
 const baseAuthorizer = reqlib('/base/authorizer');
-const baseQueryHelper = reqlib('/base/queryHelper');
+// const baseQueryHelper = reqlib('/base/queryHelper');
 const baseSequelize = reqlib('/base/sequelize');
 const baseAssistant = reqlib('/base/assistant')
 const baseMysqlPagenation = reqlib('/base/queryHelper/pagenation/mysql')
@@ -39,7 +40,8 @@ async function initializeModule(){
     const basePlainModule = {
         assistant: baseAssistant,
         formatter: baseFormatter,
-        mysqlPagenation: baseMysqlPagenation
+        mysqlPagenation: baseMysqlPagenation,
+        senderMail: baseSenderMail
     };
 
     const baseModules = {
