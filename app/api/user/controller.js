@@ -6,12 +6,15 @@ exports.validityEmail = () => {
         try {
             let code = constant.CODE_SERVICE_PROCESS_1;
             let msg = 'you can create user by using this email';
-            const email = req.prop.email;
-            const params = { email: email };
-            const result = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
-            if (result.cnt >= 1) {
+            const { email } = req.prop;  
+            //const result = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
+            const count = await sequelize.models.User.count({
+                where: { email: email }
+            })
+
+            if (count >= 1) {
                 code = constant.CODE_SERVICE_PROCESS_2,
-                    msg = 'sorry . you can not this email'
+                msg = 'sorry . you can not use this email'
             };
 
             res.send(formatter.apiResponse({
@@ -30,12 +33,9 @@ exports.new = () => {
     return async (req, res, next) => {
         try {
             const { name, email, passwd } = req.prop;
-
             //const result1 = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
             const count = await sequelize.models.User.count({
-                where: {
-                    email: email,
-                }
+                where: { email: email, }
             })
 
             if (count >= 1) {
