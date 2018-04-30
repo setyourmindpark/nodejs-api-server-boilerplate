@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/server",
-    "dockerize": "node dockerize.js",
     "test": "node_modules/.bin/mocha app/api/**/*.spec.js"
   },
   "dependencies": {
