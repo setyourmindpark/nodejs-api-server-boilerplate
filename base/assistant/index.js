@@ -61,7 +61,7 @@ function validate({ params:toValidateParam, body:toValidateBody, query:toValidat
                         res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
                         return;
                     } else {
-                        const { files: toValidateFile, feilds } = toValidateMultipart;
+                        const { files: toValidateFile } = toValidateMultipart;
                         await uploader.uploadFile(req, inspectedObj, toValidateFile);
                     }
                 }
