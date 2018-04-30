@@ -11,7 +11,7 @@ const { accessKeyId, secretAccessKey } = config.setting.upload.s3;
 const s3 = new AWS.S3({
     accessKeyId: accessKeyId,
     secretAccessKey: secretAccessKey,
-    region : 'ap-northeast-2'
+    region: 'ap-northeast-2'                    // 아시아 태평양(서울)
 });
 
 async function fileUpload(fileName, buffer, bucket){    
