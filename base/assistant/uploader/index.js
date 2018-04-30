@@ -7,13 +7,14 @@ const s3 = require('./s3');
 
 async function uploadFile(req, inspectedObj, toValidateFile) {
     try {
-        const { inspectedFiles, inspectedFields } = inspectedObj;        
+        const { inspectedFiles, inspectedFields } = inspectedObj;  
         req.files = {};
+
         for (let key of Object.keys(inspectedFiles)) {
 
+            const inspectedFileObj = inspectedFiles[key];                          
             const toUploadObj = toValidateFile[key]['upload'];
             const { target: toUploadTarget, thumbnail: toUploadThumbnailObj } = toUploadObj;
-            const inspectedFileObj = inspectedFiles[key];                          
 
             if (toUploadTarget === 'local') {
                 const { isDone, uploadedObj } = await local.processFileUpload(inspectedFileObj, toUploadObj);
@@ -41,12 +42,10 @@ async function uploadFile(req, inspectedObj, toValidateFile) {
                         req.files[key] = Object.assign(req.files[key], uploadedObj);
                     }
                 }
-
             }
 
             delete inspectedFileObj;
             delete inspectedFiles[key];
-
         }
 
         req.fields = {};
