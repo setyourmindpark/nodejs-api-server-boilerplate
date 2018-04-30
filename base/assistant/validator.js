@@ -93,47 +93,43 @@ function validateBody(paramObj, toCheckObj) {
 }
 
 async function validateMultipart(req, toCheckObj) {
-    try {
-        const { files: toValidateFiles, fields:toValidateFields } = toCheckObj;        
-        const { isProcessed, data:inspectedData } = await inspectFieldsWithAllowFiles(req, toValidateFiles);
-        const { files: inspectedFiles, fields: inspectedFields } = inspectedData;
+    const { files: toValidateFiles, fields: toValidateFields } = toCheckObj;
+    const { isProcessed, data: inspectedData } = await inspectFieldsWithAllowFiles(req, toValidateFiles);
+    const { files: inspectedFiles, fields: inspectedFields } = inspectedData;
 
-        if (isProcessed) {
+    if (isProcessed) {
 
-            const { isValidate:fileIsValidate, code:fileErrCode, msg:fileErrMsg } = validateFile(inspectedFiles, toValidateFiles);
-            if (!fileIsValidate) {
+        const { isValidate: fileIsValidate, code: fileErrCode, msg: fileErrMsg } = validateFile(inspectedFiles, toValidateFiles);
+        if (!fileIsValidate) {
 
-                delete inspectedFiles;
+            delete inspectedFiles;
 
-                return {
-                    isValidate: false,
-                    code: fileErrCode,
-                    msg: fileErrMsg
-                }
-            }
-
-            const { isValidate:fieldIsValidate, code:fieldErrCode, msg:fieldErrMsg } = validateBody(inspectedFields, toValidateFields);
-            if (!fieldIsValidate) {
-
-                delete inspectedFiles;
-
-                return {
-                    isValidate: false,
-                    code: fieldErrCode,
-                    msg: fieldErrMsg
-                }
-            }
-
-        }
-        return {
-            isValidate: true,
-            inspectedObj: {
-                inspectedFiles: inspectedFiles,
-                inspectedFields: inspectedFields
+            return {
+                isValidate: false,
+                code: fileErrCode,
+                msg: fileErrMsg
             }
         }
-    } catch (err) {
-        throw err;
+
+        const { isValidate: fieldIsValidate, code: fieldErrCode, msg: fieldErrMsg } = validateBody(inspectedFields, toValidateFields);
+        if (!fieldIsValidate) {
+
+            delete inspectedFiles;
+
+            return {
+                isValidate: false,
+                code: fieldErrCode,
+                msg: fieldErrMsg
+            }
+        }
+
+    }
+    return {
+        isValidate: true,
+        inspectedObj: {
+            inspectedFiles: inspectedFiles,
+            inspectedFields: inspectedFields
+        }
     }
 }
 
@@ -295,47 +291,43 @@ function validateUptoSize(buffer, uptoSize, fileName, key) {
 
 async function inspectFieldsWithAllowFiles(req, toValidateFiles) {
     return new Promise((resolve, reject) => {
-        try {
-            const container = {};
-            container.files = {};
-            container.fields = {};
-            const busboy = new Busboy({ headers: req.headers });
+        const container = {};
+        container.files = {};
+        container.fields = {};
+        const busboy = new Busboy({ headers: req.headers });
 
-            busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-                const isValidateFile = toValidateFiles[fieldname];      // 유효성 object에 포함되지않는 file field가 넘어올시 무시한다 .
-                // 임시로 저장할 buffer 사이즈가 너무커질 우려가존재하기에 이곳에서 로직처리를 한다 .
-                let buffers = [];
+        busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+            const isValidateFile = toValidateFiles[fieldname];      // 유효성 object에 포함되지않는 file field가 넘어올시 무시한다 .
+            // 임시로 저장할 buffer 사이즈가 너무커질 우려가존재하기에 이곳에서 로직처리를 한다 .
+            let buffers = [];
 
-                file.on('data', function (data) {
-                    if (!isValidateFile) return false;                     // 무시한다. 버퍼에 저장하지않는다
-                    buffers.push(data);
-                });
-
-                file.on('end', function () {
-                    if (!isValidateFile) return false;                     // 무시한다.
-                    const obj = {};
-                    obj[fieldname] = { fileName: filename, buffer: Buffer.concat(buffers) };
-                    container.files = Object.assign(container.files, obj);
-                });
-
+            file.on('data', function (data) {
+                if (!isValidateFile) return false;                     // 무시한다. 버퍼에 저장하지않는다
+                buffers.push(data);
             });
 
-            busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-                if (val === 'undefined') return false;
+            file.on('end', function () {
+                if (!isValidateFile) return false;                     // 무시한다.
                 const obj = {};
-                obj[fieldname] = val;
-                container.fields = Object.assign(container.fields, obj);
+                obj[fieldname] = { fileName: filename, buffer: Buffer.concat(buffers) };
+                container.files = Object.assign(container.files, obj);
             });
 
-            busboy.on('finish', function () {
-                resolve({
-                    isProcessed: true,
-                    data: container
-                })
-            });
-            req.pipe(busboy);
-        } catch (err) {
-            reject(err);
-        }
+        });
+
+        busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
+            if (val === 'undefined') return false;
+            const obj = {};
+            obj[fieldname] = val;
+            container.fields = Object.assign(container.fields, obj);
+        });
+
+        busboy.on('finish', function () {
+            resolve({
+                isProcessed: true,
+                data: container
+            })
+        });
+        req.pipe(busboy);
     })
 }

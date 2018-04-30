@@ -32,67 +32,78 @@ function validate(
     delegateFunction) { 
     return (req, res, next) => {
         (async () => {
-            const { params: reqParams, query: reqQuery, body: reqBody } = req;
 
-            if (toValidateParam) {
-                const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
-                if (!isValidate) {
-                    if (delegateFunction){
-                        delegateFunction(
-                            { req: req, res: res, next: next },
-                            { code: code, msg: msg })
-                    }else{
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                    }                    
-                    return;
+            try{
+                const { params: reqParams, query: reqQuery, body: reqBody } = req;
+
+                if (toValidateParam) {
+                    const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
+                    if (!isValidate) {
+                        if (delegateFunction) {
+                            delegateFunction(
+                                { req: req, res: res, next: next },
+                                { code: code, msg: msg })
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                        }
+                        return;
+                    }
                 }
-            }
 
-            if (toValidateQuery) {
-                const { isValidate, code, msg } = validator.validateQuery(reqQuery, toValidateQuery);
-                if (!isValidate) {
-                    if (delegateFunction) {
-                        delegateFunction(
-                            { req: req, res: res, next: next },
-                            { code: code, msg: msg })
+                if (toValidateQuery) {
+                    const { isValidate, code, msg } = validator.validateQuery(reqQuery, toValidateQuery);
+                    if (!isValidate) {
+                        if (delegateFunction) {
+                            delegateFunction(
+                                { req: req, res: res, next: next },
+                                { code: code, msg: msg })
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                        }
+                        return;
+                    }
+                }
+
+                if (toValidateBody) {
+                    const { isValidate, code, msg } = validator.validateBody(reqBody, toValidateBody);
+                    if (!isValidate) {
+                        if (delegateFunction) {
+                            delegateFunction(
+                                { req: req, res: res, next: next },
+                                { code: code, msg: msg })
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                        }
+                        return;
+                    }
+                }
+
+                if (toValidateMultipart) {
+                    const { isValidate, inspectedObj, code, msg } = await validator.validateMultipart(req, toValidateMultipart);
+                    if (!isValidate) {
+                        if (delegateFunction) {
+                            delegateFunction(
+                                { req: req, res: res, next: next },
+                                { code: code, msg: msg })
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
+                        }
+                        return;
                     } else {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                    }   
-                    return;
+                        const { files: toValidateFile, feilds } = toValidateMultipart;
+                        await uploader.uploadFile(req, inspectedObj, toValidateFile);
+                    }
                 }
-            }
-
-            if (toValidateBody) {
-                const { isValidate, code, msg } = validator.validateBody(reqBody, toValidateBody);
-                if (!isValidate) {
-                    if (delegateFunction) {
-                        delegateFunction(
-                            { req: req, res: res, next: next },
-                            { code: code, msg: msg })
-                    } else {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                    }   
-                    return;
-                }
-            }
-
-            if (toValidateMultipart) {
-                const { isValidate, inspectedObj, code, msg } = await validator.validateMultipart(req, toValidateMultipart);
-                if (!isValidate) {
-                    if (delegateFunction) {
-                        delegateFunction(
-                            { req: req, res: res, next: next },
-                            { code: code, msg: msg })
-                    } else {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                    }   
-                    return;
-                } else {
-                    const { files: toValidateFile, feilds } = toValidateMultipart;
-                    await uploader.uploadFile(req, inspectedObj, toValidateFile);
-                }
-            }
-            next();           
+                next();
+            }catch(err){
+                if (delegateFunction) {
+                    delegateFunction(
+                        { req: req, res: res, next: next },
+                        { code: constant.CODE_SYSTEM_PROCESS_ERROR, msg: constant.MSG_SYSTEM_ERROR })
+                } else {                    
+                    res.status(500).send(formatter.apiErrResponse(err));
+                }                
+            }                       
         })();
     }
 }

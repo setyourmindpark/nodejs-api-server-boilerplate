@@ -72,7 +72,7 @@ constant.MULTIPART_CAN_NOT_EXCEED_CAPACITY = (fileName, uptoSize) => {
 }
 
 //system someting wrong
-constant.MSG_SYSTEM_ERROR = 'server error. call jaehunpark'
+constant.MSG_SYSTEM_ERROR = 'server error'
 
 //code
 constant.CODE_SYSTEM_PROCESS_DONE = '0001'      // system process is done done  시스템로직 정상처리코드
