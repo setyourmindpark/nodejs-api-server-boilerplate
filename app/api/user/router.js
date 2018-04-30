@@ -1,5 +1,5 @@
 const { assistant, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
-const delegate = reqlib('/app/common/delegate');
+const handler = reqlib('/app/common/handler');
 const router = require('express').Router();
 const userController = require('./controller');
 
@@ -16,7 +16,8 @@ router.get(
         params: {
             email: { v_type: regExpEmail }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     userController.validityEmail()
 );
@@ -29,7 +30,8 @@ router.post(
             email: { require: true, v_type: regExpEmail },
             passwd: { require: true, v_type: 'any' }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     userController.new()
 );
@@ -41,26 +43,29 @@ router.post(
             email: { require: true, v_type: regExpEmail },
             passwd: { require: true, v_type: 'any' }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     userController.tokenMe()
 );
 
 router.post(
     '/token/new',
-    jwtRefresh.isAuthenticated(),
+    jwtRefresh.isAuthenticated(true),
     assistant.validate({
         body: {
             accesstoken: { require: true, v_type: 'any' }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     userController.tokenNew()
 );
 
 router.get(
     '/me',
-    jwtAccess.isAuthenticated(),
+    jwtAccess.isAuthenticated(true),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     userController.me()
 );

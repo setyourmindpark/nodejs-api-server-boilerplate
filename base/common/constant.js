@@ -22,28 +22,41 @@ constant.JWT_EXPIRE_TOKEN = {
 constant.PARAMETER_NOT_EXSIST = key => {
     return {
         code: 'E21001',
-        msg: 'parameter [ ' + key + ' ] is not exist. pleace check parameter '        
+        msg: 'parameter [ ' + key + ' ] is not exist. pleace check parameter ',
+        keys: {
+            key : key
+        }        
     }
 }
 
 constant.VALIDATE_VALUE_NOT_ONLY_CHARACTERS = key => {
     return {
         code: 'E21002',
-        msg: 'parameter value of [ ' + key + ' ] is not only characters(string)'        
+        msg: 'parameter value of [ ' + key + ' ] is not only characters(string)',
+        keys: {
+            key: key
+        }        
     }
 }
 
 constant.VALIDATE_VALUE_NOT_ONLY_NUMBER = key => {
     return {
         code: 'E21003',
-        msg: 'parameter value of [ ' + key + ' ] is not only number'        
+        msg: 'parameter value of [ ' + key + ' ] is not only number',
+        keys: {
+            key: key
+        }        
     }
 }
 
 constant.VALIDATE_WRONG_REGEXP_FORMAT = (key, regExp) => { 
     return {
         code: 'E21004', 
-        msg: 'parameter [ ' + key + ' ] is not [ ' + regExp + ' ] format'        
+        msg: 'parameter [ ' + key + ' ] is not [ ' + regExp + ' ] format',
+        keys: {
+            key: key,
+            regExp: regExp
+        }        
     }
 }
 
@@ -51,14 +64,23 @@ constant.VALIDATE_WRONG_REGEXP_FORMAT = (key, regExp) => {
 constant.MULTIPART_NOT_ALLOW_FILE_EXT = (fileName, fileExt, allowExts) => {
     return {
         code: 'E21005',
-        msg: '[ ' + fileName + ' ] extension is not allow [ ' + fileExt + ' ]. only allow ' + allowExts        
+        msg: '[ ' + fileName + ' ] extension is not allow [ ' + fileExt + ' ]. only allow [ ' + allowExts + ' ]',
+        keys: {
+            fileName: fileName,
+            fileExt: fileExt,
+            allowExts: allowExts
+        }       
     }
 }
 
 constant.MULTIPART_CAN_NOT_EXCEED_CAPACITY = (fileName, uptoSize) => {
     return {
         code: 'E21006',
-        msg: '[ ' + fileName + ' ] can not exceed [ ' + uptoSize + ' ]'              
+        msg: '[ ' + fileName + ' ] can not exceed [ ' + uptoSize + ' ]',
+        keys: {
+            fileName: fileName,
+            uptoSize: uptoSize
+        }               
     }
 }
 

@@ -1,5 +1,6 @@
-const { queryHelper, formatter, senderMail } = reqlib('/app/common/modules');
+const { queryHelper, senderMail } = reqlib('/app/common/modules');
 const constant = reqlib('/app/common/constant');
+const formatter = reqlib('/app/common/formatter');
 const config = reqlib('/config');
 
 exports.path = () => {
@@ -119,7 +120,7 @@ exports.dispatchMail = () => {
                 // attachments: []
             })
             res.send(formatter.apiResponse({
-                msg: 'dispatched mail',
+                msg: '메일을 전송하였습니다.',
                 code: constant.CODE_SERVICE_PROCESS_1
             }));
         } catch (err) {

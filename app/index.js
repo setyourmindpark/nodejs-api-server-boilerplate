@@ -10,7 +10,7 @@ exports.initialize = initialize;
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const baseFormatter = reqlib('/base/common/formatter');
+// const baseFormatter = reqlib('/base/common/formatter');
 const baseSenderMail = reqlib('/base/sender/mail');
 const baseAuthorizer = reqlib('/base/authorizer');
 // const baseQueryHelper = reqlib('/base/queryHelper');
@@ -39,7 +39,7 @@ async function initializeModule(){
 
     const basePlainModule = {
         assistant: baseAssistant,
-        formatter: baseFormatter,
+        // formatter: baseFormatter,
         mysqlPagenation: baseMysqlPagenation,
         senderMail: baseSenderMail
     };

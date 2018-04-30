@@ -15,6 +15,7 @@ exports.unifyAllProps = unifyAllProps;
  */
 const validator = require('./validator');
 const uploader = require('./uploader');
+const constant = reqlib('/base/common/constant');
 const formatter = reqlib('/base/common/formatter');
 
 /**
@@ -24,51 +25,92 @@ const formatter = reqlib('/base/common/formatter');
 * @return {express middlware}
 * @public
 */
-function validate({ params:toValidateParam, body:toValidateBody, query:toValidateQuery, multipart:toValidateMultipart }) { 
+function validate({ params: toValidateParam, body: toValidateBody, query: toValidateQuery, multipart: toValidateMultipart }, isCustomNextHandle) {
     return (req, res, next) => {
-        
+
         (async () => {
-            try{
+            try {
                 const { params: reqParams, query: reqQuery, body: reqBody } = req;
 
                 if (toValidateParam) {
-                    const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
+                    const { isValidate, code, msg, keys } = validator.validateParams(reqParams, toValidateParam);
                     if (!isValidate) {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                        return;
+                        if (isCustomNextHandle) {
+                            res.validated = {
+                                code: code,
+                                msg: msg,
+                                keys: keys
+                            }
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                            return;
+                        }
                     }
                 }
 
                 if (toValidateQuery) {
-                    const { isValidate, code, msg } = validator.validateQuery(reqQuery, toValidateQuery);
+                    const { isValidate, code, msg, keys } = validator.validateQuery(reqQuery, toValidateQuery);
                     if (!isValidate) {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                        return;
+                        if (isCustomNextHandle) {
+                            res.validated = {
+                                code: code,
+                                msg: msg,
+                                keys: keys
+                            }
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                            return;
+                        }
                     }
                 }
 
                 if (toValidateBody) {
-                    const { isValidate, code, msg } = validator.validateBody(reqBody, toValidateBody);
+                    const { isValidate, code, msg, keys } = validator.validateBody(reqBody, toValidateBody);
                     if (!isValidate) {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                        return;
+                        if (isCustomNextHandle) {
+                            res.validated = {
+                                code: code,
+                                msg: msg,
+                                keys: keys
+                            }
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                            return;
+                        }
                     }
                 }
 
                 if (toValidateMultipart) {
-                    const { isValidate, inspectedObj, code, msg } = await validator.validateMultipart(req, toValidateMultipart);
+                    const { isValidate, inspectedObj, code, msg, keys } = await validator.validateMultipart(req, toValidateMultipart);
                     if (!isValidate) {
-                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                        return;
+                        if (isCustomNextHandle) {
+                            res.validated = {
+                                code: code,
+                                msg: msg,
+                                keys: keys
+                            }
+                        } else {
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                            return;
+                        }
                     } else {
                         const { files: toValidateFile } = toValidateMultipart;
                         await uploader.uploadFile(req, inspectedObj, toValidateFile);
                     }
                 }
                 next();
-            }catch(err){
-                res.status(500).send(formatter.apiErrResponse(err));              
-            }                       
+            } catch (err) {
+                if (isCustomNextHandle) {
+                    res.validated = {
+                        code: constant.CODE_SYSTEM_PROCESS_ERROR,
+                        msg: constant.MSG_SYSTEM_ERROR,
+                    }
+                } else {
+                    res.status(500).send(formatter.apiErrResponse(err));
+                    return;
+                }
+                
+            }
         })();
     }
 }
@@ -83,7 +125,7 @@ function unifyAllProps() {
     return (req, res, next) => {
         req.prop = Object.assign(
             req.prop || {},
-            req.user || {},            
+            req.user || {},
             req.query || {},
             req.params || {},
             req.body || {},

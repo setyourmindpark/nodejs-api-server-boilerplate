@@ -1,5 +1,5 @@
 const { assistant } = reqlib('/app/common/modules');
-// const delegate = reqlib('/app/common/delegate');
+const handler = reqlib('/app/common/handler');
 const router = require('express').Router();
 const sampleController = require('./controller');
 const regExpEmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
@@ -10,8 +10,9 @@ router.get(
         params: {
             param1: { v_type: 'onlyChar' }
         }
-    }),
-    assistant.unifyAllProps(),            //all과 같음. 예시임
+    }, true ),
+    handler.handleCustomValidateResponse(),
+    assistant.unifyAllProps(),
     sampleController.path()
 );
 
@@ -25,7 +26,8 @@ router.get(
             param3: { require: true, v_type: 'onlyChar' },
             param4: { require: true, v_type: regExpEmail }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     sampleController.query()
 );
@@ -38,7 +40,8 @@ router.post(
             param2: { require: true, v_type: 'onlyNum' },
             param3: { require: true, v_type: 'onlyChar' }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     sampleController.post()
 );
@@ -54,7 +57,8 @@ router.put(
             param2: { require: true, v_type: 'any' },
             param3: { require: false, v_type: 'any' }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     sampleController.put()
 );
@@ -65,7 +69,8 @@ router.delete(
         params: {
             where: { v_type: 'onlyNum' }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     sampleController.delete()
 );
@@ -83,7 +88,7 @@ router.post(
     assistant.validate({
         multipart: {
             files: {
-                fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 'local', subDir: '/jaehunpark2', thumbnail: { width: 100, height: 200, subDir: '/ccc' } } },
+                fileFeild1: { require: true, allowExt: ['jpg','bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/jaehunpark2', thumbnail: { width: 100, height: 200, subDir: '/ccc' } } },
                 fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: 'default' } }
                 //fileFeild2 : { require : true, allowExt : 'any', uptoSize : '20mb', upload : { target : 's3', bucket : 'jaehunpark' , thumbnail : { width:200, height : 200, bucket : 'jaehunpark'} } }
             },
@@ -92,7 +97,8 @@ router.post(
                 bodyFeild2: { require: false, v_type: 'any' }
             }
         }
-    }),
+    }, true ),
+    handler.handleCustomValidateResponse(),
     assistant.unifyAllProps(),
     sampleController.localUpload()
 );

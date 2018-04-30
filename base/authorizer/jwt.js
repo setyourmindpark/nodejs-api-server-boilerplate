@@ -10,7 +10,7 @@ const formatter = reqlib('/base/common/formatter');
 // 해당 모듈을 n 개생성할수있도록 초기화하여 생성함. jwt 설정값에따라 같은비지니스로직이 쓰일수있음
 function createModule({ secret, algorithm, expire, param }) {
     const jwtModule =  {
-        isAuthenticated: () => {
+        isAuthenticated: (isCustomNextHandle) => {
             return (req, res, next) => {
                 try {
                     const token = req.headers[param];
@@ -39,7 +39,15 @@ function createModule({ secret, algorithm, expire, param }) {
                     }
 
                 } catch ({ errorCode, message }) {
-                    res.send(formatter.apiResponse({ resultCode: errorCode, msg: message }))                        
+                    if (isCustomNextHandle) {
+                        res.validated = {
+                            code: errorCode,
+                            msg: message,
+                        }
+                        next();
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: errorCode, msg: message }))                        
+                    }
                 }
             }
         },

@@ -2,7 +2,7 @@
 exports.apiResponse = apiResponse;
 exports.apiErrResponse = apiErrResponse;
 
-const constant = reqlib('/base/common/constant');
+const constant = require('./constant');
 
 function apiResponse({ resultCode, code, msg, pagenationInfo, data }) {
     if (resultCode) {

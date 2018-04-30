@@ -25,6 +25,7 @@
     "fluent-logger": "^2.6.1",
     "is-root": "^2.0.0",
     "jsonwebtoken": "^8.1.1",
+    "lower-case": "^1.1.4",
     "mkdirp": "^0.5.1",
     "moment": "^2.20.1",
     "morgan": "~1.9.0",

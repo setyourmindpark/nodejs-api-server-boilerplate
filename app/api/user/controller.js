@@ -1,11 +1,12 @@
-const { response, queryHelper, sequelize, jwtAccess, jwtRefresh, formatter } = reqlib('/app/common/modules');
+const { response, queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
+const formatter = reqlib('/app/common/formatter');
 const constant = reqlib('/app/common/constant');
 
 exports.validityEmail = () => {
     return async (req, res, next) => {
         try {
             let code = constant.CODE_SERVICE_PROCESS_1;
-            let msg = 'you can create user by using this email';
+            let msg = '계정을 만들수있습니다.';
             const { email } = req.prop;  
             //const result = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
             const count = await sequelize.models.User.count({
@@ -14,7 +15,7 @@ exports.validityEmail = () => {
 
             if (count >= 1) {
                 code = constant.CODE_SERVICE_PROCESS_2,
-                msg = 'sorry . you can not use this email'
+                msg = '현재사용중인 이메일입니다'
             };
 
             res.send(formatter.apiResponse({
@@ -41,7 +42,7 @@ exports.new = () => {
             if (count >= 1) {
                 res.send(formatter.apiResponse({
                     code: constant.CODE_SERVICE_PROCESS_2,
-                    msg: 'sorry . you can not use this email'
+                    msg: '현재 사용중인 이메일입니다.'
                 }));
                 return;
             };
@@ -53,7 +54,7 @@ exports.new = () => {
             });
 
             res.send(formatter.apiResponse({
-                msg: 'created user. login now',
+                msg: '계정을 생성하였습니다.',
                 code: constant.CODE_SERVICE_PROCESS_1,
             }));
         } catch (err) {
@@ -76,7 +77,7 @@ exports.tokenMe = () => {
             if (!someone) {
                 res.send(formatter.apiResponse({
                     code: constant.CODE_SERVICE_PROCESS_2,
-                    msg: 'sorry . check login email and password'
+                    msg: '이메일과 비밀번호를 확인해주세요'
                 }));
                 return;
             }
@@ -84,7 +85,7 @@ exports.tokenMe = () => {
             const { id } = someone.get({plain:true});
             const tokenBody = { tokenId: id };
             res.send(formatter.apiResponse({
-                msg: 'logined, take care this token',
+                msg: '인증되었습니다. 토큰을 저장해주세요.',
                 code: constant.CODE_SERVICE_PROCESS_1,
                 data: {
                     accesstoken: jwtAccess.generateToken(tokenBody),
@@ -113,7 +114,7 @@ exports.tokenNew = () => {
 
                 const tokenBody = { tokenId: tokenId };
                 res.send(formatter.apiResponse({
-                    msg: 'take care this token',
+                    msg: '토큰을 저장해주세요.',
                     code: constant.CODE_SERVICE_PROCESS_1,
                     data: {
                         accesstoken: jwtAccess.generateToken(tokenBody),
@@ -146,7 +147,7 @@ exports.me = () => {
             })
 
             res.send(formatter.apiResponse({
-                msg: 'user info here',
+                msg: '유저 정보는 다음과같습니다.',
                 code: constant.CODE_SERVICE_PROCESS_1,
                 data: someone.get({plain:true})
             }));

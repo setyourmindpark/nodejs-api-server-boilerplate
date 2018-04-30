@@ -7,6 +7,8 @@ exports.validateQuery = validateQuery;
 exports.validateBody = validateBody;
 exports.validateMultipart = validateMultipart;
 
+const file = reqlib('/base/common/file');
+const lowerCase = require('lower-case')
 const constant = reqlib('/base/common/constant');
 const bytes = require('bytes');
 const Busboy = require('busboy');
@@ -28,12 +30,13 @@ function validateParams(paramObj, toCheckObj) {
         const toValidateObj = toCheckObj[key];
         const { v_type } = toValidateObj;
 
-        const { isValidate, code, msg } = validateValue(paramVal, v_type, key);
+        const { isValidate, code, msg, keys } = validateValue(paramVal, v_type, key);
         if (!isValidate) {
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
 
@@ -44,12 +47,13 @@ function validateParams(paramObj, toCheckObj) {
 }
 
 function validateQuery(paramObj, toCheckObj) {
-    const { isValidate, code, msg } = validateBody(paramObj, toCheckObj);
+    const { isValidate, code, msg, keys } = validateBody(paramObj, toCheckObj);
     if (!isValidate) {
         return {
             isValidate: false,
             code: code,
-            msg: msg
+            msg: msg,
+            keys: keys
         }
     }
 
@@ -65,22 +69,24 @@ function validateBody(paramObj, toCheckObj) {
         const toValidateObj = toCheckObj[key];
         const { v_type, require} = toValidateObj;
 
-        const { isValidate, code, msg } = validateRequire(paramVal, require, key);
+        const { isValidate, code, msg, keys } = validateRequire(paramVal, require, key);
         if (!isValidate) {
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
 
         if (paramVal) {
-            const { isValidate, code, msg } = validateValue(paramVal, v_type, key);
+            const { isValidate, code, msg, keys } = validateValue(paramVal, v_type, key);
             if (!isValidate) {
                 return {
                     isValidate: false,
                     code: code,
-                    msg: msg
+                    msg: msg,
+                    keys: keys
                 }
             }
 
@@ -98,31 +104,31 @@ async function validateMultipart(req, toCheckObj) {
     const { files: inspectedFiles, fields: inspectedFields } = inspectedData;
 
     if (isProcessed) {
-
-        const { isValidate: fileIsValidate, code: fileErrCode, msg: fileErrMsg } = validateFile(inspectedFiles, toValidateFiles);
-        if (!fileIsValidate) {
-
-            delete inspectedFiles;
-
-            return {
-                isValidate: false,
-                code: fileErrCode,
-                msg: fileErrMsg
+        {   //temp block scope
+            const { isValidate, code, msg, keys } = validateFile(inspectedFiles, toValidateFiles);
+            if (!isValidate) {
+                delete inspectedFiles;
+                return {
+                    isValidate: false,
+                    code: code,
+                    msg: msg,
+                    keys: keys
+                }
             }
         }
 
-        const { isValidate: fieldIsValidate, code: fieldErrCode, msg: fieldErrMsg } = validateBody(inspectedFields, toValidateFields);
-        if (!fieldIsValidate) {
-
-            delete inspectedFiles;
-
-            return {
-                isValidate: false,
-                code: fieldErrCode,
-                msg: fieldErrMsg
+        {   //temp block scope
+            const { isValidate, code, msg, keys } = validateBody(inspectedFields, toValidateFields);
+            if (!isValidate) {
+                delete inspectedFiles;
+                return {
+                    isValidate: false,
+                    code: code,
+                    msg: msg,
+                    keys: keys
+                }
             }
         }
-
     }
     return {
         isValidate: true,
@@ -143,22 +149,24 @@ function validateValue(paramVal, v_type, key) {
 
     if (v_type === 'onlyChar') {                 //파리미터 value 타입 only characters 여부 검사
         if (isExsistNumber(paramVal)) {                       //값의 모든 문자가 숫자가 아니면 '문자' 라고 취급할것임 .
-            const { code, msg } = constant.VALIDATE_VALUE_NOT_ONLY_CHARACTERS(key);
+            const { code, msg, keys } = constant.VALIDATE_VALUE_NOT_ONLY_CHARACTERS(key);
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
     }
 
     if (v_type === 'onlyNum') {                  //파리미터 value 타입 only number 여부 검사
         if (!isOnlyNumber(paramVal)) {
-            const { code, msg } = constant.VALIDATE_VALUE_NOT_ONLY_NUMBER(key);
+            const { code, msg, keys } = constant.VALIDATE_VALUE_NOT_ONLY_NUMBER(key);
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
     }
@@ -166,11 +174,12 @@ function validateValue(paramVal, v_type, key) {
     if (v_type instanceof RegExp) {
         const isValidate = v_type.test(paramVal);
         if (!isValidate) {
-            const { code, msg } = constant.VALIDATE_WRONG_REGEXP_FORMAT(key, v_type);
+            const { code, msg, keys } = constant.VALIDATE_WRONG_REGEXP_FORMAT(key, v_type);
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
         return {
@@ -187,11 +196,12 @@ function validateRequire(paramVal, require, key) {
 
     if (require) {         //파라미터가 반드시 requre true 인경우
         if (!paramVal) {                //파라미터가 존재하지않을경우
-            const { code, msg } = constant.PARAMETER_NOT_EXSIST(key);
+            const { code, msg, keys } = constant.PARAMETER_NOT_EXSIST(key);
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
     }
@@ -209,35 +219,38 @@ function validateFile(inspectedObj, toCheckObj){
         const toValidateObj = toCheckObj[key];
         const { uptoSize, require, allowExt} = toValidateObj;
 
-        const { isValidate, code, msg } = validateRequire(paramObj, require, key);
+        const { isValidate, code, msg, keys } = validateRequire(paramObj, require, key);
         if (!isValidate) {
             return {
                 isValidate: false,
                 code: code,
-                msg: msg
+                msg: msg,
+                keys: keys
             }
         }
 
         if (paramObj) {
             const { buffer, fileName } = paramObj;
-            const { isValidate, code, msg } = validateFileExt(fileName, allowExt);
+            const { isValidate, code, msg, keys } = validateFileExt(fileName, allowExt);
 
             if (!isValidate) {
                 return {
                     isValidate: false,
                     code: code,
-                    msg: msg
+                    msg: msg,
+                    keys: keys
                 }
             }
 
             if (!(uptoSize === 'any')) {
-                const { isValidate, code, msg } = validateUptoSize(buffer, uptoSize, fileName, key);
+                const { isValidate, code, msg, keys } = validateUptoSize(buffer, uptoSize, fileName, key);
 
                 if (!isValidate) {
                     return {
                         isValidate: false,
                         code: code,
-                        msg: msg
+                        msg: msg,
+                        keys: keys
                     }
                 }
             }
@@ -248,21 +261,22 @@ function validateFile(inspectedObj, toCheckObj){
     }
 }
 
-function validateFileExt(fileName, allowExt) {
-
+function validateFileExt(fileName, allowExt) {    
     if (allowExt === 'any') {
         return {
             isValidate: true
         }
     }
 
-    const fileExt = file.fileExt(fileName);
+    const fileExt = lowerCase(file.fileExt(fileName));
     if (!allowExt.includes(fileExt)) {
-        const { code, msg } = constant.MULTIPART_NOT_ALLOW_FILE_EXT(fileName, fileExt, allowExt);
+        console.log(constant.MULTIPART_NOT_ALLOW_FILE_EXT(fileName, fileExt, allowExt))
+        const { code, msg, keys } = constant.MULTIPART_NOT_ALLOW_FILE_EXT(fileName, fileExt, allowExt);
         return {
             isValidate: false,
             code: code,
-            msg: msg
+            msg: msg,
+            keys: keys
         }
     }
     return {
@@ -276,11 +290,12 @@ function validateUptoSize(buffer, uptoSize, fileName, key) {
     const byte_bufferSize = parseInt(buffer.length);
 
     if (byte_bufferSize >= byte_uptoSize) {        
-        const { code, msg } = constant.MULTIPART_CAN_NOT_EXCEED_CAPACITY(fileName, uptoSize);
+        const { code, msg, keys } = constant.MULTIPART_CAN_NOT_EXCEED_CAPACITY(fileName, uptoSize);
         return {
             isValidate: false,
             code: code,
-            msg: msg
+            msg: msg,
+            keys: keys
         }
     }
     return {
