@@ -97,23 +97,29 @@ router.post(
     sampleController.localUpload()
 );
 
-// //s3 업로드 예제
-// router.post(
-//     '/s3Upload',
-//     assistant.validate({
-//         multipart: {
-//             files: {
-//                 fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', bucket: 'jaehunpark', thumbnail: { width: 200, height: 200, bucket: 'jaehunpark' } } },
-//             },
-//             fields: {
-//                 bodyFeild1: { require: true, v_type: 'any', extra: 'checkEmailRules' },
-//                 bodyFeild2: { require: false, v_type: 'any' }
-//             }
-//         }
-//     }),
-//     assistant.unifyAllProps(),
-//     sampleController.s3Upload()
-// );
+// s3 업로드 예제
+// bucket이 aws에 존재하지않을시 서버에러.
+// 상황에따라 s3 버킷을 조회하고 생성하는 로직을 추가로 작성할것임.
+// 현재 생성된 버킷에 업로드만 가능.
+// 버킷/폴더/폴더/....
+// 폴더생성은 자동으로 생성됨 .
+router.post(
+    '/s3Upload',
+    assistant.validate({
+        multipart: {
+            files: {
+                fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', bucket: 'jaehunpark/files', thumbnail: { width: 200, height: 200, bucket: 'jaehunpark/thumbnails' } } },
+                fileFeild2: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', bucket: 'jaehunpark/files' } },
+            },
+            fields: {
+                bodyFeild1: { require: false, v_type: regExpEmail },
+                bodyFeild2: { require: false, v_type: 'any' }
+            }
+        }
+    }, message.customMessage()),
+    assistant.unifyAllProps(),
+    sampleController.s3Upload()
+);
 
 router.post(
     '/dispatch/mail',

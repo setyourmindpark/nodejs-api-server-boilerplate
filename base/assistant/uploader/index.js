@@ -14,7 +14,7 @@ async function upload(req, inspectedObj, toValidateFile) {
         for (let key of Object.keys(inspectedFiles)) {
 
             const { buffer, fileName } = inspectedFiles[key];            
-            const { target, subDir, thumbnail } = toValidateFile[key]['upload'];
+            const { target, subDir, thumbnail, bucket } = toValidateFile[key]['upload'];
 
             if (target === 'local') {                                             
                 const { originalFileName, ext, renamedFileNameWithExt, rename, uploadFullPath, mainDirPath, subDirPath } = await local.fileUpload(fileName, buffer, subDir);                
@@ -40,22 +40,30 @@ async function upload(req, inspectedObj, toValidateFile) {
                         renamedFileNameWithExt: renamedFileNameWithExt,
                         uploadFullPath: uploadFullPath,
                     }
+                    delete resizedBuffer;
                 }
-                delete resizedBuffer;
 
             } else if (target === 's3') {
-
-                // const { isDone, uploadedObj } = await s3.handleFileUpload(inspectedFileObj, toUploadObj);
-                // if (isDone) {
-                //     req.files[key] = uploadedObj;
-                // }
-
-                // if (toUploadThumbnailObj) {
-                //     const { isDone, uploadedObj } = await s3.handleThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
-                //     if (isDone) {
-                //         req.files[key] = Object.assign(req.files[key], uploadedObj);
-                //     }
-                // }
+                const { ETag, Location, Bucket, Key  } = await s3.fileUpload(fileName, buffer, bucket);
+                req.files[key] = {};
+                req.files[key].file = {
+                    ETag: ETag,
+                    Location: Location,                    
+                    Key: Key,
+                    Bucket: Bucket,                    
+                };
+                if (thumbnail) {
+                    const { bucket, width, height } = thumbnail;
+                    const resizedBuffer = await resizeBuffer(buffer, width, height);
+                    const { ETag, Location, Bucket, Key } = await s3.fileUpload(fileName, resizedBuffer, bucket);
+                    req.files[key].thumbnail = {
+                        ETag: ETag,
+                        Location: Location,
+                        Key: Key,
+                        Bucket: Bucket,
+                    }
+                    delete resizedBuffer;
+                }                
             }
 
             delete buffer;

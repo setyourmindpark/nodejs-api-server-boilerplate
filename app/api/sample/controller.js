@@ -108,6 +108,23 @@ exports.localUpload = () => {
     }
 }
 
+exports.s3Upload = () => {
+    return async (req, res, next) => {
+        try {
+            // req.files +
+            // req.fields +
+            // ...
+            // = req.prop(all)
+            res.send(formatter.apiResponse({
+                code: constant.CODE_SERVICE_PROCESS_1,
+                data: req.prop
+            }));     
+        } catch (err) {
+            res.status(500).send(formatter.apiErrResponse(err));
+        }
+    }
+}
+
 exports.dispatchMail = () => {
     return async (req, res, next) => {
         try {
