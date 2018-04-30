@@ -1,5 +1,5 @@
-exports.processFileUpload = processFileUpload;
-exports.processThumbNailUpload = processThumbNailUpload;
+exports.handleFileUpload = handleFileUpload;
+exports.handleThumbNailUpload = handleThumbNailUpload;
 
 const config = reqlib('/config');
 const path = require('path');
@@ -42,7 +42,7 @@ function makeDirContext(mainDirPath, subPath) {
     }
 };
 
-async function processFileUpload(paramObj, toCheckObj) {
+async function handleFileUpload(paramObj, toCheckObj) {
     const { buffer, fileName } = paramObj;
     const { subDir } = toCheckObj;
     const { isExsist, fullPath, subDirPath } = makeDirContext(mainDirPath, subDir);
@@ -63,7 +63,7 @@ async function processFileUpload(paramObj, toCheckObj) {
     };
 }
 
-async function processThumbNailUpload(paramObj, toCheckObj) {
+async function handleThumbNailUpload(paramObj, toCheckObj) {
     const { buffer, fileName } = paramObj;
     const { width, height, subDir } = toCheckObj;
     const { isExsist, fullPath, subDirPath } = makeDirContext(mainDirPath, subDir);

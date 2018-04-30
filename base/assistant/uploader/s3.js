@@ -1,6 +1,6 @@
 
-// exports.processFileUpload = processFileUpload;
-// exports.processThumbNailUpload = processThumbNailUpload;
+// exports.handleFileUpload = handleFileUpload;
+// exports.handleThumbNailUpload = handleThumbNailUpload;
 
 // const aws = require('aws-sdk');
 // const fileType = require('file-type');
@@ -15,7 +15,7 @@
 //   secretAccessKey: s3Config.secretAccessKey
 // });
 
-// function processFileUpload(paramObj, toCheckObj) {
+// function handleFileUpload(paramObj, toCheckObj) {
 //   //업로드가 true 체크
 //   (async () => {
 //     try {
@@ -48,7 +48,7 @@
 //   })();
 // }
 
-// async function processThumbNailUpload(paramObj, toCheckObj) {
+// async function handleThumbNailUpload(paramObj, toCheckObj) {
 //   try {
 //     const buffer = paramObj['buffer'];
 //     const width = toCheckObj['width'];

@@ -1,11 +1,11 @@
 //local system upload 로직과 s3 업로드 로직 이곳에서 구현할것 ...
 
-exports.uploadFile = uploadFile;
+exports.upload = upload;
 
 const local = require('./local');
 const s3 = require('./s3');
 
-async function uploadFile(req, inspectedObj, toValidateFile) {
+async function upload(req, inspectedObj, toValidateFile) {
     try {
         const { inspectedFiles, inspectedFields } = inspectedObj;  
         req.files = {};
@@ -17,13 +17,13 @@ async function uploadFile(req, inspectedObj, toValidateFile) {
             const { target: toUploadTarget, thumbnail: toUploadThumbnailObj } = toUploadObj;
 
             if (toUploadTarget === 'local') {
-                const { isDone, uploadedObj } = await local.processFileUpload(inspectedFileObj, toUploadObj);
+                const { isDone, uploadedObj } = await local.handleFileUpload(inspectedFileObj, toUploadObj);
                 if (isDone) {
                     req.files[key] = uploadedObj;
                 }
 
                 if (toUploadThumbnailObj) {
-                    const { isDone, uploadedObj } = await local.processThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
+                    const { isDone, uploadedObj } = await local.handleThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
                     if (isDone) {
                         req.files[key] = Object.assign(req.files[key], uploadedObj);
                     }
@@ -31,13 +31,13 @@ async function uploadFile(req, inspectedObj, toValidateFile) {
 
             } else if (toUploadTarget === 's3') {
 
-                const { isDone, uploadedObj } = await s3.processFileUpload(inspectedFileObj, toUploadObj);
+                const { isDone, uploadedObj } = await s3.handleFileUpload(inspectedFileObj, toUploadObj);
                 if (isDone) {
                     req.files[key] = uploadedObj;
                 }
 
                 if (toUploadThumbnailObj) {
-                    const { isDone, uploadedObj } = await s3.processThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
+                    const { isDone, uploadedObj } = await s3.handleThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
                     if (isDone) {
                         req.files[key] = Object.assign(req.files[key], uploadedObj);
                     }

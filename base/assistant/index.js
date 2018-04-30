@@ -89,7 +89,7 @@ function validate({ params: toValidateParam, body: toValidateBody, query: toVali
                         return;
                     } else {
                         const { files: toValidateFile } = toValidateMultipart;
-                        await uploader.uploadFile(req, inspectedObj, toValidateFile);
+                        await uploader.upload(req, inspectedObj, toValidateFile);
                     }
                 }
                 next();
