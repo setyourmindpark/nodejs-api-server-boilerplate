@@ -1,7 +1,7 @@
 const { assistant } = reqlib('/app/common/modules');
 // const delegate = reqlib('/app/common/delegate');
 const router = require('express').Router();
-const sampleCtrl = require('./controller');
+const sampleController = require('./controller');
 const regExpEmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
 
 router.get(
@@ -12,7 +12,7 @@ router.get(
         }
     }),
     assistant.unifyAllProps(),            //all과 같음. 예시임
-    sampleCtrl.path()
+    sampleController.path()
 );
 
 //get 방식의 고전 querystring 방식 지원하기위해 예제를 작성함. query, post 의 body validate format과 같음
@@ -27,7 +27,7 @@ router.get(
         }
     }),
     assistant.unifyAllProps(),
-    sampleCtrl.query()
+    sampleController.query()
 );
 
 router.post(
@@ -40,7 +40,7 @@ router.post(
         }
     }),
     assistant.unifyAllProps(),
-    sampleCtrl.post()
+    sampleController.post()
 );
 
 router.put(
@@ -56,7 +56,7 @@ router.put(
         }
     }),
     assistant.unifyAllProps(),
-    sampleCtrl.put()
+    sampleController.put()
 );
 
 router.delete(
@@ -67,7 +67,7 @@ router.delete(
         }
     }),
     assistant.unifyAllProps(),
-    sampleCtrl.delete()
+    sampleController.delete()
 );
 
 //https://www.npmjs.com/package/bytes
@@ -88,13 +88,13 @@ router.post(
                 //fileFeild2 : { require : true, allowExt : 'any', uptoSize : '20mb', upload : { target : 's3', bucket : 'jaehunpark' , thumbnail : { width:200, height : 200, bucket : 'jaehunpark'} } }
             },
             fields: {
-                bodyFeild1: { require: true, v_type: 'any', extra: 'checkEmailRules' },
+                bodyFeild1: { require: true, v_type: regExpEmail },
                 bodyFeild2: { require: false, v_type: 'any' }
             }
         }
     }),
     assistant.unifyAllProps(),
-    sampleCtrl.localUpload()
+    sampleController.localUpload()
 );
 
 // //s3 업로드 예제
@@ -112,13 +112,13 @@ router.post(
 //         }
 //     }),
 //     assistant.unifyAllProps(),
-//     sampleCtrl.s3Upload()
+//     sampleController.s3Upload()
 // );
 
 router.post(
     '/dispatch/mail',
     assistant.unifyAllProps(),
-    sampleCtrl.dispatchMail()
+    sampleController.dispatchMail()
 );
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const { assistant, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
 const delegate = reqlib('/app/common/delegate');
 const router = require('express').Router();
-const userCtrl = require('./controller');
+const userController = require('./controller');
 
 // RESTFUL SPEC을 지키려합니다.
 // http://meetup.toast.com/posts/92
@@ -18,7 +18,7 @@ router.get(
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.validityEmail()
+    userController.validityEmail()
 );
 
 router.post(
@@ -31,7 +31,7 @@ router.post(
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.new()
+    userController.new()
 );
 
 router.post(
@@ -43,7 +43,7 @@ router.post(
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.tokenMe()
+    userController.tokenMe()
 );
 
 router.post(
@@ -55,14 +55,14 @@ router.post(
         }
     }),
     assistant.unifyAllProps(),
-    userCtrl.tokenNew()
+    userController.tokenNew()
 );
 
 router.get(
     '/me',
     jwtAccess.isAuthenticated(),
     assistant.unifyAllProps(),
-    userCtrl.me()
+    userController.me()
 );
 
 module.exports = router;
