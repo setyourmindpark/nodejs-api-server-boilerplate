@@ -15,7 +15,6 @@ exports.unifyAllProps = unifyAllProps;
  */
 const validator = require('./validator');
 const uploader = require('./uploader');
-const constant = reqlib('/base/common/constant');
 const formatter = reqlib('/base/common/formatter');
 
 /**
