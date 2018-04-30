@@ -22,30 +22,20 @@ const formatter = reqlib('/base/common/formatter');
 * 유효성검사를 수행
 * @param {JSON, function}   
 * ex) {파라미터이름 : {require : true, type : string or regExp},  ...  }   //get 방식의 api 요청일경우 default는 string.
-* delegateFunction존재시 validate 수행결과를 callback으로 router( 호출시점 ) 에서 받을시 정의하여 사용. callback으로 보내줌.( middleware, validate result )
-* delegateFunction없을시 default는 formatter에서 바로 response를 error code와 message를 보냄.
 * @return {express middlware}
 * @public
 */
-function validate(
-    { params:toValidateParam, body:toValidateBody, query:toValidateQuery, multipart:toValidateMultipart }, 
-    delegateFunction) { 
+function validate({ params:toValidateParam, body:toValidateBody, query:toValidateQuery, multipart:toValidateMultipart }) { 
     return (req, res, next) => {
+        
         (async () => {
-
             try{
                 const { params: reqParams, query: reqQuery, body: reqBody } = req;
 
                 if (toValidateParam) {
                     const { isValidate, code, msg } = validator.validateParams(reqParams, toValidateParam);
                     if (!isValidate) {
-                        if (delegateFunction) {
-                            delegateFunction(
-                                { req: req, res: res, next: next },
-                                { code: code, msg: msg })
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                        }
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
                         return;
                     }
                 }
@@ -53,13 +43,7 @@ function validate(
                 if (toValidateQuery) {
                     const { isValidate, code, msg } = validator.validateQuery(reqQuery, toValidateQuery);
                     if (!isValidate) {
-                        if (delegateFunction) {
-                            delegateFunction(
-                                { req: req, res: res, next: next },
-                                { code: code, msg: msg })
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                        }
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
                         return;
                     }
                 }
@@ -67,13 +51,7 @@ function validate(
                 if (toValidateBody) {
                     const { isValidate, code, msg } = validator.validateBody(reqBody, toValidateBody);
                     if (!isValidate) {
-                        if (delegateFunction) {
-                            delegateFunction(
-                                { req: req, res: res, next: next },
-                                { code: code, msg: msg })
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                        }
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
                         return;
                     }
                 }
@@ -81,13 +59,7 @@ function validate(
                 if (toValidateMultipart) {
                     const { isValidate, inspectedObj, code, msg } = await validator.validateMultipart(req, toValidateMultipart);
                     if (!isValidate) {
-                        if (delegateFunction) {
-                            delegateFunction(
-                                { req: req, res: res, next: next },
-                                { code: code, msg: msg })
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }))
-                        }
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
                         return;
                     } else {
                         const { files: toValidateFile, feilds } = toValidateMultipart;
@@ -96,13 +68,7 @@ function validate(
                 }
                 next();
             }catch(err){
-                if (delegateFunction) {
-                    delegateFunction(
-                        { req: req, res: res, next: next },
-                        { code: constant.CODE_SYSTEM_PROCESS_ERROR, msg: constant.MSG_SYSTEM_ERROR })
-                } else {                    
-                    res.status(500).send(formatter.apiErrResponse(err));
-                }                
+                res.status(500).send(formatter.apiErrResponse(err));              
             }                       
         })();
     }
