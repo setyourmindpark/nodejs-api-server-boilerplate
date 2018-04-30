@@ -15,6 +15,10 @@
 //   secretAccessKey: s3Config.secretAccessKey
 // });
 
+// function uploadFile(){
+
+// }
+
 // function handleFileUpload(paramObj, toCheckObj) {
 //   //업로드가 true 체크
 //   (async () => {

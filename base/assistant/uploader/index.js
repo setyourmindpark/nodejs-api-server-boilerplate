@@ -2,6 +2,7 @@
 
 exports.upload = upload;
 
+const sharp = require('sharp');
 const local = require('./local');
 const s3 = require('./s3');
 
@@ -12,40 +13,52 @@ async function upload(req, inspectedObj, toValidateFile) {
 
         for (let key of Object.keys(inspectedFiles)) {
 
-            const inspectedFileObj = inspectedFiles[key];                          
-            const toUploadObj = toValidateFile[key]['upload'];
-            const { target: toUploadTarget, thumbnail: toUploadThumbnailObj } = toUploadObj;
+            const { buffer, fileName } = inspectedFiles[key];            
+            const { target, subDir, thumbnail } = toValidateFile[key]['upload'];
 
-            if (toUploadTarget === 'local') {
-                const { isDone, uploadedObj } = await local.handleFileUpload(inspectedFileObj, toUploadObj);
-                if (isDone) {
-                    req.files[key] = uploadedObj;
+            if (target === 'local') {                                             
+                const { originalFileName, ext, renamedFileNameWithExt, rename, uploadFullPath, mainDirPath, subDirPath } = await local.fileUpload(fileName, buffer, subDir);                
+                req.files[key] = {                  // file과 thumbnail 업로드 공통 정보
+                    originalFileName: originalFileName,
+                    ext: ext,
+                    mainDirPath: mainDirPath
+                };
+                req.files[key].file = {             // file과 업로드 정보
+                    subDirPath: subDirPath,
+                    rename: rename,
+                    renamedFileNameWithExt: renamedFileNameWithExt,
+                    uploadFullPath: uploadFullPath,
                 }
 
-                if (toUploadThumbnailObj) {
-                    const { isDone, uploadedObj } = await local.handleThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
-                    if (isDone) {
-                        req.files[key] = Object.assign(req.files[key], uploadedObj);
+                if (thumbnail) {                    // thumbnail 업로드 정보
+                    const { subDir, width, height } = thumbnail;
+                    const resizedBuffer = await resizeBuffer(buffer, width, height);
+                    const { renamedFileNameWithExt, rename, uploadFullPath } = await local.fileUpload(fileName, resizedBuffer, subDir);
+                    req.files[key].thumbnail = {                        
+                        subDirPath: subDirPath,
+                        rename: rename,
+                        renamedFileNameWithExt: renamedFileNameWithExt,
+                        uploadFullPath: uploadFullPath,
                     }
                 }
+                delete resizedBuffer;
 
-            } else if (toUploadTarget === 's3') {
+            } else if (target === 's3') {
 
-                const { isDone, uploadedObj } = await s3.handleFileUpload(inspectedFileObj, toUploadObj);
-                if (isDone) {
-                    req.files[key] = uploadedObj;
-                }
+                // const { isDone, uploadedObj } = await s3.handleFileUpload(inspectedFileObj, toUploadObj);
+                // if (isDone) {
+                //     req.files[key] = uploadedObj;
+                // }
 
-                if (toUploadThumbnailObj) {
-                    const { isDone, uploadedObj } = await s3.handleThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
-                    if (isDone) {
-                        req.files[key] = Object.assign(req.files[key], uploadedObj);
-                    }
-                }
+                // if (toUploadThumbnailObj) {
+                //     const { isDone, uploadedObj } = await s3.handleThumbNailUpload(inspectedFileObj, toUploadThumbnailObj);
+                //     if (isDone) {
+                //         req.files[key] = Object.assign(req.files[key], uploadedObj);
+                //     }
+                // }
             }
 
-            delete inspectedFileObj;
-            delete inspectedFiles[key];
+            delete buffer;
         }
 
         req.fields = {};
@@ -58,4 +71,11 @@ async function upload(req, inspectedObj, toValidateFile) {
         delete inspectedFiles;          // inspected 시 buffer가 저장되어있으므로 error 시 모두 삭제
         throw err;
     }
+}
+
+async function resizeBuffer(buffer, width, height) {
+    const resizedBuffer = await sharp(buffer)
+                                    .resize(width, height)
+                                    .toBuffer();
+    return resizedBuffer;
 }
