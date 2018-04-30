@@ -10,7 +10,9 @@ const formatter = reqlib('/base/common/formatter');
 // 해당 모듈을 n 개생성할수있도록 초기화하여 생성함. jwt 설정값에따라 같은비지니스로직이 쓰일수있음
 function createModule({ secret, algorithm, expire, param }) {
     const jwtModule =  {
-        isAuthenticated: (isCustomNextHandle) => {
+        // customHandleFunction validate 수행결과를 callback으로 router( 호출시점 ) 에서 받을시 정의하여 사용. callback으로 보내줌.( middleware, validate result )
+        // customHandleFunction default는 base formatter에서 바로 response를 validate code와 message를 response 함.
+        isAuthenticated: (customHandleFunction) => {
             return (req, res, next) => {
                 try {
                     const token = req.headers[param];
@@ -39,12 +41,11 @@ function createModule({ secret, algorithm, expire, param }) {
                     }
 
                 } catch ({ errorCode, message }) {
-                    if (isCustomNextHandle) {
-                        res.validated = {
-                            code: errorCode,
-                            msg: message,
-                        }
-                        next();
+                    if (customHandleFunction) {
+                        customHandleFunction(
+                            { req, res, next },
+                            { code: errorCode, msg: message }
+                        )
                     } else {
                         res.send(formatter.apiResponse({ resultCode: errorCode, msg: message }))                        
                     }

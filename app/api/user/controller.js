@@ -1,6 +1,7 @@
 const { response, queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
 const formatter = reqlib('/app/common/formatter');
 const constant = reqlib('/app/common/constant');
+const message = reqlib('/app/common/message');
 
 exports.validityEmail = () => {
     return async (req, res, next) => {
@@ -122,13 +123,12 @@ exports.tokenNew = () => {
                     }
                 }));
             } catch (err) {
+                const customMessage = message.customJwtMessage(err.errorCode);
                 res.send(formatter.apiResponse({
                     resultCode: err.errorCode,
-                    msg: err.message
+                    msg: customMessage
                 }));
             }
-
-
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
         }

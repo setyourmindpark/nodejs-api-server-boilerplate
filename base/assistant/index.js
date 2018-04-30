@@ -22,10 +22,12 @@ const formatter = reqlib('/base/common/formatter');
 * 유효성검사를 수행
 * @param {JSON, function}   
 * ex) {파라미터이름 : {require : true, type : string or regExp},  ...  }   //get 방식의 api 요청일경우 default는 string.
+* customHandleFunction validate 수행결과를 callback으로 router( 호출시점 ) 에서 받을시 정의하여 사용. callback으로 보내줌.( middleware, validate result )
+* customHandleFunction default는 base formatter에서 바로 response를 validate code와 message를 response 함.
 * @return {express middlware}
 * @public
 */
-function validate({ params: toValidateParam, body: toValidateBody, query: toValidateQuery, multipart: toValidateMultipart }, isCustomNextHandle) {
+function validate({ params: toValidateParam, body: toValidateBody, query: toValidateQuery, multipart: toValidateMultipart }, customHandleFunction) {
     return (req, res, next) => {
 
         (async () => {
@@ -35,64 +37,56 @@ function validate({ params: toValidateParam, body: toValidateBody, query: toVali
                 if (toValidateParam) {
                     const { isValidate, code, msg, keys } = validator.validateParams(reqParams, toValidateParam);
                     if (!isValidate) {
-                        if (isCustomNextHandle) {
-                            res.validated = {
-                                code: code,
-                                msg: msg,
-                                keys: keys
-                            }
+                        if (customHandleFunction) {
+                            customHandleFunction(
+                                { req, res, next },
+                                { code: code, msg: msg, keys: keys })                            
                         } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                            return;
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
                         }
+                        return;
                     }
                 }
 
                 if (toValidateQuery) {
                     const { isValidate, code, msg, keys } = validator.validateQuery(reqQuery, toValidateQuery);
                     if (!isValidate) {
-                        if (isCustomNextHandle) {
-                            res.validated = {
-                                code: code,
-                                msg: msg,
-                                keys: keys
-                            }
+                        if (customHandleFunction) {
+                            customHandleFunction(
+                                { req, res, next },
+                                { code: code, msg: msg, keys: keys })
                         } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                            return;
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
                         }
+                        return;
                     }
                 }
 
                 if (toValidateBody) {
                     const { isValidate, code, msg, keys } = validator.validateBody(reqBody, toValidateBody);
                     if (!isValidate) {
-                        if (isCustomNextHandle) {
-                            res.validated = {
-                                code: code,
-                                msg: msg,
-                                keys: keys
-                            }
+                        if (customHandleFunction) {
+                            customHandleFunction(
+                                { req, res, next },
+                                { code: code, msg: msg, keys: keys}) 
                         } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                            return;
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
                         }
+                        return;
                     }
                 }
 
                 if (toValidateMultipart) {
                     const { isValidate, inspectedObj, code, msg, keys } = await validator.validateMultipart(req, toValidateMultipart);
                     if (!isValidate) {
-                        if (isCustomNextHandle) {
-                            res.validated = {
-                                code: code,
-                                msg: msg,
-                                keys: keys
-                            }
+                        if (customHandleFunction) {
+                            customHandleFunction(
+                                { req, res, next },
+                                { code: code, msg: msg, keys: keys })
                         } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
-                            return;
+                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
                         }
+                        return;
                     } else {
                         const { files: toValidateFile } = toValidateMultipart;
                         await uploader.uploadFile(req, inspectedObj, toValidateFile);
@@ -100,16 +94,14 @@ function validate({ params: toValidateParam, body: toValidateBody, query: toVali
                 }
                 next();
             } catch (err) {
-                if (isCustomNextHandle) {
-                    res.validated = {
-                        code: constant.CODE_SYSTEM_PROCESS_ERROR,
-                        msg: constant.MSG_SYSTEM_ERROR,
-                    }
+                console.log(err);
+                if (customHandleFunction) {
+                     customHandleFunction(
+                        { req, res, next },
+                        { code: constant.CODE_SYSTEM_PROCESS_ERROR, msg: constant.MSG_SYSTEM_ERROR })                     
                 } else {
                     res.status(500).send(formatter.apiErrResponse(err));
-                    return;
-                }
-                
+                }                
             }
         })();
     }

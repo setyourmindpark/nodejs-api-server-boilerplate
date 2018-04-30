@@ -1,5 +1,5 @@
 const { assistant } = reqlib('/app/common/modules');
-const handler = reqlib('/app/common/handler');
+const message = reqlib('/app/common/message');
 const router = require('express').Router();
 const sampleController = require('./controller');
 const regExpEmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
@@ -10,8 +10,7 @@ router.get(
         params: {
             param1: { v_type: 'onlyChar' }
         }
-    }, true ),
-    handler.handleCustomValidateResponse(),
+    }, message.customMessage()),
     assistant.unifyAllProps(),
     sampleController.path()
 );
@@ -26,8 +25,7 @@ router.get(
             param3: { require: true, v_type: 'onlyChar' },
             param4: { require: true, v_type: regExpEmail }
         }
-    }, true ),
-    handler.handleCustomValidateResponse(),
+    }, message.customMessage() ),
     assistant.unifyAllProps(),
     sampleController.query()
 );
@@ -40,8 +38,7 @@ router.post(
             param2: { require: true, v_type: 'onlyNum' },
             param3: { require: true, v_type: 'onlyChar' }
         }
-    }, true ),
-    handler.handleCustomValidateResponse(),
+    }, message.customMessage() ),
     assistant.unifyAllProps(),
     sampleController.post()
 );
@@ -57,8 +54,7 @@ router.put(
             param2: { require: true, v_type: 'any' },
             param3: { require: false, v_type: 'any' }
         }
-    }, true ),
-    handler.handleCustomValidateResponse(),
+    }, message.customMessage() ),
     assistant.unifyAllProps(),
     sampleController.put()
 );
@@ -69,8 +65,7 @@ router.delete(
         params: {
             where: { v_type: 'onlyNum' }
         }
-    }, true ),
-    handler.handleCustomValidateResponse(),
+    }, message.customMessage() ),
     assistant.unifyAllProps(),
     sampleController.delete()
 );
@@ -97,8 +92,7 @@ router.post(
                 bodyFeild2: { require: false, v_type: 'any' }
             }
         }
-    }, true ),
-    handler.handleCustomValidateResponse(),
+    }, message.customMessage() ),
     assistant.unifyAllProps(),
     sampleController.localUpload()
 );

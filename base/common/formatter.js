@@ -6,9 +6,9 @@ const constant = reqlib('/base/common/constant');
 
 function apiResponse({ resultCode, code, msg, pagenationInfo, data }) {
     if (resultCode) {
-        logger.info('--------------------------- identified info start ---------------------------');
+        logger.info('--------------------------- [ base ] identified info start ---------------------------');
         logger.info('identified code : ' + resultCode + '   identified msg : ' + msg);
-        logger.info('--------------------------- identified info end -----------------------------');
+        logger.info('--------------------------- [ base ] identified info end -----------------------------');
     }
     return {
         resultCode: resultCode || constant.CODE_SYSTEM_PROCESS_DONE,
@@ -22,9 +22,9 @@ function apiResponse({ resultCode, code, msg, pagenationInfo, data }) {
 }
 
 function apiErrResponse(err) {
-    logger.info('--------------------------- unexpected system error start ---------------------------');
+    logger.info('--------------------------- [ base ] unexpected system error start ---------------------------');
     logger.info(err);
-    logger.info('--------------------------- unexpected system error end -----------------------------');
+    logger.info('--------------------------- [ base ] unexpected system error end -----------------------------');
     return {
         resultCode: constant.CODE_SYSTEM_PROCESS_ERROR,
         msg: constant.MSG_SYSTEM_ERROR
