@@ -2,7 +2,6 @@ exports.fileUpload = fileUpload;
 
 const config = reqlib('/config');
 const path = require('path');
-const mkdirp = require('mkdirp');
 const sharp = require('sharp');
 const file = reqlib('/base/common/file');
 const moment = require('moment');
