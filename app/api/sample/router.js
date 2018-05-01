@@ -84,8 +84,8 @@ router.post(
     assistant.validate({
         multipart: {
             files: {
-                fileFeild1: { require: true, allowExt: ['jpg', 'bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/[today]/files', thumbnail: { width: 100, height: 200, subDir: '/thumbnails' } } },
-                fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: '/[today]' } }
+                fileFeild1: { require: true, allowExt: ['jpg', 'bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/[today]/files', thumbnail: { width: 100, height: 200, subDir: '/[today]/thumbnails' } } },
+                fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: '/[today]/files' } }
                 //fileFeild2 : { require : true, allowExt : 'any', uptoSize : '20mb', upload : { target : 's3', bucket : 'jaehunpark' , thumbnail : { width:200, height : 200, bucket : 'jaehunpark'} } }
             },
             fields: {
