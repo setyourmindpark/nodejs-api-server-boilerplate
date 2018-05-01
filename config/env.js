@@ -60,7 +60,7 @@ module.exports = {
                 from: env.SENDER_MAIL_FROM,
             },
             android: {
-
+                serverKey: env.SENDER_ANDROID_SERVER_KEY,
             },
             ios: {
                 
