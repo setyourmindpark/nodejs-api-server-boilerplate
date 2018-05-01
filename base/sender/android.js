@@ -3,7 +3,7 @@ exports.send = send;
 const config = reqlib('/config');
 const { serverKey } = config.setting.sender.android;
 const FCM = require('fcm-push');
-const sender = new FCM(serverKey);
+const sender = new FCM( serverKey || 'emptyServerKey' );
 
 // Promise.all 과 같은 동시다발적 비동기처리중 메일전송이 특정 수신인에게 실패하더라도 중단하면 안되기때문에 메일 전송 결과값만을 return
 // async await을 사용할수도있으나 메일실패시 바로 throw err가 되기때문에( 실패와무관하게 결과값만 저장 ) promise를 수동으로 사용함. 
@@ -26,17 +26,13 @@ function send({ to, title, body }) {
         };
 
         sender.send(options, (error, response) => {
-            if (error) {
-                resolve({
-                    sended: false,
-                    token: to
-                });
-            } else {
-                resolve({
-                    sended: true,
-                    token: to
-                });
-            }
+            let sended = true;
+            if (error) sended = false;
+            
+            resolve({
+                sended: sended,
+                token: to
+            });
         });
     })
 }

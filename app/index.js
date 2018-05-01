@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 const app = express();
 // const baseFormatter = reqlib('/base/common/formatter');
 const baseSenderMail = reqlib('/base/sender/mail');
+const baseSenderAndorid = reqlib('/base/sender/android');
 const baseAuthorizer = reqlib('/base/authorizer');
 // const baseQueryHelper = reqlib('/base/queryHelper');
 const baseSequelize = reqlib('/base/sequelize');
@@ -41,7 +42,8 @@ async function initializeModule(){
         assistant: baseAssistant,
         // formatter: baseFormatter,
         mysqlPagenation: baseMysqlPagenation,
-        senderMail: baseSenderMail
+        senderMail: baseSenderMail,
+        senderAndorid: baseSenderAndorid
     };
 
     const baseModules = {

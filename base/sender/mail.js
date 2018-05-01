@@ -22,17 +22,13 @@ function send({ to, subject, text, html }){
         else if (attachments) options.attachments = attachments;
 
         sender.sendMail(options, ( error, response ) => {
-            if (error) {
-                resolve({
-                    sended : false,
-                    mail: to
-                })
-            } else {
-                resolve({
-                    sended: true,
-                    mail: to
-                })
-            }
+            let sended = true;
+            if (error) sended = false;
+            
+            resolve({
+                sended: sended,
+                mail: to
+            })
             sender.close();     
         });        
     })
