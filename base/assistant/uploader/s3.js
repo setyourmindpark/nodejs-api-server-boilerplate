@@ -17,10 +17,10 @@ const s3 = new AWS.S3({
 
 async function fileUpload(fileName, buffer, subDir){    
     let fullPath = undefined;
-    if (subDir === '/'){
-        fullPath = bucket;
+    if (subDir){
+        fullPath = path.join(bucket, subDir);        
     }else{
-        fullPath = path.join(bucket, subDir);
+        fullPath = bucket;
     }
 
     const params = {

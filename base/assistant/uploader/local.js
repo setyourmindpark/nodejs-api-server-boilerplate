@@ -8,11 +8,16 @@ const rootPath = require('app-root-path');
 const appRootPath = rootPath.path;
 let targetPath = config.setting.upload.local.mainDir;
 targetPath = targetPath.charAt(0) === '/' ? targetPath : '/' + targetPath;
-targetPath = targetPath.charAt(targetPath.length - 1) === '/' ? targetPath.slice(0, -1) : targetPath;
 const mainDir = appRootPath + targetPath;
 
 async function fileUpload(fileName, buffer, subDir){
-    const fullPath = path.join(mainDir, subDir);
+    let fullPath = undefined;
+    if (subDir) {
+        fullPath = path.join(mainDir, subDir);
+    } else {
+        fullPath = mainDir;
+    }
+
     if (!file.isExsistDir(fullPath)) {
         file.mkdir(fullPath);
     };
@@ -25,7 +30,7 @@ async function fileUpload(fileName, buffer, subDir){
     await sharp(buffer).toFile(uploadFullPath);
     return {
         mainPath: mainDir,
-        subPath: subDir,
+        subPath: subDir || '/',
         rename: rename,
         renamedFileNameWithExt: renamedFileNameWithExt,
         uploadFullPath: uploadFullPath,

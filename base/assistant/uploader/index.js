@@ -97,10 +97,7 @@ async function upload(req, inspectedObj, toValidateFile) {
 }
 
 function renameSubDir(subDir){
-    if(!subDir) return '/'
-
     if (subDir) {
-        subDir = subDir.charAt(0) === '/' ? subDir : '/' + subDir;
         if (subDir.search('[today]') !== -1) {
             subDir = replaceall('[today]', moment().format('YYYYMMDD'), subDir);
         }
