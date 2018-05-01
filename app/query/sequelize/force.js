@@ -275,7 +275,7 @@ prompt.get([{
         console.log('######################### findOrCreate')
 
 
-        process.exit(1)
+        process.exit(0)
 
     })();
 

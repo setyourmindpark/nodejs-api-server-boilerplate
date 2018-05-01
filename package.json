@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/server",
-    "test": "node_modules/.bin/mocha app/api/**/*.spec.js"
+    "test": "node_modules/.bin/mocha app/api/**/*.spec.js",
+    "init-ddl": "sudo node ./app/query/sequelize/force.js --dev"
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
@@ -18,7 +19,6 @@
     "cluster": "^0.7.7",
     "composable-middleware": "^0.3.0",
     "dotenv": "^5.0.0",
-    "dottie": "^2.0.0",
     "express": "~4.16.2",
     "fcm-push": "^1.1.3",
     "file-type": "^7.5.0",
@@ -32,7 +32,7 @@
     "mysql": "~2.15.0",
     "mysql2": "^1.5.3",
     "nodemailer": "^4.4.2",
-    "promise-mysql": "^3.2.0",    
+    "promise-mysql": "^3.2.0",
     "replaceall": "^0.1.6",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
@@ -43,8 +43,9 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "prompt": "^1.0.0",
     "mocha": "^5.0.0",
+    "prompt": "^1.0.0",
+    "sequelize-cli": "^4.0.0",
     "shelljs": "^0.8.1",
     "should": "^13.2.1",
     "supertest": "^3.0.0"
