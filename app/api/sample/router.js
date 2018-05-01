@@ -78,13 +78,14 @@ router.delete(
 //          tb for terabytes
 //          'any' max 용량체크안함 .
 // s3 ex) fileFeild1 : { require : true, allowExt : 'any', uptoSize : '20mb', upload : { target : 's3', bucket : 'jaehunpark' , thumbnail : { width:200, height : 200, bucket : 'jaehunpark'} } },
+// [today] 는 현재날짜로 폴더를 생성하게됨. 
 router.post(
     '/localUpload',
     assistant.validate({
         multipart: {
             files: {
-                fileFeild1: { require: true, allowExt: ['jpg','bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/jaehunpark2', thumbnail: { width: 100, height: 200, subDir: '/ccc' } } },
-                fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: 'default' } }
+                fileFeild1: { require: true, allowExt: ['jpg', 'bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/[today]/files', thumbnail: { width: 100, height: 200, subDir: '/thumbnails' } } },
+                fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: '/[today]' } }
                 //fileFeild2 : { require : true, allowExt : 'any', uptoSize : '20mb', upload : { target : 's3', bucket : 'jaehunpark' , thumbnail : { width:200, height : 200, bucket : 'jaehunpark'} } }
             },
             fields: {
@@ -108,8 +109,8 @@ router.post(
     assistant.validate({
         multipart: {
             files: {
-                fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', bucket: 'jaehunpark/files', thumbnail: { width: 200, height: 200, bucket: 'jaehunpark/thumbnails' } } },
-                fileFeild2: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', bucket: 'jaehunpark/files' } },
+                fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', subDir: '/[today]/files', thumbnail: { width: 300, height: 300, subDir: '/[today]/thumbnails' } } },
+                fileFeild2: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', subDir: '/[today]/files' } },
             },
             fields: {
                 bodyFeild1: { require: false, v_type: regExpEmail },

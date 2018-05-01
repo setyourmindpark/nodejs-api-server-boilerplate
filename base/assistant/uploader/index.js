@@ -3,6 +3,8 @@
 exports.upload = upload;
 
 const sharp = require('sharp');
+const replaceall = require('replaceall');
+const moment = require('moment');
 const local = require('./local');
 const s3 = require('./s3');
 
@@ -14,17 +16,20 @@ async function upload(req, inspectedObj, toValidateFile) {
         for (let key of Object.keys(inspectedFiles)) {
 
             const { buffer, fileName } = inspectedFiles[key];            
-            const { target, subDir, thumbnail, bucket } = toValidateFile[key]['upload'];
+            const { target, subDir, thumbnail } = toValidateFile[key]['upload'];
+            
+            
 
             if (target === 'local') {                                             
-                const { originalFileName, ext, renamedFileNameWithExt, rename, uploadFullPath, mainDirPath, subDirPath } = await local.fileUpload(fileName, buffer, subDir);                
+                const renamedSubDir = renameSubDir(subDir);
+                const { renamedFileNameWithExt, rename, uploadFullPath, mainPath, subPath } = await local.fileUpload(fileName, buffer, renamedSubDir);                
                 req.files[key] = {                  // file과 thumbnail 업로드 공통 정보
-                    originalFileName: originalFileName,
-                    ext: ext,
-                    mainDirPath: mainDirPath
+                    target: 'local',
+                    fileName: fileName,
+                    mainPath: mainPath
                 };
                 req.files[key].file = {             // file과 업로드 정보
-                    subDirPath: subDirPath,
+                    subPath: subPath,
                     rename: rename,
                     renamedFileNameWithExt: renamedFileNameWithExt,
                     uploadFullPath: uploadFullPath,
@@ -32,10 +37,11 @@ async function upload(req, inspectedObj, toValidateFile) {
 
                 if (thumbnail) {                    // thumbnail 업로드 정보
                     const { subDir, width, height } = thumbnail;
+                    const renamedSubDir = renameSubDir(subDir);
                     const resizedBuffer = await resizeBuffer(buffer, width, height);
-                    const { renamedFileNameWithExt, rename, uploadFullPath } = await local.fileUpload(fileName, resizedBuffer, subDir);
-                    req.files[key].thumbnail = {                        
-                        subDirPath: subDirPath,
+                    const { renamedFileNameWithExt, rename, uploadFullPath, subPath } = await local.fileUpload(fileName, resizedBuffer, renamedSubDir);
+                    req.files[key].thumbnail = {
+                        subPath: subPath,
                         rename: rename,
                         renamedFileNameWithExt: renamedFileNameWithExt,
                         uploadFullPath: uploadFullPath,
@@ -43,9 +49,15 @@ async function upload(req, inspectedObj, toValidateFile) {
                     delete resizedBuffer;
                 }
 
+
+
             } else if (target === 's3') {
-                const { ETag, Location, Bucket, Key  } = await s3.fileUpload(fileName, buffer, bucket);
-                req.files[key] = {};
+                const renamedSubDir = renameSubDir(subDir);
+                const { ETag, Location, Bucket, Key } = await s3.fileUpload(fileName, buffer, renamedSubDir);
+                req.files[key] = { 
+                    target: 's3',
+                    fileName : fileName
+                };
                 req.files[key].file = {
                     ETag: ETag,
                     Location: Location,                    
@@ -53,9 +65,10 @@ async function upload(req, inspectedObj, toValidateFile) {
                     Bucket: Bucket,                    
                 };
                 if (thumbnail) {
-                    const { bucket, width, height } = thumbnail;
+                    const { subDir, width, height } = thumbnail;
+                    const renamedSubDir = renameSubDir(subDir);
                     const resizedBuffer = await resizeBuffer(buffer, width, height);
-                    const { ETag, Location, Bucket, Key } = await s3.fileUpload(fileName, resizedBuffer, bucket);
+                    const { ETag, Location, Bucket, Key } = await s3.fileUpload(fileName, resizedBuffer, renamedSubDir);
                     req.files[key].thumbnail = {
                         ETag: ETag,
                         Location: Location,
@@ -65,6 +78,8 @@ async function upload(req, inspectedObj, toValidateFile) {
                     delete resizedBuffer;
                 }                
             }
+
+
 
             delete buffer;
         }
@@ -79,6 +94,18 @@ async function upload(req, inspectedObj, toValidateFile) {
         delete inspectedFiles;          // inspected 시 buffer가 저장되어있으므로 error 시 모두 삭제
         throw err;
     }
+}
+
+function renameSubDir(subDir){
+    if(!subDir) return '/'
+
+    if (subDir) {
+        subDir = subDir.charAt(0) === '/' ? subDir : '/' + subDir;
+        if (subDir.search('[today]') !== -1) {
+            subDir = replaceall('[today]', moment().format('YYYYMMDD'), subDir);
+        }
+    } 
+    return subDir;
 }
 
 async function resizeBuffer(buffer, width, height) {
