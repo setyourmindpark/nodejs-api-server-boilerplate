@@ -194,7 +194,7 @@ function validateValue(paramVal, v_type, key) {
 
 function validateRequire(paramVal, require, key) {
 
-    if (require) {         //파라미터가 반드시 requre true 인경우
+    if (require) {                      //파라미터가 반드시 requre true 인경우
         if (!paramVal) {                //파라미터가 존재하지않을경우
             const { code, msg, keys } = constant.PARAMETER_NOT_EXSIST(key);
             return {
@@ -270,7 +270,6 @@ function validateFileExt(fileName, allowExt) {
 
     const fileExt = lowerCase(file.fileExt(fileName));
     if (!allowExt.includes(fileExt)) {
-        console.log(constant.MULTIPART_NOT_ALLOW_FILE_EXT(fileName, fileExt, allowExt))
         const { code, msg, keys } = constant.MULTIPART_NOT_ALLOW_FILE_EXT(fileName, fileExt, allowExt);
         return {
             isValidate: false,

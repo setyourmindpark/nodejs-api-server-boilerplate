@@ -36,7 +36,7 @@ router.post(
         body: {
             param1: { require: true, v_type: 'any' },
             param2: { require: true, v_type: 'onlyNum' },
-            param3: { require: true, v_type: 'onlyChar' }
+            param3: { require: false, v_type: 'onlyChar' }
         }
     }, message.customMessage() ),
     assistant.unifyAllProps(),
