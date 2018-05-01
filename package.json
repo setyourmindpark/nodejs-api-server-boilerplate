@@ -1,7 +1,7 @@
 {
-  "name": "boilerplate",
+  "name": "nodejs-api-server-boilerplate",
   "version": "1.0.0",
-  "description": "boilerplate",
+  "description": "nodejs-api-server-boilerplate",
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/server",
@@ -37,8 +37,7 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.37.6",
-    "sharp": "^0.20.1",
-    "swagger-ui": "^2.2.10",
+    "sharp": "^0.20.1",    
     "uuid": "^3.2.1",
     "winston": "^2.4.0"
   },
@@ -48,7 +47,8 @@
     "sequelize-cli": "^4.0.0",
     "shelljs": "^0.8.1",
     "should": "^13.2.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "swagger-ui": "^2.2.10"
   },
   "author": "jaehunpark",
   "license": "ISC"
