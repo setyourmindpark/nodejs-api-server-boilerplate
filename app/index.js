@@ -38,7 +38,7 @@ async function initializeModule(){
     const { jwtAccess, jwtRefresh } = baseAuthorizer.createModules();
     const syncdSequelize1 = await sqzSync.sync(sequelize1);       // sequelize.models 에 entity binded
 
-    const basePlainModule = {
+    const basePlainModules = {
         assistant: baseAssistant,
         // formatter: baseFormatter,
         mysqlPagenation: baseMysqlPagenation,
@@ -59,7 +59,7 @@ async function initializeModule(){
         }
     }
    
-    modules.initialize(basePlainModule, baseModules);
+    modules.initialize(basePlainModules, baseModules);
 }
 
 function configureProtocol(){
