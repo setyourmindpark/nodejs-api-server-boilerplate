@@ -12,7 +12,7 @@ module.exports = {
         Tag: require('./models/Tag'),
         MemoTag: require('./models/MemoTag'),
         Common: require('./models/Common'),
-        Constant: require('./models/Constant'),
+        System: require('./models/System'),
         File: require('./models/File'),
         // ...        
     },
