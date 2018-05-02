@@ -1,6 +1,6 @@
 
 // ***************************************************
-// start service initialize and configure here to need
+// initialize to start service and configure here to need
 // service에 대한 초기화는 이곳에서 모두 처리함.
 // ***************************************************
 
