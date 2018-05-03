@@ -1,9 +1,7 @@
 ## NODEJS-API-SERVER-BOILERPLATE
 NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.   
-전체적인 프로젝트구조는 **/base** 에서 모듈을 모두 작성하였으며  
-**/app** 에서 **base**에서 작성한 모듈을 꺼내쓴다 **( /app/index )에서 /app/common/modules/에 binding**  
-따라서 **/app**에서는 비지니스로직에대한 **router** 및 **controller** 그리고 **sequelize model** 작성및 **query**를 수행한다.  
-환경변수 설정만으로 동작하도록 구성중이며 제공되는 기능은 다음과같다.    
+전체적인 프로젝트구조는 모듈을 위한 **/base** 그리고 서비스 비지니스로직 처리에대한 **/app** 로 구조화하였으며  
+**/base**가 제공하는 기능은 다음과같다. **( /app/index )에서 /app/common/modules/에 base modules를 binding** 
 **assistant**  
 - parameter validator 
 - file uploader ( local, s3 )
@@ -15,12 +13,16 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 - local
 - fluentd
 
+**sender**  
+- mail
+- android
+
 **sequelize**  
 **queryHelper** ( queryHelper보다는 sequelize를 사용하는게.. )
 
 
 ## 환경변수
-해당 환경변수는 **dev.env**와 **prod.env**로 작성될수있으며 **/env/** 에 위치한다.  
+boilerplate는 환경변수기반으로 동작하며  **dev.env**와 **prod.env**로 작성될수있으며 **/env/** 에 위치한다.  
  **/.env**의 설정값에따라 작성된 **dev.env** 또는 **prod.env**로 동작한다.  
 ``` bash
 BASE_PORT=( base로 사용할 port ex. 4000 ) 
