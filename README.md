@@ -1,19 +1,19 @@
 ## NODEJS-API-SERVER-BOILERPLATE
 NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.   
 환경변수 설정만으로 동작하도록 구성중이며 제공되는 기능은 다음과같다.    
-assistant
+**assistant**  
 - parameter validator 
 - file uploader ( local, s3 )
 
-authorizer
+**authorizer**  
 - jsonwebtoken
 
-logger
+**logger**  
 - local
 - fluentd
 
-sequelize  
-queryHelper ( queryHelper보다는 sequelize를 사용하는게.. )
+**sequelize**  
+**queryHelper** ( queryHelper보다는 sequelize를 사용하는게.. )
 
 
 ## 환경변수
@@ -156,6 +156,6 @@ router.post(
 ```
 
 ## sequelize
-/app/query/sequelize/design/models에 sequelize model을 정의하고 /app/query/sequelize/design/index.js에 bind와 associations 정의한다.  
+**/app/query/sequelize/design/models**에 **sequelize model**을 정의하고 **/app/query/sequelize/design/index.js**에 **bind**와 **associations** 정의한다.  
 
 
