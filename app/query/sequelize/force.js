@@ -53,7 +53,7 @@ prompt.get([{
             try {
                 transaction = await sequelize.transaction();
 
-                for (item of Object.keys(system)){
+                for (item in system){
                     await syncdModule.models.System.create({
                         code: system[item].code,
                         group: system[item].group,
