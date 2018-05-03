@@ -2,15 +2,19 @@
 NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.   
 환경변수 설정만으로 동작하도록 구성중이며 제공되는 기능은 다음과같다.    
 assistant
-- parameter validator
+- parameter validator 
 - file uploader ( local, s3 )
+
 authorizer
 - jsonwebtoken
+
 logger
 - local
 - fluentd
-sequelize
-그리고 개인적으로만든 queryHelper가 있습니다.( queryHelper는 모듈에는 포함시켰지만 sequelize 사용하는게.. )  
+
+sequelize  
+queryHelper ( queryHelper보다는 sequelize를 사용하는게.. )
+
 
 ## 환경변수
 해당 환경변수는 dev.env와 prod.env로 작성될수있으며 /env/ 에 위치한다.  
