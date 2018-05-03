@@ -1,4 +1,5 @@
 const { queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
+const { User, System } = sequelize.models;
 const formatter = reqlib('/app/common/formatter');
 const response = reqlib('/app/common/constant/response');
 const message = reqlib('/app/common/message');
@@ -10,7 +11,7 @@ exports.validityEmail = () => {
             let msg = '계정을 만들수있습니다.';
             const { email } = req.prop;  
             //const result = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
-            const count = await sequelize.models.User.count({
+            const count = await User.count({
                 where: { email: email }
             })
 
@@ -36,7 +37,7 @@ exports.new = () => {
         try {
             const { name, email, passwd } = req.prop;
             //const result1 = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
-            const count = await sequelize.models.User.count({
+            const count = await User.count({
                 where: { email: email, }
             })
 
@@ -48,7 +49,7 @@ exports.new = () => {
                 return;
             };
 
-            const create = await sequelize.models.User.create({
+            const create = await User.create({
                 name: name,
                 email: email,
                 passwd: passwd
@@ -68,7 +69,7 @@ exports.tokenMe = () => {
     return async(req, res, next) => {
         try {
             const { email, passwd } = req.prop;
-            const someone = await sequelize.models.User.findOne({
+            const someone = await User.findOne({
                 where: {
                     email: email,
                     passwd: passwd
@@ -139,10 +140,22 @@ exports.me = () => {
     return async(req, res, next) => {
         try {
             const id = req.prop.tokenId;            
-            const someone = await sequelize.models.User.findOne({
+            const someone = await User.findOne({
                 attributes: {
-                    exclude: ['passwd']
+                    exclude: ['passwd', 'typeCode', 'deviceCode', 'provision','token']
                 },
+                include : [
+                    {
+                        model: System,
+                        as: 'type',
+                        attributes: [['value1', 'name']]
+                    },
+                    {
+                        model: System,
+                        as: 'device',
+                        attributes: [['value1', 'name']]
+                    },
+                ],
                 where: { id : id },
             })
 
