@@ -18,8 +18,10 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 - mail
 - android
 
-sequelize  
-queryHelper ( queryHelper보다는 sequelize를 사용하는게.. )
+### sequelize  
+
+### queryHelper  
+- queryHelper보다는 sequelize를 사용하는게.. 
 
 
 ## 환경변수
