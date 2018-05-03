@@ -142,5 +142,6 @@ assistant.validate({
 ## sequelize
 **/app/query/sequelize/design/models**에 **sequelize model**을 정의하고   
 **/app/query/sequelize/design/index.js**에 **bind**와 **associations** 정의한다.  
+// 추가정리는 다음에 ...
 
 
