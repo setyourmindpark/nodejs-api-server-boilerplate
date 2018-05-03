@@ -144,7 +144,7 @@ router.post(
 );
 ```
 
-#정# sequelize
+## sequelize
 /app/query/sequelize/design/models에 sequelize model을 정의하고 /app/query/sequelize/design/index.js에 bind와 associations 정의한다.  
 
 
