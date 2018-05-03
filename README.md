@@ -88,7 +88,7 @@ router.get(
 
 ```
 assistant.validator의 2번째인자값의 callback function은 명시하지않으면 default로 /base/common/constant 기반으로 동작한다.  
-custom하게 error response handling시 위와같이 작성하면됩니다. ( /app/common/message 참고)  
+custom하게 error response handling시 위와같이 장성한다. ( /app/common/message 참고 )  
 
 ### local file upload
 ``` javascript
@@ -146,4 +146,5 @@ router.post(
 
 ### sequelize
 /app/query/sequelize/design/models에 sequelize model을 정의하고 /app/query/sequelize/design/index.js에 bind와 associations 정의한다.  
+
 
