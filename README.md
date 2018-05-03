@@ -76,9 +76,7 @@ LOGGER_FLUENTD_TAG= ( ex. app )
 ### basic
 ``` javascript
 const regExpEmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
-router.get(
-    '/path/:param1',
-    assistant.validate({
+assistant.validate({
         params: {                                               // => params는 default require: true ( url path로 넘어오기에 .. )
             param1: { v_type: 'any' },                          // => param1 파라미터는 값은 아무값이나 상관없음
             param2: { v_type: 'onlyNum' },                      // => param1 파라미터는 값은 오직 숫자만 가능 ex. '12345' O, 'some1' X
@@ -92,11 +90,7 @@ router.get(
         body: {
             body1: { require: true, v_type:'any' }
         }
-    }, message.customMessage()),                                // => custom하게 에러메시지를 표시하고싶다면 callback function을 작성 
-    assistant.unifyAllProps(),                                  // => request로 binding된 params, query, body, header를 prop 로 모두 unify
-    sampleController.path()                                     // => 서비스로직 controller 호출
-);
-
+    }, message.customMessage())
 ```
 assistant.validator의 2번째인자값의 callback function은 명시하지않으면 default로 /base/common/constant 기반으로 동작한다.  
 custom하게 error response handling시 위와같이 작성한다. ( /app/common/message 참고 )  
@@ -113,46 +107,36 @@ custom하게 error response handling시 위와같이 작성한다. ( /app/common
 
 // [ 하위디렉토리 ] 
 // [today] 는 현재날짜로 폴더를 생성하게됨. 
-router.post(
-    '/localUpload',
-    assistant.validate({
-        multipart: {
-            files: {
-                fileFeild1: { require: true, allowExt: ['jpg', 'bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/[today]/files', thumbnail: { width: 100, height: 200, subDir: '/[today]/thumbnails' } } },
-                fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: '/[today]/files' } }
-            },
-            fields: {
-                bodyFeild1: { require: true, v_type: regExpEmail },
-                bodyFeild2: { require: false, v_type: 'any' }
-            }
+assistant.validate({
+    multipart: {
+        files: {
+            fileFeild1: { require: true, allowExt: ['jpg', 'bmp'], uptoSize: '20mb', upload: { target: 'local', subDir: '/[today]/files', thumbnail: { width: 100, height: 200, subDir: '/[today]/thumbnails' } } },
+            fileFeild2: { require: false, allowExt: 'any', uptoSize: 'any', upload: { target: 'local', subDir: '/[today]/files' } }
+        },
+        fields: {
+            bodyFeild1: { require: true, v_type: regExpEmail },
+            bodyFeild2: { require: false, v_type: 'any' }
         }
-    }, message.customMessage() ),
-    assistant.unifyAllProps(),
-    sampleController.localUpload()
-);
+    }
+}, message.customMessage() )
 ```
 ### s3 file upload
 ``` javascript
 // s3에 bucket은 반드시 생성하고 사용할것.
 // 버킷/폴더/폴더/....
 // 폴더생성은 자동으로 생성됨 .
-router.post(
-    '/s3Upload',
-    assistant.validate({
-        multipart: {
-            files: {
-                fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', subDir: '/[today]/files', thumbnail: { width: 300, height: 300, subDir: '/[today]/thumbnails' } } },
-                fileFeild2: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', subDir: '/[today]/files' } },
-            },
-            fields: {
-                bodyFeild1: { require: false, v_type: regExpEmail },
-                bodyFeild2: { require: false, v_type: 'any' }
-            }
+assistant.validate({
+    multipart: {
+        files: {
+            fileFeild1: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', subDir: '/[today]/files', thumbnail: { width: 300, height: 300, subDir: '/[today]/thumbnails' } } },
+            fileFeild2: { require: true, allowExt: 'any', uptoSize: '20mb', upload: { target: 's3', subDir: '/[today]/files' } },
+        },
+        fields: {
+            bodyFeild1: { require: false, v_type: regExpEmail },
+            bodyFeild2: { require: false, v_type: 'any' }
         }
-    }, message.customMessage()),
-    assistant.unifyAllProps(),
-    sampleController.s3Upload()
-);
+    }
+}, message.customMessage())
 ```
 
 ## sequelize
