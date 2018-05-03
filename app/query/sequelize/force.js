@@ -8,7 +8,7 @@ const Sequelize = require('sequelize');
 const isRoot = require('is-root');
 const sqzSync = require('./sync');
 const rootPath = require('app-root-path');
-const dottie = require('dottie');
+const system = require('../../common/constant/system')
 require('dotenv').config({ path: rootPath.path + '/env/dev.env' });
 const config = require('../../../config');
 const { host, port, user, database, password } = config.setting.db.mysql;
@@ -29,254 +29,78 @@ prompt.get([{
     if(err) return;
     if (result.yesorno !== 'yes') return;
     
-
-    function sleep(ms) {
-        return new Promise(resolve => {
-            setTimeout(resolve, ms)
-        })
-    }
-
     (async () => {
-        const sequelize = new Sequelize(database, user, password, {
-            host: host,
-            dialect: dialect,
-            logging: console.log,
-            operatorsAliases: false,
-            define: {
-                timestamps: false,
-                freezeTableName: true,
-            },
-            dialectOptions: {           // https://github.com/sequelize/sequelize/issues/854
-                dateStrings: true,
-                typeCast: true
-            },
-            timezone: 'Asia/Seoul'      // set default now() timezone // default is seoul korea
-        });
-
-        const syncdModule = await sqzSync.sync(sequelize, true);
-
-        //################## insert start ##################
-        const resultEntity1 = await syncdModule.models.User.create({
-            id: null,
-            email: 'setyourmindpark@gmail.com',
-            passwd: '0000',
-            name: '박재훈'
-        });
-        console.log(resultEntity1.get({ plain: true }))
-
-        await syncdModule.models.User.create({
-            id: null,
-            email: 'chulsookim@gmail.com',
-            passwd: '4a7d1ed414474e4033ac29ccb8653d9b',
-            name: '김철수'
-        });
-
-        await syncdModule.models.Memo.create({
-            userId: 1,
-            title: '메모제목1',
-            content: '메모내용1'
-        });
-
-        await syncdModule.models.Memo.create({
-            userId: 1,
-            title: '메모제목2',
-            content: '메모내용2'
-        });
-
-        await syncdModule.models.Memo.create({
-            userId: 1,
-            title: '메모제목3',
-            content: '메모내용3'
-        });
-
-        await syncdModule.models.Tag.create({
-            name: '자바의정석'
-        });
-
-        await syncdModule.models.Tag.create({
-            name: '토비의스프링'
-        });
-
-        await syncdModule.models.Tag.create({
-            name: 'docker'
-        });
-
-        await syncdModule.models.Tag.create({
-            name: 'kubernetes'
-        });
-
-        await syncdModule.models.MemoTag.create({
-            memoId: 1,
-            tagId: 1
-        });
-
-        await syncdModule.models.MemoTag.create({
-            memoId: 1,
-            tagId: 2
-        });
-
-        await syncdModule.models.MemoTag.create({
-            memoId: 2,
-            tagId: 2
-        });
-
-        await syncdModule.models.MemoTag.create({
-            memoId: 2,
-            tagId: 3
-        });
-
-        //################## insert end ##################
-
-        //################## update start ##################
-        const resultEntity2 = await syncdModule.models.User.update({
-            passwd: '4a7d1ed414474e4033ac29ccb8653d9b',
-            updateAt: Sequelize.fn('NOW')
-        }, {
-                where: { id: 1 }
+        try{
+            const sequelize = new Sequelize(database, user, password, {
+                host: host,
+                dialect: dialect,
+                logging: console.log,
+                operatorsAliases: false,
+                define: {
+                    timestamps: false,
+                    freezeTableName: true,
+                },
+                dialectOptions: {           // https://github.com/sequelize/sequelize/issues/854
+                    dateStrings: true,
+                    typeCast: true
+                },
+                timezone: 'Asia/Seoul'      // set default now() timezone // default is seoul korea
             });
-        console.log(resultEntity2)
-        //################## update end ##################
 
-        //################## transaction start ##################
-        let transaction;
-        try {
-            transaction = await sequelize.transaction();
+            const syncdModule = await sqzSync.sync(sequelize, true);
 
-            await sleep(1000)
-            await syncdModule.models.User.create({
-                email: '2setyourmindpark@gmail.com',
-                passwd: '0000',
-                name: '박재훈'
-            }, { transaction });
+            let transaction;
+            try {
+                transaction = await sequelize.transaction();
 
-            await sleep(1000)
-            await syncdModule.models.User.create({
-                email: '3setyourmindpark@gmail.com',
-                passwd: '0000',
-                name: '박재훈'
-            }, { transaction });
-
-            await sleep(1000)
-            await syncdModule.models.User.create({
-                email: '4setyourmindpark@gmail.com',
-                passwd: '0000',
-                name: '박재훈'
-            }, { transaction });
-            await transaction.commit();
-        } catch (err) {
-            await transaction.rollback();
-        }
-        //################## transaction end ##################
-
-        //################## select start ##################
-        // count
-        const count = await syncdModule.models.User.count({
-            where: {
-                name: '박재훈'
+                for (item of Object.keys(system)){
+                    await syncdModule.models.System.create({
+                        code: system[item].code,
+                        group: system[item].group,
+                        value1: system[item].name
+                    }, { transaction });
+                }
+                
+                await transaction.commit();
+            } catch (err) {                
+                await transaction.rollback();
+                throw err;
             }
-        })
-        console.log('######################### count')
-        console.log(count);
-        console.log('######################### count')
 
-        // findAll // http://docs.sequelizejs.com/manual/tutorial/models-usage.html
-        const users = await syncdModule.models.User.findAll({
-            raw: true,
-            where: {
-                name: '박재훈'
-            },
-            order: [
-                ['createdAt', 'DESC'] // DESC 반드시 대문자
-            ],
-            offset: 2,
-            limit: 100
-        })
-        console.log('######################### findAll')
-        console.log(users);
-        console.log('######################### findAll')
+            const create = await syncdModule.models.User.create({
+                id: null,
+                email: 'setyourmindpark@gmail.com',
+                passwd: '4a7d1ed414474e4033ac29ccb8653d9b',
+                name: 'jaehunpark',
+                typeCode: system.USER_LINK_GENERAL.code,
+                deviceCode: system.USER_DEVICE_ANDROID.code
+            });
+            console.log(create.get({ plain: true }))
 
-        //findOne
-        const someone = await syncdModule.models.User.findOne({
-            //raw: true,
-            where: {
-                email: 'setyourmindpark@gmail.com'
-            },
-        })
-        console.log('######################### findOne')
-        console.log(someone.get({ plain: true }));
-        console.log('######################### findOne')
+            const someone = await syncdModule.models.User.findOne({
+                attributes:{
+                    exclude: ['typeCode','deviceCode']
+                },
+                include: [{ 
+                    model: syncdModule.models.System,
+                    as : 'type',
+                    attributes: [['value1','name']]
+                },{ 
+                    model: syncdModule.models.System,
+                    as : 'device',
+                    attributes: [['value1','name']]
+                }],
+                where: {
+                    email: 'setyourmindpark@gmail.com'
+                },
+            })
+            
+            console.log(someone.get({ plain: true }));            
 
-        // hasMany    
-        const hasMany = await syncdModule.models.User.find({
-            where: {
-                id: 1
-            },
-            include: { model: syncdModule.models.Memo }
-        })
-        console.log('######################### hasMany')
-        console.log(hasMany.get({ plain: true }));
-        console.log('######################### hasMany')
-
-        const belongsTo = await syncdModule.models.Memo.find({
-            where: {
-                id: 1
-            },
-            include: [{
-                model: syncdModule.models.User,
-                attributes: ['name', 'email'],
-            }]
-        })
-        console.log('######################### belongsTo')
-        console.log(belongsTo.get({ plain: true }));
-        console.log('######################### belongsTo')
-
-        const hasMany2 = await syncdModule.models.MemoTag.findAll({
-            attributes: {
-                //include: ['createAt'],
-                exclude: ['memoId', 'tagId', 'updatedAt']
-            },
-            where: { memoId: 1 },
-            include: [{
-                model: syncdModule.models.Memo,
-                attributes: ['title', 'content'],
-                include: [{
-                    model: syncdModule.models.User,
-                    attributes: ['email', 'name']
-                }]
-            }, {
-                model: syncdModule.models.Tag,
-                attributes: ['name'],
-                where: { name: '자바의정석' }
-            }]
-        })
-        console.log('######################### hasMany2')
-        const data = hasMany2.map(node => {
-            return node.get({ plain: true });
-        })
-        console.log(data);
-        // console.log(dottie.transform(hasMany2));
-        console.log('######################### hasMany2')
-
-        console.log('######################### findOrCreate')
-        const findOrCreate = await syncdModule.models.Tag.findOrCreate({
-            where: { name: 'docker1' },
-            defaults: { name: 'Technical Lead JavaScript' }
-        })
-
-        const isCreated = findOrCreate[1];
-        if (isCreated) {
-            console.log('created');
-            console.log(findOrCreate[0].dataValues) //생성된정보가져옴
-        } else {
-            console.log('not created. already exist')
-            console.log(findOrCreate[0].dataValues) //기존정보가져옴
-        }
-
-        console.log('######################### findOrCreate')
-
-
-        process.exit(0)
-
+            process.exit(0)
+        }catch(err){
+            console.log(err);
+        }        
     })();
 
 });

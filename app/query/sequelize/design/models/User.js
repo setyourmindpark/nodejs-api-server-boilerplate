@@ -8,10 +8,10 @@ module.exports = {
             email: { type: Sequelize.STRING(100), allowNull: false, unique: true },
             passwd: { type: Sequelize.STRING(200), allowNull: false, },
             name: { type: Sequelize.STRING(20), allowNull: false, },
-            type: { type: Sequelize.STRING(20), allowNull: true, },
+            typeCode: { type: Sequelize.STRING(20), allowNull: true, },
             provision: { type: Sequelize.TEXT, allowNull: true },
             token: { type: Sequelize.STRING(20), allowNull: true, },
-            tokenType: { type: Sequelize.STRING(20), allowNull: true, },                        
+            deviceCode: { type: Sequelize.STRING(20), allowNull: true, },                        
             createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') },
             updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.fn('NOW') }
         },

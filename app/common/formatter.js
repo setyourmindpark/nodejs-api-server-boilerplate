@@ -2,7 +2,7 @@
 exports.apiResponse = apiResponse;
 exports.apiErrResponse = apiErrResponse;
 
-const constant = require('./constant');
+const response = require('./constant/response');
 
 function apiResponse({ resultCode, code, msg, pagenationInfo, data }) {
     if (resultCode) {
@@ -11,7 +11,7 @@ function apiResponse({ resultCode, code, msg, pagenationInfo, data }) {
         logger.info('--------------------------- [ app ] identified info end -----------------------------');
     }
     return {
-        resultCode: resultCode || constant.CODE_SYSTEM_PROCESS_DONE,
+        resultCode: resultCode || response.CODE_SYSTEM_PROCESS_DONE,
         body: {
             msg: msg,
             code: code,
@@ -26,7 +26,7 @@ function apiErrResponse(err) {
     logger.info(err);
     logger.info('--------------------------- [ app ] unexpected system error end -----------------------------');
     return {
-        resultCode: constant.CODE_SYSTEM_PROCESS_ERROR,
-        msg: constant.MSG_SYSTEM_ERROR
+        resultCode: response.CODE_SYSTEM_PROCESS_ERROR,
+        msg: response.MSG_SYSTEM_ERROR
     };
 }

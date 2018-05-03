@@ -4,14 +4,16 @@ const Sequelize = require('sequelize');
 module.exports = {
     defaultPrimaryKey: false,
     modelSet: {
-        tableName: 'constant',
+        tableName: 'system',
         define: {
             code: { type: Sequelize.STRING(50), allowNull: false, primaryKey: true },
-            name: { type: Sequelize.STRING(50), allowNull: false },
-            group: { type: Sequelize.STRING(50), allowNull: false },            
+            group: { type: Sequelize.STRING(50), allowNull: false, primaryKey: true },            
+            value1: { type: Sequelize.STRING(50), allowNull: false },            
+            value2: { type: Sequelize.STRING(50), allowNull: true },
+            value3: { type: Sequelize.STRING(50), allowNull: true },
             displayOrder: { type: Sequelize.INTEGER(3), allowNull: true },
             useYn: { type: Sequelize.CHAR(1), allowNull: false, defaultValue: 'y' },
-            description: { type: Sequelize.STRING(200), allowNull: false, },
+            description: { type: Sequelize.STRING(200), allowNull: true, },
         },
         config: {}
     }

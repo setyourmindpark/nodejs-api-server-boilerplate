@@ -19,7 +19,7 @@ async function sync(sequelizeModule, option){
     }
 
     for (let association in associations) {           // association define
-        const { hasMany, hasOne, belongsTo } = associations[association];    // belongsToMany는 사용하지않을예정.
+        const { hasMany, hasOne, belongsTo, belongsToMany } = associations[association];
 
         if (hasMany) {
             hasMany.forEach(({ model, config }) => {
@@ -36,6 +36,12 @@ async function sync(sequelizeModule, option){
         if (belongsTo) {
             belongsTo.forEach(({ model, config }) => {
                 sqzModels[association].belongsTo(sqzModels[model], config)
+            });
+        }
+
+        if (belongsToMany) {
+            belongsToMany.forEach(({ model, config }) => {
+                sqzModels[association].belongsToMany(sqzModels[model], config)
             });
         }
     }

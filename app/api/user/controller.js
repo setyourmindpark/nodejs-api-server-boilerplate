@@ -1,12 +1,12 @@
-const { response, queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
+const { queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
 const formatter = reqlib('/app/common/formatter');
-const constant = reqlib('/app/common/constant');
+const response = reqlib('/app/common/constant/response');
 const message = reqlib('/app/common/message');
 
 exports.validityEmail = () => {
     return async (req, res, next) => {
         try {
-            let code = constant.CODE_SERVICE_PROCESS_1;
+            let code = response.CODE_SERVICE_PROCESS_1;
             let msg = '계정을 만들수있습니다.';
             const { email } = req.prop;  
             //const result = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
@@ -15,7 +15,7 @@ exports.validityEmail = () => {
             })
 
             if (count >= 1) {
-                code = constant.CODE_SERVICE_PROCESS_2,
+                code = response.CODE_SERVICE_PROCESS_2,
                 msg = '현재사용중인 이메일입니다'
             };
 
@@ -42,7 +42,7 @@ exports.new = () => {
 
             if (count >= 1) {
                 res.send(formatter.apiResponse({
-                    code: constant.CODE_SERVICE_PROCESS_2,
+                    code: response.CODE_SERVICE_PROCESS_2,
                     msg: '현재 사용중인 이메일입니다.'
                 }));
                 return;
@@ -56,7 +56,7 @@ exports.new = () => {
 
             res.send(formatter.apiResponse({
                 msg: '계정을 생성하였습니다.',
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
             }));
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
@@ -77,7 +77,7 @@ exports.tokenMe = () => {
 
             if (!someone) {
                 res.send(formatter.apiResponse({
-                    code: constant.CODE_SERVICE_PROCESS_2,
+                    code: response.CODE_SERVICE_PROCESS_2,
                     msg: '이메일과 비밀번호를 확인해주세요'
                 }));
                 return;
@@ -87,7 +87,7 @@ exports.tokenMe = () => {
             const tokenBody = { tokenId: id };
             res.send(formatter.apiResponse({
                 msg: '인증되었습니다. 토큰을 저장해주세요.',
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: {
                     accesstoken: jwtAccess.generateToken(tokenBody),
                     refreshtoken: jwtRefresh.generateToken(tokenBody)
@@ -108,15 +108,15 @@ exports.tokenNew = () => {
                 const decoded = jwtAccess.decode(accesstoken);                
 
                 if (decoded.tokenId !== tokenId) {
-                    const error = new Error(constant.JWT_NOT_MATCH_TWO_TOKEN.msg);
-                    error.errorCode = constant.JWT_NOT_MATCH_TWO_TOKEN.code;
+                    const error = new Error(response.JWT_NOT_MATCH_TWO_TOKEN.msg);
+                    error.errorCode = response.JWT_NOT_MATCH_TWO_TOKEN.code;
                     throw error;
                 }
 
                 const tokenBody = { tokenId: tokenId };
                 res.send(formatter.apiResponse({
                     msg: '토큰을 저장해주세요.',
-                    code: constant.CODE_SERVICE_PROCESS_1,
+                    code: response.CODE_SERVICE_PROCESS_1,
                     data: {
                         accesstoken: jwtAccess.generateToken(tokenBody),
                         refreshtoken: jwtRefresh.generateToken(tokenBody)
@@ -148,7 +148,7 @@ exports.me = () => {
 
             res.send(formatter.apiResponse({
                 msg: '유저 정보는 다음과같습니다.',
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: someone.get({plain:true})
             }));
         } catch (err) {

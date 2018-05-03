@@ -1,5 +1,5 @@
 const { queryHelper, senderMail } = reqlib('/app/common/modules');
-const constant = reqlib('/app/common/constant');
+const response = reqlib('/app/common/constant/response');
 const formatter = reqlib('/app/common/formatter');
 const Promise = require('bluebird');
 const config = reqlib('/config');
@@ -9,7 +9,7 @@ exports.path = () => {
         try {
             const { param1 } = req.prop;
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: {
                     param1: param1,
                     property2: 'value2',
@@ -27,7 +27,7 @@ exports.query = () => {
         try {
             const { param1, param2, param3, param4 } = req.prop;
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: {
                     param1: param1,
                     param2: param2,
@@ -45,7 +45,7 @@ exports.post = () => {
     return (req, res, next) => {
         try {
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: {
                     property1: 'value1',
                     property2: 'value2',
@@ -62,7 +62,7 @@ exports.put = () => {
     return (req, res, next) => {
         try {
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: {
                     property1: 'value1',
                     property2: 'value2',
@@ -79,7 +79,7 @@ exports.delete = () => {
     return (req, res, next) => {
         try {
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: {
                     property1: 'value1',
                     property2: 'value2',
@@ -100,7 +100,7 @@ exports.localUpload = () => {
             // ...
             // = req.prop(all)
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: req.prop
             }));            
         } catch (err) {
@@ -117,7 +117,7 @@ exports.s3Upload = () => {
             // ...
             // = req.prop(all)
             res.send(formatter.apiResponse({
-                code: constant.CODE_SERVICE_PROCESS_1,
+                code: response.CODE_SERVICE_PROCESS_1,
                 data: req.prop
             }));     
         } catch (err) {
@@ -148,7 +148,7 @@ exports.dispatchMail = () => {
 
             let format = formatter.apiResponse({
                 msg: '메일을 전송하였습니다.',
-                code: constant.CODE_SERVICE_PROCESS_1
+                code: response.CODE_SERVICE_PROCESS_1
             })
             const { sended, mail } = await senderMail.send({                
                 subject: subject,
@@ -160,7 +160,7 @@ exports.dispatchMail = () => {
             if (!sended){
                 format= formatter.apiResponse({
                     msg: '메일을 전송에 실패하였습니다. 수신인을 확인해주세요.',
-                    code: constant.CODE_SERVICE_PROCESS_2
+                    code: response.CODE_SERVICE_PROCESS_2
                 })
             }
             res.send(format);
