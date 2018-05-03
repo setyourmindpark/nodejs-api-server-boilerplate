@@ -1,7 +1,8 @@
 ## NODEJS-API-SERVER-BOILERPLATE
 NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.   
 전체적인 프로젝트구조는 모듈을 위한 **/base** 그리고 서비스 비지니스로직 처리에대한 **/app** 로 구조화하였으며  
-**/base**가 제공하는 기능은 다음과같다. **( /app/index )에서 /app/common/modules/에 base modules를 binding** 
+**/base**가 제공하는 기능은 다음과같다. **( /app/index )에서 /app/common/modules/에 base modules를 binding**   
+
 **assistant**  
 - parameter validator 
 - file uploader ( local, s3 )
