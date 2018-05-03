@@ -2,6 +2,7 @@ const { queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/mo
 const { User, System } = sequelize.models;
 const formatter = reqlib('/app/common/formatter');
 const response = reqlib('/app/common/constant/response');
+const system = reqlib('/app/common/constant/system');
 const message = reqlib('/app/common/message');
 
 exports.validityEmail = () => {
@@ -29,10 +30,9 @@ exports.validityEmail = () => {
             res.status(500).send(formatter.apiErrResponse(err));
         }
     }
-    
 }
 
-exports.new = () => {        
+exports.new = () => {
     return async (req, res, next) => {
         try {
             const { name, email, passwd } = req.prop;
@@ -52,7 +52,8 @@ exports.new = () => {
             const create = await User.create({
                 name: name,
                 email: email,
-                passwd: passwd
+                passwd: passwd,
+                typeCode: system.USER_LINK_GENERAL.code                
             });
 
             res.send(formatter.apiResponse({
@@ -142,7 +143,8 @@ exports.me = () => {
             const id = req.prop.tokenId;            
             const someone = await User.findOne({
                 attributes: {
-                    exclude: ['passwd', 'typeCode', 'deviceCode', 'provision','token']
+                    include: ['id', 'email', 'name', 'createdAt'],
+                    exclude: ['passwd', 'typeCode', 'deviceCode', 'provision', 'token','updatedAt']
                 },
                 include : [
                     {
@@ -153,7 +155,7 @@ exports.me = () => {
                     {
                         model: System,
                         as: 'device',
-                        attributes: [['value1', 'name']]
+                        attributes: [['value1', 'name']],                                                
                     },
                 ],
                 where: { id : id },
