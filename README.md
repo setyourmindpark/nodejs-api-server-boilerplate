@@ -149,7 +149,27 @@ assistant.validate({
 
 ## sequelize
 **/app/query/sequelize/design/models**에 **sequelize model**을 정의하고   
-**/app/query/sequelize/design/index.js**에 **bind**와 **associations** 정의한다.  
-// 추가정리는 다음에 ...
+**/app/query/sequelize/design/index.js**에 **bind**와 **associations** 정의한다.
+### force sync
+개발 시작 단계에서 database table DDL 또는 DML 초기화 sync는 /app/query/sequelize/force.js 를 이용한다.  
+force.js 를 실행하는 명령어는 다음과같다. ( /app/query/sequelize/design 에 model 정의와 /app/query/sequelize/index.js association 정의 후 )  
+``` bash
+$ yarn init-ddl
+or
+$ npm run init-ddl
+
+192:nodejs-api-server-boilerplate jaehunpark$ yarn init-ddl
+yarn run v1.5.1
+$ sudo node ./app/query/sequelize/force.js --dev
+Password:
+###################### [ 경고 ] 반드시 DDL 생성과 초기화 작업이 필요한경우에만 수행해주세요 ######################
+######################  sequelize를 사용하여 테이블을 생성및 초기화를 진행하시겠습니까 ?  yes or no ######################
+prompt: yesorno:  yes
+```
+혹시나 해당명령어를 실수로라도 입력하는것을 방지하기위해 root 권한으로 실행해야 하며 초기화 여부를 yes or no 로 답한다.  
+해당명령어는 운영모드에서는 절대 사용하지말아야하며 ( 모든데이터를 초기화한다 ) 운영모드시 force.js를 삭제하는것을 권고한다.  
+
+
+
 
 
