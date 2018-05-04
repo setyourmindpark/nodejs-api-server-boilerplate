@@ -22,6 +22,7 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 
 ### queryHelper  
 - queryHelper보다는 sequelize를 사용하는게.. 
+
 ---
 
 ## 환경변수
@@ -77,6 +78,7 @@ LOGGER_FLUENTD_TIMEOUT= ( ex. 3 )
 LOGGER_FLUENTD_TAG= ( ex. app )
 
 ```
+
 ---
 
 ## asisstant
@@ -147,6 +149,7 @@ assistant.validate({
     }
 }, message.customMessage())
 ```
+
 ---
 
 ## router
@@ -203,6 +206,7 @@ prompt: yesorno:  yes
 ```
 혹시나 해당명령어를 실수로라도 입력하는것을 방지하기위해 root 권한으로 실행해야 하며 초기화 여부를 yes or no 로 답한다.  
 해당명령어는 운영모드에서는 절대 사용하지말아야하며 ( 모든데이터를 초기화한다 ) 운영모드시 force.js를 삭제하는것을 권고한다.  
+
 ---
 
 ## 실행
@@ -217,6 +221,7 @@ info: created worker [ 35557 ] is listening port : 4000
 info: created worker [ 35559 ] is listening port : 4000
 info: created worker [ 35560 ] is listening port : 4000
 ```
+
 ---
 
 
