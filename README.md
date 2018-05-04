@@ -22,7 +22,7 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 
 ### queryHelper  
 - queryHelper보다는 sequelize를 사용하는게.. 
-
+---
 
 ## 환경변수
 boilerplate는 환경변수기반으로 동작하며  **dev.env**와 **prod.env**로 작성될수있으며 **/env/** 에 위치한다.  
@@ -77,6 +77,7 @@ LOGGER_FLUENTD_TIMEOUT= ( ex. 3 )
 LOGGER_FLUENTD_TAG= ( ex. app )
 
 ```
+---
 
 ## asisstant
 기본적으로 설정 방법은 다음과같다.  
@@ -146,6 +147,7 @@ assistant.validate({
     }
 }, message.customMessage())
 ```
+---
 
 ## router
 router 등록은 다음과같이 설정할수있다.  
@@ -176,7 +178,7 @@ commonRoute : '/api',                                   // => default 첫번쨰 
     ]
 ```
 해당 format으로 /app/index.js에서 자동으로 express api 등록.  
-
+---
 
 ## sequelize
 **/app/query/sequelize/design/models**에 **sequelize model**을 정의하고   
@@ -200,6 +202,7 @@ prompt: yesorno:  yes
 ```
 혹시나 해당명령어를 실수로라도 입력하는것을 방지하기위해 root 권한으로 실행해야 하며 초기화 여부를 yes or no 로 답한다.  
 해당명령어는 운영모드에서는 절대 사용하지말아야하며 ( 모든데이터를 초기화한다 ) 운영모드시 force.js를 삭제하는것을 권고한다.  
+---
 
 ## 실행
 실행은 cluster 모듈을 사용하여 cpu 논리코어 갯수만큼 worker가 생성된다.  
@@ -213,6 +216,7 @@ info: created worker [ 35557 ] is listening port : 4000
 info: created worker [ 35559 ] is listening port : 4000
 info: created worker [ 35560 ] is listening port : 4000
 ```
+---
 
 
 
