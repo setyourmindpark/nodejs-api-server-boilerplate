@@ -200,7 +200,7 @@ $ yarn init-ddl
 or
 $ npm run init-ddl
 
-192:nodejs-api-server-boilerplate jaehunpark$ yarn init-ddl
+$ yarn init-ddl
 yarn run v1.5.1
 $ sudo node ./app/query/sequelize/force.js --dev
 Password:
