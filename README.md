@@ -177,7 +177,8 @@ commonRoute : '/api',                                   // => default 첫번쨰 
         // ..
     ]
 ```
-해당 format으로 /app/index.js에서 자동으로 express api 등록.  
+해당 format으로 /app/index.js에서 자동으로 express api 등록된다.  
+
 ---
 
 ## sequelize
