@@ -147,6 +147,37 @@ assistant.validate({
 }, message.customMessage())
 ```
 
+## router
+router 등록은 다음과같이 설정할수있다.  
+/app/api에 폴더별 router를 생성하며 적용은 /app/api/index.js에서 설정한다.  
+``` javascript
+commonRoute : '/api',                                   // => default 첫번쨰 endpoint로 시작 /api
+    routers : [
+        {
+            customRoute: '/swagger',                    // => commonRoute를 사용안함. endpoint는 /swagger
+            folder : '/swagger',
+            router : '/router.js',
+            activate : env === 'dev' ? true : false     // => api 사용여부 ( false는 api 사용 X )
+        },
+        {
+            toRoute: '/sample',                         // => endpoint는 /api/sample
+            folder: '/sample',
+            router: '/router.js',
+            activate: env === 'dev' ? true : false
+        },        
+        {
+            toRoute: '/user',                           // => endpoint는 /api/user
+            folder: '/user',
+            router: '/router.js',
+            activate: true
+        },
+
+        // ..
+    ]
+```
+해당 format으로 /app/index.js에서 자동으로 express api 등록.  
+
+
 ## sequelize
 **/app/query/sequelize/design/models**에 **sequelize model**을 정의하고   
 **/app/query/sequelize/design/index.js**에 **bind**와 **associations** 정의한다.
@@ -170,6 +201,18 @@ prompt: yesorno:  yes
 혹시나 해당명령어를 실수로라도 입력하는것을 방지하기위해 root 권한으로 실행해야 하며 초기화 여부를 yes or no 로 답한다.  
 해당명령어는 운영모드에서는 절대 사용하지말아야하며 ( 모든데이터를 초기화한다 ) 운영모드시 force.js를 삭제하는것을 권고한다.  
 
+## 실행
+실행은 cluster 모듈을 사용하여 cpu 논리코어 갯수만큼 worker가 생성된다.  
+``` bash
+$ yarn start
+or
+$ npm start
+
+info: created worker [ 35558 ] is listening port : 4000
+info: created worker [ 35557 ] is listening port : 4000
+info: created worker [ 35559 ] is listening port : 4000
+info: created worker [ 35560 ] is listening port : 4000
+```
 
 
 
