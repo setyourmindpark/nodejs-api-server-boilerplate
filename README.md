@@ -152,7 +152,8 @@ assistant.validate({
 **/app/query/sequelize/design/index.js**에 **bind**와 **associations** 정의한다.
 ### force sync
 개발 시작 단계에서 database table DDL 또는 DML 초기화 sync는 /app/query/sequelize/force.js 를 이용한다.  
-force.js 를 실행하는 명령어는 다음과같다. ( /app/query/sequelize/design 에 model 정의와 /app/query/sequelize/index.js association 정의 후 )  
+force.js 를 실행하는 명령어는 다음과같다.  
+**=> /app/query/sequelize/design 에 model 정의와 /app/query/sequelize/index.js association 정의 후**  
 ``` bash
 $ yarn init-ddl
 or
