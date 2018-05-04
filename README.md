@@ -108,7 +108,11 @@ custom하게 error response handling시 위와같이 작성한다. ( /app/common
 
 ### local file upload
 ``` javascript
-// [ 파일용량 ]
+// [ allowExt ]
+// ['jpg', 'bmp'] => .jpg, .bmp 만허용
+// 'any' 모든파일 확장자 가능 .
+
+// [ uptoSize ]
 // b for bytes
 // kb for kilobytes
 // mb for megabytes
@@ -116,7 +120,7 @@ custom하게 error response handling시 위와같이 작성한다. ( /app/common
 // tb for terabytes
 // 'any' max 용량체크안함 .
 
-// [ 하위디렉토리 ] 
+// [ subDir ] 
 // [today] 는 현재날짜로 폴더를 생성하게됨. 
 assistant.validate({
     multipart: {
