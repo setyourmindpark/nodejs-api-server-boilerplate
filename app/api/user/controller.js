@@ -161,10 +161,17 @@ exports.me = () => {
                 where: { id : id },
             })
 
+            const data = someone.get({ plain: true });
+            data.type = data.type.name;
+            data.device = data.device.name;
+
+            delete data.type.name;
+            delete data.device.name;
+
             res.send(formatter.apiResponse({
                 msg: '유저 정보는 다음과같습니다.',
                 code: response.CODE_SERVICE_PROCESS_1,
-                data: someone.get({plain:true})
+                data: data
             }));
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
