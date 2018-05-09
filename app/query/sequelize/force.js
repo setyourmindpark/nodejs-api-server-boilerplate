@@ -97,12 +97,13 @@ prompt.get([{
                     attributes: [['value1','name']]
                 }],
                 where: {
-                    email : 'setyourmindpark@gmail.com'
+                    email : 'setyourmindpark@gmail.com',
                 }
             })
             // where : syncdModule.where(syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'),'=','123')
-            
-            console.log(someone.get({ plain: true }));            
+            if (someone){
+                console.log(someone.get({ plain: true }));      
+            }
 
             process.exit(0)
         }catch(err){
