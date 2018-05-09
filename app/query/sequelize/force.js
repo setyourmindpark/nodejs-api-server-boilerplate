@@ -82,24 +82,42 @@ prompt.get([{
             console.log(create.get({ plain: true }))
 
             // https://stackoverflow.com/questions/20695062/sequelize-or-condition-object
+
+            // ( scalar subquery style )
             const someone = await syncdModule.models.User.findOne({
-                attributes:{
+                attributes: {
                     //include: [[syncdModule.fn('json_extract', syncdModule.col('provision'),'$.id'),'provisionId']],
-                    exclude: ['typeCode','deviceCode']
-                },
-                include: [{ 
-                    model: syncdModule.models.System,
-                    as : 'type',
-                    attributes: [['value1','name']]
-                },{ 
-                    model: syncdModule.models.System,
-                    as : 'device',
-                    attributes: [['value1','name']]
-                }],
+                    include: [
+                        [syncdModule.literal('(select value1 from system where code = deviceCode)'), 'device'],
+                        [syncdModule.literal('(select value1 from system where code = typeCode)'), 'type']
+                    ],
+                    exclude: ['typeCode', 'deviceCode']
+                },               
                 where: {
                     email : 'setyourmindpark@gmail.com',
                 }
             })
+            
+            // 또는 ( join style ) // sequelize association binding이 되었을경우
+
+            // const someone = await syncdModule.models.User.findOne({
+            //     attributes:{
+            //         //include: [[syncdModule.fn('json_extract', syncdModule.col('provision'),'$.id'),'provisionId']],
+            //         exclude: ['typeCode','deviceCode']
+            //     },
+            //     include: [{ 
+            //         model: syncdModule.models.System,
+            //         as : 'type',
+            //         attributes: [['value1','name']]
+            //     },{ 
+            //         model: syncdModule.models.System,
+            //         as : 'device',
+            //         attributes: [['value1','name']]
+            //     }],
+            //     where: {
+            //         email : 'setyourmindpark@gmail.com',
+            //     }
+            // })
             // where : syncdModule.where(syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'),'=','123')
             if (someone){
                 console.log(someone.get({ plain: true }));      

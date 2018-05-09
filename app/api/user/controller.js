@@ -10,7 +10,7 @@ exports.validityEmail = () => {
         try {
             let code = response.CODE_SERVICE_PROCESS_1;
             let msg = '계정을 만들수있습니다.';
-            const { email } = req.prop;  
+            const { email } = req.prop;
             //const result = await queryHelper.execute({ query: userSql.selectEmailCount, data: params, expect: 'single' });
             const count = await User.count({
                 where: { email: email }
@@ -18,7 +18,7 @@ exports.validityEmail = () => {
 
             if (count >= 1) {
                 code = response.CODE_SERVICE_PROCESS_2,
-                msg = '현재사용중인 이메일입니다'
+                    msg = '현재사용중인 이메일입니다'
             };
 
             res.send(formatter.apiResponse({
@@ -53,7 +53,7 @@ exports.new = () => {
                 name: name,
                 email: email,
                 passwd: passwd,
-                typeCode: system.USER_LINK_GENERAL.code                
+                typeCode: system.USER_LINK_GENERAL.code
             });
 
             res.send(formatter.apiResponse({
@@ -63,11 +63,11 @@ exports.new = () => {
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
         }
-    }    
+    }
 }
 
 exports.tokenMe = () => {
-    return async(req, res, next) => {
+    return async (req, res, next) => {
         try {
             const { email, passwd } = req.prop;
             const someone = await User.findOne({
@@ -85,7 +85,7 @@ exports.tokenMe = () => {
                 return;
             }
 
-            const { id } = someone.get({plain:true});
+            const { id } = someone.get({ plain: true });
             const tokenBody = { tokenId: id };
             res.send(formatter.apiResponse({
                 msg: '인증되었습니다. 토큰을 저장해주세요.',
@@ -98,16 +98,16 @@ exports.tokenMe = () => {
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
         }
-    }    
+    }
 }
 
 exports.tokenNew = () => {
-    return async(req, res, next) => {
+    return async (req, res, next) => {
         try {
             const { accesstoken, tokenId } = req.prop;
 
             try {
-                const decoded = jwtAccess.decode(accesstoken);                
+                const decoded = jwtAccess.decode(accesstoken);
 
                 if (decoded.tokenId !== tokenId) {
                     const error = new Error(response.JWT_NOT_MATCH_TWO_TOKEN.msg);
@@ -134,48 +134,32 @@ exports.tokenNew = () => {
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
         }
-    }    
+    }
 }
 
 exports.me = () => {
-    return async(req, res, next) => {
+    return async (req, res, next) => {
         try {
-            const id = req.prop.tokenId;            
+            const id = req.prop.tokenId;
             const someone = await User.findOne({
                 attributes: {
-                    include: ['id', 'email', 'name', 'createdAt'],
-                    exclude: ['passwd', 'typeCode', 'deviceCode', 'provision', 'token','updatedAt']
+                    include: [
+                        [ sequelize.literal('(select value1 from system where code = deviceCode)'), 'device' ],
+                        [ sequelize.literal('(select value1 from system where code = typeCode)'), 'type' ]
+                    ],
+                    exclude: ['passwd', 'typeCode', 'deviceCode', 'provision', 'token', 'updatedAt']
                 },
-                include : [
-                    {
-                        model: System,
-                        as: 'type',
-                        attributes: [['value1', 'name']]
-                    },
-                    {
-                        model: System,
-                        as: 'device',
-                        attributes: [['value1', 'name']],                                                
-                    },
-                ],
-                where: { id : id },
+                where: { id: id },
             })
-
-            const data = someone.get({ plain: true });
-            data.type = data.type.name;
-            data.device = data.device.name;
-
-            delete data.type.name;
-            delete data.device.name;
 
             res.send(formatter.apiResponse({
                 msg: '유저 정보는 다음과같습니다.',
                 code: response.CODE_SERVICE_PROCESS_1,
-                data: data
+                data: someone.get({ plain: true })
             }));
         } catch (err) {
             res.status(500).send(formatter.apiErrResponse(err));
         }
-    }    
+    }
 }
 
