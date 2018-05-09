@@ -14,10 +14,10 @@ const config = require('../../../config');
 const { host, port, user, database, password } = config.setting.db.mysql;
 const dialect = 'mysql';
 
-if(!isRoot()){
+if (!isRoot()) {
     console.log('###################### 해당작업은 root 권한으로만 실행가능합니다. ######################')
     return;
-} 
+}
 
 console.log('###################### [ 경고 ] 반드시 DDL 생성과 초기화 작업이 필요한경우에만 수행해주세요 ######################')
 prompt.start();
@@ -25,12 +25,12 @@ console.log('######################  sequelize를 사용하여 테이블을 생�
 prompt.get([{
     name: 'yesorno',
     required: true
-}],  (err, result) => {
-    if(err) return;
+}], (err, result) => {
+    if (err) return;
     if (result.yesorno !== 'yes') return;
-    
+
     (async () => {
-        try{
+        try {
             const sequelize = new Sequelize(database, user, password, {
                 host: host,
                 dialect: dialect,
@@ -53,16 +53,16 @@ prompt.get([{
             try {
                 transaction = await sequelize.transaction();
 
-                for (item in system){
+                for (item in system) {
                     await syncdModule.models.System.create({
                         code: system[item].code,
                         group: system[item].group,
                         value1: system[item].name
                     }, { transaction });
                 }
-                
+
                 await transaction.commit();
-            } catch (err) {                
+            } catch (err) {
                 await transaction.rollback();
                 throw err;
             }
@@ -75,7 +75,7 @@ prompt.get([{
                 typeCode: system.USER_LINK_GENERAL.code,
                 deviceCode: system.USER_DEVICE_ANDROID.code,
                 provision: JSON.stringify({
-                    id : '1234',
+                    id: '1234',
                     name: '박재훈'
                 })
             });
@@ -88,16 +88,17 @@ prompt.get([{
                 attributes: {
                     //include: [[syncdModule.fn('json_extract', syncdModule.col('provision'),'$.id'),'provisionId']],
                     include: [
-                        [syncdModule.literal('(select value1 from system where code = deviceCode)'), 'device'],
-                        [syncdModule.literal('(select value1 from system where code = typeCode)'), 'type']
+                        [ syncdModule.literal('(select value1 from system where code = deviceCode)'), 'device' ],
+                        [ syncdModule.literal('(select value1 from system where code = typeCode)'), 'type' ],
+                        [ syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'), 'provisionId' ]
                     ],
                     exclude: ['typeCode', 'deviceCode']
-                },               
+                },
                 where: {
-                    email : 'setyourmindpark@gmail.com',
+                    email: 'setyourmindpark@gmail.com',
                 }
             })
-            
+
             // 또는 ( join style ) // sequelize association binding이 되었을경우
 
             // const someone = await syncdModule.models.User.findOne({
@@ -119,14 +120,14 @@ prompt.get([{
             //     }
             // })
             // where : syncdModule.where(syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'),'=','123')
-            if (someone){
-                console.log(someone.get({ plain: true }));      
+            if (someone) {
+                console.log(someone.get({ plain: true }));
             }
 
             process.exit(0)
-        }catch(err){
+        } catch (err) {
             console.log(err);
-        }        
+        }
     })();
 
 });
