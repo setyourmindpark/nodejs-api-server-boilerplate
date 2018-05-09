@@ -10,13 +10,9 @@ let targetPath = config.setting.upload.local.mainDir;
 targetPath = targetPath.charAt(0) === '/' ? targetPath : '/' + targetPath;
 const mainDir = appRootPath + targetPath;
 
-async function fileUpload(fileName, buffer, subDir){
+async function fileUpload(fileName, buffer, subDir = '/'){
     let fullPath = undefined;
-    if (subDir) {
-        fullPath = path.join(mainDir, subDir);
-    } else {
-        fullPath = mainDir;
-    }
+    fullPath = path.join(mainDir, subDir);    
 
     if (!file.isExsistDir(fullPath)) {
         file.mkdir(fullPath);
@@ -30,7 +26,7 @@ async function fileUpload(fileName, buffer, subDir){
     await sharp(buffer).toFile(uploadFullPath);
     return {
         mainPath: mainDir,
-        subPath: subDir || '/',
+        subPath: subDir,
         rename: rename,
         renamedFileNameWithExt: renamedFileNameWithExt,
         uploadFullPath: uploadFullPath,
