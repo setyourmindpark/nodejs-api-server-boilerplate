@@ -73,12 +73,18 @@ prompt.get([{
                 passwd: '4a7d1ed414474e4033ac29ccb8653d9b',
                 name: 'jaehunpark',
                 typeCode: system.USER_LINK_GENERAL.code,
-                deviceCode: system.USER_DEVICE_ANDROID.code
+                deviceCode: system.USER_DEVICE_ANDROID.code,
+                provision: JSON.stringify({
+                    id : '1234',
+                    name: '박재훈'
+                })
             });
             console.log(create.get({ plain: true }))
 
+            // https://stackoverflow.com/questions/20695062/sequelize-or-condition-object
             const someone = await syncdModule.models.User.findOne({
                 attributes:{
+                    //include: [[syncdModule.fn('json_extract', syncdModule.col('provision'),'$.id'),'provisionId']],
                     exclude: ['typeCode','deviceCode']
                 },
                 include: [{ 
@@ -91,9 +97,10 @@ prompt.get([{
                     attributes: [['value1','name']]
                 }],
                 where: {
-                    email: 'setyourmindpark@gmail.com'
-                },
+                    email : 'setyourmindpark@gmail.com'
+                }
             })
+            // where : syncdModule.where(syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'),'=','123')
             
             console.log(someone.get({ plain: true }));            
 
