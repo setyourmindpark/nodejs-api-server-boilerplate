@@ -28,7 +28,6 @@
     "lower-case": "^1.1.4",
     "mkdirp": "^0.5.1",
     "moment": "^2.20.1",
-    "morgan": "~1.9.0",
     "mysql": "~2.15.0",
     "mysql2": "^1.5.3",
     "nodemailer": "^4.4.2",
@@ -37,7 +36,7 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.37.6",
-    "sharp": "^0.20.1",    
+    "sharp": "^0.20.1",
     "uuid": "^3.2.1",
     "winston": "^2.4.0"
   },
