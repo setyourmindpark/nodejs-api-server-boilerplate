@@ -31,9 +31,6 @@ benchmarks/graphs
 app/public/upload/**
 !app/public/upload/jaehunpark.jpeg
 
-#env
-env/*.env
-
 #docker image
 *-*.*
 
@@ -42,3 +39,6 @@ docker.env
 
 # build
 build/
+
+#env
+config/env.*
