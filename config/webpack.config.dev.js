@@ -24,7 +24,7 @@ module.exports = {
         //     compress: {
         //         warnings: false
         //     }
-        // }),
+        // }), 
         new webpack.DefinePlugin({
             reqlib: "require('app-root-path').require",
             config: JSON.stringify(devEnv),
