@@ -4,11 +4,14 @@
 // service에 대한 초기화는 이곳에서 모두 처리함.
 // ***************************************************
 
-
 exports.initialize = initialize;
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const compression = require('compression');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const helmet = require('helmet');
 const app = express();
 // const baseFormatter = reqlib('/base/common/formatter');
 const baseSenderMail = reqlib('/base/sender/mail');
@@ -66,16 +69,24 @@ function configureProtocol(){
     //cross doamin handling
     app.use((req, res, next) => {
         if (req.originalUrl === '/favicon.ico') return;
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-        // res.setHeader('Access-Control-Allow-Headers', `Origin,Accept, Content-Type, Authorization, Content-Length, X-Requested-With, ${config.auth.param}`);
-        res.setHeader('Access-Control-Allow-Headers', `Origin,Accept, Content-Type, Authorization, Content-Length, X-Requested-With`);
-        res.setHeader('Access-Control-Allow-Credentials', true);
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS ');
+        res.header(
+            'Access-Control-Allow-Headers',
+            'Origin, X-Requested-With,' +
+            ' Content-Type, Accept,' +
+            ' Authorization,' +
+            ' Access-Control-Allow-Credentials'
+        );
+        res.header('Access-Control-Allow-Credentials', 'true');
         next();
     });
 
-    app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.use(cookieParser());
+    app.use(compression());
+    app.use(helmet());
+    app.use(cors());
 
     const { routers, commonRoute } = toRouteRouters;
     routers.forEach(({ customRoute, toRoute, folder, router, activate }) => {

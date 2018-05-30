@@ -2,7 +2,6 @@ const rootPath = require('app-root-path');
 global.reqlib = rootPath.require;
 
 const config = reqlib('/config');
-const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const cluster = require('cluster');
