@@ -1,6 +1,5 @@
 exports.fileUpload = fileUpload;
 
-const config = reqlib('/config');
 const sharp = require('sharp');
 const file = reqlib('/base/common/file');
 const path = require('path');

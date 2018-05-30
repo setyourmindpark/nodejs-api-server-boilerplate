@@ -1,5 +1,4 @@
 const winston = require('winston');
-const config = reqlib('/config');
 const file = reqlib('/base/common/file');
 const rootPath = require('app-root-path');
 exports.getLogger = getLogger;

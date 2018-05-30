@@ -1,6 +1,5 @@
 exports.createModules = createModules;
 
-const config = reqlib('/config');
 const jwt = require('./jwt');
 const baseType = config.base.auth;
 

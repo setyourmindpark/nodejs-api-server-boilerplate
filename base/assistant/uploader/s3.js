@@ -6,7 +6,6 @@ const path = require('path');
 const file = reqlib('/base/common/file');
 const uuidV4 = require('uuid/v4');              //http://hyeonjae.github.io/uuid/2015/03/17/uuid.html
 const fileType = require('file-type');
-const config = reqlib('/config');
 const { accessKeyId, secretAccessKey, bucket } = config.setting.upload.s3;
 
 const s3 = new AWS.S3({

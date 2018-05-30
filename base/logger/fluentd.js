@@ -1,5 +1,4 @@
 const winston = require('winston');
-const config = reqlib('/config');
 exports.getLogger = getLogger;
 
 async function getLogger() {

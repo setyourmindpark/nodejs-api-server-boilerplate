@@ -1,6 +1,5 @@
 exports.send = send;
 
-const config = reqlib('/config');
 const { serverKey } = config.setting.sender.android;
 const FCM = require('fcm-push');
 const sender = new FCM( serverKey || 'emptyServerKey' );

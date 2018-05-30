@@ -2,7 +2,6 @@ const { queryHelper, senderMail } = reqlib('/app/common/modules');
 const response = reqlib('/app/common/constant/response');
 const formatter = reqlib('/app/common/formatter');
 const Promise = require('bluebird');
-const config = reqlib('/config');
 
 exports.path = () => {
     return (req, res, next) => {

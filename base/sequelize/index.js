@@ -1,7 +1,6 @@
 exports.createModules = createModules;
 
 const Sequelize = require('sequelize');
-const config = reqlib('/config');
 const baseType = config.base.db;
 // const linkDb1 = config.setting.linkdb1;
 

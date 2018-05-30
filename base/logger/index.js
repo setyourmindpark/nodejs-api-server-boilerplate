@@ -1,5 +1,3 @@
-const config = reqlib('/config');
-
 exports.initialize = initialize;
 exports.getLogger = getLogger;
 

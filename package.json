@@ -4,9 +4,11 @@
   "description": "nodejs-api-server-boilerplate",
   "main": "index.js",
   "scripts": {
+    "build:dev": "node_modules/.bin/webpack --config ./config/webpack.config.dev.js",
+    "build:prod": "node_modules/.bin/webpack --config ./config/webpack.config.prod.js",
     "start": "node ./bin/server",
     "test": "node_modules/.bin/mocha app/api/**/*.spec.js",
-    "init-ddl": "sudo node ./app/query/sequelize/force.js --dev"
+    "init-ddl": "sudo node ./app/query/sequelize/force.js --dev"    
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
@@ -51,7 +53,8 @@
     "shelljs": "^0.8.1",
     "should": "^13.2.1",
     "supertest": "^3.0.0",
-    "swagger-ui": "^2.2.10"
+    "swagger-ui": "^2.2.10",
+    "webpack": "^3.11.0"
   },
   "author": "jaehunpark",
   "license": "ISC"

@@ -39,3 +39,6 @@ env/*.env
 
 #docker env
 docker.env
+
+# build
+build/

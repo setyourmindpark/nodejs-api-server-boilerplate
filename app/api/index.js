@@ -1,4 +1,3 @@
-const config = reqlib('/config');
 const env = config.env;
 
 module.exports = {

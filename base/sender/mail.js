@@ -2,7 +2,6 @@
 exports.send = send;
 
 const nodemailer = require('nodemailer');
-const config = reqlib('/config');
 const { service, user, passwd, from } = config.setting.sender.mail;
 const sender = nodemailer.createTransport({
     service: service,

@@ -1,8 +1,18 @@
-const rootPath = require('app-root-path');
-global.reqlib = rootPath.require;
+try {
+    if (reqlib) {
+        global.reqlib = reqlib;
+    }
+} catch (err) {
+    global.reqlib = require('app-root-path').require;
+}
+try{
+    if(config){        
+        global.config = config;
+    }
+}catch(err){
+    global.config = reqlib('/config/env.config.dev');
+}
 
-const config = reqlib('/config');
-const https = require('https');
 const http = require('http');
 const cluster = require('cluster');
 const loggerHelper = reqlib('/base/logger');
