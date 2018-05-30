@@ -1,6 +1,6 @@
 module.exports = {
     base: {
-        port: '4000',
+        port: '',
         logger: '',
         db: '',
         auth: '',
