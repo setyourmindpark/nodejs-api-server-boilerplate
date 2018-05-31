@@ -7,6 +7,7 @@
 webpack build시 해당 경로의 환경변수를 읽어온다.  
 ``` javascript
 module.exports = {
+    env: '',
     base: {
         port: '',
         logger: '',
@@ -16,7 +17,8 @@ module.exports = {
     setting: {
         upload: {
             local: {
-                mainDir: '',
+                commonDir: '',
+                storeDir: ''
             },
             s3: {
                 accessKeyId: '',
