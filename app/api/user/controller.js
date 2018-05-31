@@ -1,9 +1,9 @@
-const { queryHelper, sequelize, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
+const { queryHelper, sequelize, jwtAccess, jwtRefresh } = require('@root/app/common/modules');
 const { User, System } = sequelize.models;
-const formatter = reqlib('/app/common/formatter');
-const response = reqlib('/app/common/constant/response');
-const system = reqlib('/app/common/constant/system');
-const message = reqlib('/app/common/message');
+const formatter = require('@root/app/common/formatter');
+const response = require('@root/app/common/constant/response');
+const system = require('@root/app/common/constant/system');
+const message = require('@root/app/common/message');
 
 exports.validityEmail = () => {
     return async (req, res, next) => {

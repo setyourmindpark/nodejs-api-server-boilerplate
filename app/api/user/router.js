@@ -1,5 +1,5 @@
-const { assistant, jwtAccess, jwtRefresh } = reqlib('/app/common/modules');
-const message = reqlib('/app/common/message');
+const { assistant, jwtAccess, jwtRefresh } = require('@root/app/common/modules');
+const message = require('@root/app/common/message');
 const router = require('express').Router();
 const userController = require('./controller');
 

@@ -1,27 +1,40 @@
 const path = require('path');
 const webpack = require('webpack');
 const prodEnv = require('./env.config.prod');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     entry: path.resolve(__dirname, '../bin/server.js'),
     target: "node",
+    node: {
+        console: false,
+        global: true,
+        process: false,
+        __filename: true,
+        __dirname: true,
+    },
     output: {
         path: path.resolve(__dirname, '../build'),
         filename: 'prod.bundle.js'
     },
     resolve: {
+        alias: { '@root': path.resolve(__dirname, '../') },
         extensions: ['.js']
     },
     devtool: 'inline-source-map',
     module: {
         rules: [
-            { test: /\.js$/ }
+            {
+                test: /\.node$/,
+                use: 'node-loader'
+            }
+        ],
+        loaders: [
         ]
     },
     plugins: [
-        //new webpack.optimize.UglifyJsPlugin(),
+        //new UglifyJSPlugin(),  
         new webpack.DefinePlugin({
-            reqlib: "require('app-root-path').require",
             config: JSON.stringify(prodEnv),
         })
     ],

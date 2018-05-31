@@ -3,7 +3,7 @@ exports.fileUpload = fileUpload;
 
 const AWS = require('aws-sdk');
 const path = require('path');
-const file = reqlib('/base/common/file');
+const file = require('@root/base/common/file');
 const uuidV4 = require('uuid/v4');              //http://hyeonjae.github.io/uuid/2015/03/17/uuid.html
 const fileType = require('file-type');
 const { accessKeyId, secretAccessKey, bucket } = config.setting.upload.s3;

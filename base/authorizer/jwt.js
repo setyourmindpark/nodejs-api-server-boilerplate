@@ -1,9 +1,9 @@
 
 exports.createModule = createModule;
 
-const constant = reqlib('/base/common/constant');
+const constant = require('@root/base/common/constant');
 const jwt = require('jsonwebtoken');
-const formatter = reqlib('/base/common/formatter');
+const formatter = require('@root/base/common/formatter');
 
 // passport를 더이상쓰지않음. api server 로만쓸것이기때문에 session관련사항은 불필요함. 
 // jsonwebtoken 모듈로두 충분히 access token과 refresh token을 구현할수있음. verify 만 하면됨..

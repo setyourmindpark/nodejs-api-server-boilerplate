@@ -28,8 +28,7 @@ coverage
 benchmarks/graphs
 
 #upload
-app/public/upload/**
-!app/public/upload/jaehunpark.jpeg
+public/upload/**
 
 #docker image
 *-*.*

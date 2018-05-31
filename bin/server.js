@@ -1,23 +1,18 @@
-try {
-    if (reqlib) {
-        global.reqlib = reqlib;
-    }
-} catch (err) {
-    global.reqlib = require('app-root-path').require;
-}
+
 try{
-    if(config){        
+    if (config){
         global.config = config;
     }
-}catch(err){
-    global.config = reqlib('/config/env.config.dev');
+}catch(err){    
+    require('module-alias').addAlias('@root', require('path').resolve(__dirname, '../'))
+    global.config = require('@root/config/env.config.dev');
 }
 
 const http = require('http');
 const cluster = require('cluster');
-const loggerHelper = reqlib('/base/logger');
+const loggerHelper = require('@root/base/logger');
 const numCPUs = require('os').cpus().length;
-const app =  reqlib('/app');
+const app = require('@root/app');
 const port = config.base.port;
 const env = config.env;
 const master = cluster.isMaster;   

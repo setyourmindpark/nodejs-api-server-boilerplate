@@ -7,9 +7,9 @@ exports.validateQuery = validateQuery;
 exports.validateBody = validateBody;
 exports.validateMultipart = validateMultipart;
 
-const file = reqlib('/base/common/file');
+const file = require('@root/base/common/file');
 const lowerCase = require('lower-case')
-const constant = reqlib('/base/common/constant');
+const constant = require('@root/base/common/constant');
 const bytes = require('bytes');
 const Busboy = require('busboy');
 

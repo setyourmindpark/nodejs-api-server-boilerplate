@@ -1,5 +1,5 @@
-const { assistant } = reqlib('/app/common/modules');
-const message = reqlib('/app/common/message');
+const { assistant } = require('@root/app/common/modules');
+const message = require('@root/app/common/message');
 const router = require('express').Router();
 const sampleController = require('./controller');
 const regExpEmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;

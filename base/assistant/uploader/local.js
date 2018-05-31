@@ -1,11 +1,12 @@
 exports.fileUpload = fileUpload;
 
 const sharp = require('sharp');
-const file = reqlib('/base/common/file');
+const file = require('@root/base/common/file');
 const path = require('path');
 const rootPath = require('app-root-path');
 const appRootPath = rootPath.path;
-let targetPath = config.setting.upload.local.mainDir;
+const { commonDir, storeDir } = config.setting.upload.local;
+let targetPath = path.join(commonDir, storeDir);
 targetPath = targetPath.charAt(0) === '/' ? targetPath : '/' + targetPath;
 const mainDir = appRootPath + targetPath;
 

@@ -15,8 +15,8 @@ exports.unifyAllProps = unifyAllProps;
  */
 const validator = require('./validator');
 const uploader = require('./uploader');
-const constant = reqlib('/base/common/constant');
-const formatter = reqlib('/base/common/formatter');
+const constant = require('@root/base/common/constant');
+const formatter = require('@root/base/common/formatter');
 
 /**
 * 유효성검사를 수행
