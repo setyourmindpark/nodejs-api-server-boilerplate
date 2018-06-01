@@ -23,7 +23,7 @@ async function getLogger() {
 
     dailyConfig.dirname = path;
     dailyConfig.filename = '%DATE%.' + fileName;
-    dailyConfig.timestamp = () => moment().tz(timestamp).format('YYYY-MM-DD HH:mm');
+    dailyConfig.timestamp = () => moment().tz(timestamp).format('YYYY-MM-DD HH:mm ss.SSS');
 
     const logger = new (winston.Logger)({
         level: level,                       // error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5        
