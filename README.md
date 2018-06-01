@@ -228,6 +228,12 @@ info: created worker [ 35560 ] is listening port : 4000
 
 ---
 
+## build
+``` bash
+$ npm run build:dev
+$ npm run build:prod
+```
+
 
 
 
