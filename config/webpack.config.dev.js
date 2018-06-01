@@ -5,7 +5,10 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     entry: path.resolve(__dirname, '../bin/server.js'),
-    target: "node",    
+    target: "node",
+    stats: {
+        warnings: false
+    },    
     node: {
         console: false,
         global: true,
