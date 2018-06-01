@@ -22,10 +22,7 @@ function createModule({ secret, algorithm, expire, param }) {
                         throw jwtError;
                     }
                     try {
-                        const decoded = jwt.verify(token, secret);
-                        delete decoded.iat;
-                        delete decoded.exp;
-                        req.user = decoded;                        
+                        req.user = jwt.verify(token, secret);                        
                         next();
                     } catch (err) {
                         if (err.name === 'TokenExpiredError') {
@@ -54,10 +51,7 @@ function createModule({ secret, algorithm, expire, param }) {
         },
         decode : (token) => {
             try{
-                const decoded = jwt.decode(token);
-                delete decoded.iat;
-                delete decoded.exp;
-                return decoded;
+                return jwt.decode(token);
             }catch(err){
                 const jwtError = new Error(constant.JWT_INVALID_TOKEN.msg);
                 jwtError.errorCode = constant.JWT_INVALID_TOKEN.code;

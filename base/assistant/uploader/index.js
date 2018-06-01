@@ -46,7 +46,7 @@ async function upload(req, inspectedObj, toValidateFile) {
                         renamedFileNameWithExt: renamedFileNameWithExt,
                         uploadFullPath: uploadFullPath,
                     }
-                    delete resizedBuffer;
+                    
                 }
 
 
@@ -75,13 +75,13 @@ async function upload(req, inspectedObj, toValidateFile) {
                         Key: Key,
                         Bucket: Bucket,
                     }
-                    delete resizedBuffer;
+                    
                 }                
             }
 
 
 
-            delete buffer;
+            
         }
 
         req.fields = {};
@@ -91,7 +91,7 @@ async function upload(req, inspectedObj, toValidateFile) {
         }
 
     } catch (err) {
-        delete inspectedFiles;          // inspected 시 buffer가 저장되어있으므로 error 시 모두 삭제
+        
         throw err;
     }
 }

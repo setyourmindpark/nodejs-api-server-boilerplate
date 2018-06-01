@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const devEnv = require('./env.config.dev');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
-module.exports = {
+module.exports = {    
     entry: path.resolve(__dirname, '../bin/server.js'),
-    target: "node",
+    target: 'node',
     stats: {
         warnings: false
     },    
@@ -22,22 +22,25 @@ module.exports = {
     },
     resolve: {
         alias: { '@root': path.resolve(__dirname, '../') },
+        extensions: ['.js']
     },
-    devtool: 'source-map',
+    // devtool: '',    
+    optimization: {
+        minimizer: [            
+        ],
+    },
     module: {
-        rules: [
+        rules: [                     
             {
                 test: /\.node$/,
                 use: 'node-loader'
             }
-        ],        
-        loaders: [            
-        ]
+        ],                
     },
-    plugins: [        
-        //new UglifyJSPlugin(),  
+    plugins: [          
+        new MinifyPlugin(),
         new webpack.DefinePlugin({
-            config: JSON.stringify(devEnv),
+            config: JSON.stringify(devEnv),            
         })
     ],
 };

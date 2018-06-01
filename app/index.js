@@ -28,12 +28,12 @@ const rootPath = require('app-root-path').path;
 const path = require('path');
 const commonDir = config.setting.upload.local.commonDir;;
 
-async function initialize(){
+async function initialize() {
     await initializeModule();
     return configureProtocol();
 }
 
-async function initializeModule(){
+async function initializeModule() {
     // service module initialize. 
     // initialize module you want to use. 
     // 기본적으로 sequelize를 사용. sequelize에서 언급에따라 퍼포먼스 이슈있을시(?) queryHelper 사용. 아님 sequelize raw query를 사용하든가 ..
@@ -64,11 +64,11 @@ async function initializeModule(){
             jwtRefresh: jwtRefresh
         }
     }
-   
+
     modules.initialize(basePlainModules, baseModules);
 }
 
-function configureProtocol(){
+function configureProtocol() {
     //cross doamin handling
     app.use((req, res, next) => {
         if (req.originalUrl === '/favicon.ico') return;
@@ -100,7 +100,7 @@ function configureProtocol(){
     });
 
     if (commonDir) app.use(express.static(path.join(rootPath, commonDir)));
-    
+
     app.use((req, res, next) => {
         res.status(404).send('404 not found');
     });

@@ -1,11 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const prodEnv = require('./env.config.prod');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     entry: path.resolve(__dirname, '../bin/server.js'),
-    target: "node",
+    target: 'node',
     stats: {
         warnings: false
     },
@@ -22,8 +21,13 @@ module.exports = {
     },
     resolve: {
         alias: { '@root': path.resolve(__dirname, '../') },
+        extensions: ['.js']
     },
-    devtool: 'inline-source-map',
+    // devtool: '',    
+    optimization: {
+        minimizer: [
+        ],
+    },
     module: {
         rules: [
             {
@@ -31,11 +35,8 @@ module.exports = {
                 use: 'node-loader'
             }
         ],
-        loaders: [
-        ]
     },
     plugins: [
-        //new UglifyJSPlugin(),  
         new webpack.DefinePlugin({
             config: JSON.stringify(prodEnv),
         })

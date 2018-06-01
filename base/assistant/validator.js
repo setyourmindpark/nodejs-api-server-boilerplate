@@ -107,7 +107,7 @@ async function validateMultipart(req, toCheckObj) {
         {   //temp block scope
             const { isValidate, code, msg, keys } = validateFile(inspectedFiles, toValidateFiles);
             if (!isValidate) {
-                delete inspectedFiles;
+                
                 return {
                     isValidate: false,
                     code: code,
@@ -120,7 +120,7 @@ async function validateMultipart(req, toCheckObj) {
         {   //temp block scope
             const { isValidate, code, msg, keys } = validateBody(inspectedFields, toValidateFields);
             if (!isValidate) {
-                delete inspectedFiles;
+                
                 return {
                     isValidate: false,
                     code: code,
