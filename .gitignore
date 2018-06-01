@@ -20,6 +20,7 @@ node_modules
 #log
 *.log
 log/*
+logs/*
 
 # Coveralls
 coverage
