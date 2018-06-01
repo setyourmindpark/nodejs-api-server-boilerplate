@@ -4,8 +4,8 @@ const rootPath = require('app-root-path');
 exports.getLogger = getLogger;
 
 async function getLogger() {
-    const { level, filePath, fileName } = config.setting.logger.local;
-    let path = filePath;
+    const { level, dir, fileName } = config.setting.logger.local;
+    let path = dir;
 
     if (!path) path = rootPath.path + '/log';
     if (!file.isExsistDir(path)) file.mkdir(path);

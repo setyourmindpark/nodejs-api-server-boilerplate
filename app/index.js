@@ -99,7 +99,8 @@ function configureProtocol(){
         }
     });
 
-    app.use(express.static(path.join(rootPath, commonDir)));
+    if (commonDir) app.use(express.static(path.join(rootPath, commonDir)));
+    
     app.use((req, res, next) => {
         res.status(404).send('404 not found');
     });

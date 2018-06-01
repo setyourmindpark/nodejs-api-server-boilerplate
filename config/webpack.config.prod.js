@@ -22,7 +22,6 @@ module.exports = {
     },
     resolve: {
         alias: { '@root': path.resolve(__dirname, '../') },
-        extensions: ['.js']
     },
     devtool: 'inline-source-map',
     module: {
