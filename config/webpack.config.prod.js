@@ -1,6 +1,8 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const prodEnv = require('./env.config.prod');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     entry: path.resolve(__dirname, '../bin/server.js'),
@@ -8,6 +10,12 @@ module.exports = {
     stats: {
         warnings: false
     },
+    externals: {
+        'pg-hstore': 'pg-hstore',
+        'tedious': 'tedious',
+        'pg': 'pg',
+        'sqlite3': 'sqlite3'    
+    },   
     node: {
         console: false,
         global: true,
@@ -23,22 +31,29 @@ module.exports = {
         alias: { '@root': path.resolve(__dirname, '../') },
         extensions: ['.js']
     },
-    // devtool: '',    
-    optimization: {
-        minimizer: [
-        ],
-    },
+    // optimization: {
+    //     minimize: true,
+    //     minimizer: [
+    //         new UglifyJsPlugin({        // https://github.com/webpack-contrib/uglifyjs-webpack-plugin
+    //             uglifyOptions: {
+    //                 //.. if you want custom
+    //             }
+    //         })
+    //     ]
+    // },
+    // devtool: '',            
     module: {
-        rules: [
+        rules: [            
             {
                 test: /\.node$/,
                 use: 'node-loader'
-            }
+            },
         ],
+        
     },
-    plugins: [
+    plugins: [                
         new webpack.DefinePlugin({
-            config: JSON.stringify(prodEnv),
+            config: JSON.stringify(prodEnv),            
         })
     ],
 };

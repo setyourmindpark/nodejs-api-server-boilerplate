@@ -8,6 +8,12 @@ module.exports = {
     target: 'node',
     stats: {
         warnings: false
+    },
+    externals: {
+        'pg-hstore': 'pg-hstore',
+        'tedious': 'tedious',
+        'pg': 'pg',
+        'sqlite3': 'sqlite3'
     },    
     node: {
         console: false,
@@ -25,10 +31,10 @@ module.exports = {
         extensions: ['.js']
     },
     // devtool: '',    
-    optimization: {
-        minimizer: [            
-        ],
-    },
+    // optimization: {
+    //     minimizer: [            
+    //     ],
+    // },
     module: {
         rules: [                     
             {
@@ -36,7 +42,7 @@ module.exports = {
                 use: 'node-loader'
             }
         ],                
-    },
+    },    
     plugins: [          
         new MinifyPlugin(),
         new webpack.DefinePlugin({
