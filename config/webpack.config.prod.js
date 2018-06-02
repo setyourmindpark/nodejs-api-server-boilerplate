@@ -14,8 +14,8 @@ module.exports = {
         'pg-hstore': 'pg-hstore',
         'tedious': 'tedious',
         'pg': 'pg',
-        'sqlite3': 'sqlite3'    
-    },   
+        'sqlite3': 'sqlite3'
+    },
     node: {
         console: false,
         global: true,
@@ -43,17 +43,17 @@ module.exports = {
     // },
     // devtool: '',            
     module: {
-        rules: [            
+        rules: [
             {
                 test: /\.node$/,
                 use: 'node-loader'
             },
         ],
-        
+
     },
-    plugins: [                
+    plugins: [
         new webpack.DefinePlugin({
-            config: JSON.stringify(prodEnv),            
+            config: JSON.stringify(prodEnv),
         })
     ],
 };
