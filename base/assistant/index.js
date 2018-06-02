@@ -28,82 +28,79 @@ const formatter = require('@root/base/common/formatter');
 * @public
 */
 function validate({ params: toValidateParam, body: toValidateBody, query: toValidateQuery, multipart: toValidateMultipart }, customHandleFunction) {
-    return (req, res, next) => {
+    return async (req, res, next) => {
+        try {
+            const { params: reqParams, query: reqQuery, body: reqBody } = req;
 
-        (async () => {
-            try {
-                const { params: reqParams, query: reqQuery, body: reqBody } = req;
-
-                if (toValidateParam) {
-                    const { isValidate, code, msg, keys } = validator.validateParams(reqParams, toValidateParam);
-                    if (!isValidate) {
-                        if (customHandleFunction) {
-                            customHandleFunction(
-                                { req, res, next },
-                                { code: code, msg: msg, keys: keys })                            
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
-                        }
-                        return;
-                    }
-                }
-
-                if (toValidateQuery) {
-                    const { isValidate, code, msg, keys } = validator.validateQuery(reqQuery, toValidateQuery);
-                    if (!isValidate) {
-                        if (customHandleFunction) {
-                            customHandleFunction(
-                                { req, res, next },
-                                { code: code, msg: msg, keys: keys })
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
-                        }
-                        return;
-                    }
-                }
-
-                if (toValidateBody) {
-                    const { isValidate, code, msg, keys } = validator.validateBody(reqBody, toValidateBody);
-                    if (!isValidate) {
-                        if (customHandleFunction) {
-                            customHandleFunction(
-                                { req, res, next },
-                                { code: code, msg: msg, keys: keys}) 
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
-                        }
-                        return;
-                    }
-                }
-
-                if (toValidateMultipart) {
-                    const { isValidate, inspectedObj, code, msg, keys } = await validator.validateMultipart(req, toValidateMultipart);
-                    if (!isValidate) {
-                        if (customHandleFunction) {
-                            customHandleFunction(
-                                { req, res, next },
-                                { code: code, msg: msg, keys: keys })
-                        } else {
-                            res.send(formatter.apiResponse({ resultCode: code, msg: msg }));                            
-                        }
-                        return;
+            if (toValidateParam) {
+                const { isValidate, code, msg, keys } = validator.validateParams(reqParams, toValidateParam);
+                if (!isValidate) {
+                    if (customHandleFunction) {
+                        customHandleFunction(
+                            { req, res, next },
+                            { code: code, msg: msg, keys: keys })
                     } else {
-                        const { files: toValidateFile } = toValidateMultipart;
-                        await uploader.upload(req, inspectedObj, toValidateFile);
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
                     }
+                    return;
                 }
-                next();
-            } catch (err) {
-                console.log(err);
-                if (customHandleFunction) {
-                     customHandleFunction(
-                        { req, res, next },
-                        { code: constant.CODE_SYSTEM_PROCESS_ERROR, msg: constant.MSG_SYSTEM_ERROR })                     
-                } else {
-                    res.status(500).send(formatter.apiErrResponse(err));
-                }                
             }
-        })();
+
+            if (toValidateQuery) {
+                const { isValidate, code, msg, keys } = validator.validateQuery(reqQuery, toValidateQuery);
+                if (!isValidate) {
+                    if (customHandleFunction) {
+                        customHandleFunction(
+                            { req, res, next },
+                            { code: code, msg: msg, keys: keys })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                    }
+                    return;
+                }
+            }
+
+            if (toValidateBody) {
+                const { isValidate, code, msg, keys } = validator.validateBody(reqBody, toValidateBody);
+                if (!isValidate) {
+                    if (customHandleFunction) {
+                        customHandleFunction(
+                            { req, res, next },
+                            { code: code, msg: msg, keys: keys })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                    }
+                    return;
+                }
+            }
+
+            if (toValidateMultipart) {
+                const { isValidate, inspectedObj, code, msg, keys } = await validator.validateMultipart(req, toValidateMultipart);
+                if (!isValidate) {
+                    if (customHandleFunction) {
+                        customHandleFunction(
+                            { req, res, next },
+                            { code: code, msg: msg, keys: keys })
+                    } else {
+                        res.send(formatter.apiResponse({ resultCode: code, msg: msg }));
+                    }
+                    return;
+                } else {
+                    const { files: toValidateFile } = toValidateMultipart;
+                    await uploader.upload(req, inspectedObj, toValidateFile);
+                }
+            }
+            next();
+        } catch (err) {
+            console.log(err);
+            if (customHandleFunction) {
+                customHandleFunction(
+                    { req, res, next },
+                    { code: constant.CODE_SYSTEM_PROCESS_ERROR, msg: constant.MSG_SYSTEM_ERROR })
+            } else {
+                res.status(500).send(formatter.apiErrResponse(err));
+            }
+        }
     }
 }
 
