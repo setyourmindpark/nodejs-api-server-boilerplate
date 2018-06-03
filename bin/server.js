@@ -1,6 +1,7 @@
+const buildEnv = process.env.buildEnv;
 
-if (process.env.config){
-    global.config = config;
+if (buildEnv){
+    global.config = buildEnv;
 }else{
     require('module-alias').addAlias('@root', require('path').resolve(__dirname, '../'))
     global.config = require('@root/config/env.config.dev');

@@ -46,7 +46,7 @@ module.exports = {
     plugins: [          
         new MinifyPlugin(),
         new webpack.DefinePlugin({
-            config: JSON.stringify(devEnv),            
+            buildEnv: JSON.stringify(devEnv),            
         })
     ],
 };

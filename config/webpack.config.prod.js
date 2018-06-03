@@ -53,7 +53,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            config: JSON.stringify(prodEnv),
+            buildEnv: JSON.stringify(prodEnv),
         })
     ],
 };
