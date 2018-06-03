@@ -7,7 +7,7 @@
 webpack build시 해당 경로의 환경변수를 읽어온다.  
 ``` javascript
 module.exports = {
-    env: '',
+    mode: '',
     base: {
         port: '',
         logger: '',
@@ -16,9 +16,9 @@ module.exports = {
     },
     setting: {
         upload: {
-            local: {
+            local: {                
                 commonDir: '',
-                storeDir: ''
+                storeDir: '',
             },
             s3: {
                 accessKeyId: '',
@@ -41,7 +41,7 @@ module.exports = {
                     expire: '',
                 }
             },
-            // other auth will be here ..
+
         },
         db: {
             mysql: {
@@ -53,7 +53,7 @@ module.exports = {
                 connectionLimit: '',
                 connectionLeast: '',
             },
-            // other db will be here ..
+
         },
         sender: {
             mail: {
@@ -72,8 +72,9 @@ module.exports = {
         logger: {
             local: {
                 level: '',
+                dir: '',
                 fileName: '',
-                filePath: '',
+                timestamp: '',
             },
             fluentd: {
                 level: '',
@@ -82,10 +83,9 @@ module.exports = {
                 timeout: '',
                 tag: '',
             }
-            // other logger option will be here ..
+
         }
     }
-
 
 }
 ```
