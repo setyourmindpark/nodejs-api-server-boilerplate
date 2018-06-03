@@ -1,9 +1,7 @@
 
-try{
-    if (config){
-        global.config = config;
-    }
-}catch(err){    
+if (process.env.config){
+    global.config = config;
+}else{
     require('module-alias').addAlias('@root', require('path').resolve(__dirname, '../'))
     global.config = require('@root/config/env.config.dev');
 }
