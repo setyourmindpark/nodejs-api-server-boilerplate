@@ -17,8 +17,8 @@ module.exports = {
     setting: {
         upload: {
             local: {                
-                commonDir: '',
-                storeDir: '',
+                assetDir: '',
+                saveDir: '',
             },
             s3: {
                 accessKeyId: '',

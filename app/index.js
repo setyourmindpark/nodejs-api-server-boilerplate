@@ -26,7 +26,7 @@ const modules = require('@root/app/common/modules');
 const toRouteRouters = require('@root/app/api');
 const rootPath = require('app-root-path').path;
 const path = require('path');
-const commonDir = config.setting.upload.local.commonDir;;
+const assetDir = config.setting.upload.local.assetDir;;
 
 async function initialize() {
     await initializeModule();
@@ -99,7 +99,7 @@ function configureProtocol() {
         }
     });
 
-    if (commonDir) app.use(express.static(path.join(rootPath, commonDir)));
+    if (assetDir) app.use(express.static(path.join(rootPath, assetDir)));
 
     app.use((req, res, next) => {
         res.status(404).send('404 not found');

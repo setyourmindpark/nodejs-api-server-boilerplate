@@ -5,8 +5,8 @@ const file = require('@root/base/common/file');
 const path = require('path');
 const rootPath = require('app-root-path');
 const appRootPath = rootPath.path;
-const { commonDir, storeDir } = config.setting.upload.local;
-let targetPath = path.join(commonDir, storeDir);
+const { assetDir, saveDir } = config.setting.upload.local;
+let targetPath = path.join(assetDir, saveDir);
 targetPath = targetPath.charAt(0) === '/' ? targetPath : '/' + targetPath;
 const mainDir = appRootPath + targetPath;
 
