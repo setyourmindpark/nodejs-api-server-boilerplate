@@ -4,7 +4,13 @@ if (buildEnv){
     global.config = buildEnv;
 }else{
     require('module-alias').addAlias('@root', require('app-root-path').path)
-    global.config = require('@root/config/env.config.dev');
+    require('dotenv').config()
+    const mode = process.env.mode;
+    let env = require('@root/config/env.config.dev');
+    if (mode === 'prod'){
+        env = require('@root/config/env.config.prod');
+    }else{}
+    global.config = env;
 }
 
 const http = require('http');

@@ -26,9 +26,98 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 ---
 
 ## 환경변수
-boilerplate는 환경변수기반으로 동작하며  **dev.env**와 **prod.env**로 작성될수있으며 **/env/** 에 위치한다.  
- **/.env**의 설정값에따라 작성된 **dev.env** 또는 **prod.env**로 동작한다.  
+boilerplate는 환경변수기반으로 동작하며  **env.config.dev**와 **env.config.prod**로 작성될수있으며 **/config/** 에 위치한다.  
+ **/.env**의 설정값에따라 작성된 **env.config.dev** 또는 **env.config.prod**로 동작한다.  
+ 설정과 관련된 설명은 아래의 deprecated를 참고한다. 
+``` javascript
+
+module.exports = {
+    env: '',
+    base: {
+        port: '',
+        logger: '',
+        db: '',
+        auth: '',
+    },
+    setting: {
+        upload: {
+            local: {                
+                assetDir: '',
+                saveDir: '',
+            },
+            s3: {
+                accessKeyId: '',
+                secretAccessKey: '',
+                bucket: '',
+            }
+        },
+        auth: {
+            jwt: {
+                access: {
+                    algorithm: '',
+                    param: '',
+                    secret: '',
+                    expire: '',
+                },
+                refresh: {
+                    algorithm: '',
+                    param: '',
+                    secret: '',
+                    expire: '',
+                }
+            },
+
+        },
+        db: {
+            mysql: {
+                host: '',
+                port: '',
+                user: '',
+                database: '',
+                password: '',
+                connectionLimit: '',
+                connectionLeast: '',
+            },
+
+        },
+        sender: {
+            mail: {
+                service: '',
+                user: '',
+                passwd: '',
+                from: '',
+            },
+            android: {
+                serverKey: '',
+            },
+            ios: {
+
+            }
+        },
+        logger: {
+            local: {
+                level: '',
+                dir: '',
+                fileName: '',
+                timestamp: '',
+            },
+            fluentd: {
+                level: '',
+                host: '',
+                port: '',
+                timeout: '',
+                tag: '',
+            }
+
+        }
+    }
+}
+```
+
+### deprecated
 ``` bash
+
+@ deprecated
 BASE_PORT=( base로 사용할 port ex. 4000 ) 
 BASE_LOGGER= ( base로 사용할 autorizer ex. local ) 
 BASE_DB= ( base로 사용할 database type ex. mysql [ 현재는 mysql만 존재.. ] ) 
@@ -78,6 +167,7 @@ LOGGER_FLUENTD_TIMEOUT= ( ex. 3 )
 LOGGER_FLUENTD_TAG= ( ex. app )
 
 ```
+
 
 ---
 
@@ -228,7 +318,7 @@ info: created worker [ 35560 ] is listening port : 4000
 
 ---
 
-## build
+## webpack build
 ``` bash
 $ npm run build:dev
 $ npm run build:prod
