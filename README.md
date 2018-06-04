@@ -252,12 +252,6 @@ router 등록은 다음과같이 설정할수있다.
 commonRoute : '/api',                                   // => default 첫번쨰 endpoint로 시작 /api
     routers : [
         {
-            customRoute: '/swagger',                    // => commonRoute를 사용안함. endpoint는 /swagger
-            folder : '/swagger',
-            router : '/router.js',
-            activate : env === 'dev' ? true : false     // => api 사용여부 ( false는 api 사용 X )
-        },
-        {
             toRoute: '/sample',                         // => endpoint는 /api/sample
             folder: '/sample',
             router: '/router.js',
