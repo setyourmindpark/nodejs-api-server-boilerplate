@@ -24,7 +24,7 @@ module.exports = {
         __dirname: true,
     },
     output: {
-        path: path.resolve(__dirname, '../build'),
+        path: path.resolve(__dirname, '../build/prod'),
         filename: 'prod.bundle.js'
     },
     resolve: {

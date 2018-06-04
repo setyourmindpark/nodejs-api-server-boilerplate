@@ -3,7 +3,7 @@ const buildEnv = process.env.buildEnv;
 if (buildEnv){
     global.config = buildEnv;
 }else{
-    require('module-alias').addAlias('@root', require('path').resolve(__dirname, '../'))
+    require('module-alias').addAlias('@root', require('app-root-path').path)
     global.config = require('@root/config/env.config.dev');
 }
 
