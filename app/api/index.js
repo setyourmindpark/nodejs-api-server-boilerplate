@@ -2,18 +2,12 @@ const env = config.env;
 
 module.exports = {
     commonRoute : '/api',
-    routers : [
-        {
-            customRoute: '/swagger',
-            folder : '/swagger',
-            router : '/router.js',
-            activate : env === 'dev' ? true : false
-        },
+    routers : [        
         {
             toRoute: '/sample',
             folder: '/sample',
             router: '/router.js',
-            activate: env === 'dev' ? true : false
+            activate: true
         },        
         {
             toRoute: '/user',

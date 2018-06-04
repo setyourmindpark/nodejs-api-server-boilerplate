@@ -27,6 +27,7 @@ const toRouteRouters = require('@root/app/api');
 const rootPath = require('app-root-path').path;
 const path = require('path');
 const assetDir = config.setting.upload.local.assetDir;;
+const env = config.env;
 
 async function initialize() {
     await initializeModule();
@@ -90,6 +91,12 @@ function configureProtocol() {
     app.use(compression());
     app.use(helmet());
     app.use(cors());
+
+    if (env === 'dev') {
+        const swaggerUi = require('swagger-ui-express');
+        const swaggerDocument = require('@root/app/api/swagger/document');
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    }
 
     const { routers, commonRoute } = toRouteRouters;
     routers.forEach(({ customRoute, toRoute, folder, router, activate }) => {

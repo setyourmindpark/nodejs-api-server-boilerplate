@@ -15,16 +15,11 @@ module.exports = {
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "1.0.0"
-    },
-    // "host": conf.proxy.host + ':' + conf.proxy.port,
-    // "basePath": "/",
-    // "schemes": [
-    //   conf.proxy.protocol
-    // ],
-    "host": 'localhost:4000',
+    },    
+    // "host": '',
     "basePath": "/",
     "schemes": [
-        'http'
+        'http','https'
     ],
     "consumes": [
         "application/json"
@@ -34,5 +29,5 @@ module.exports = {
     ],
     paths: Object.assign(sample.paths, user.paths),
     parameters: Object.assign(sample.parameters, user.parameters),
-    definitions: Object.assign(sample.definitions, user.definitions)
+    definitions: Object.assign(sample.definitions, user.definitions) // https://github.com/GenFirst/swagger-to-existing-nodejs-project/blob/master/backend/swagger.json
 };

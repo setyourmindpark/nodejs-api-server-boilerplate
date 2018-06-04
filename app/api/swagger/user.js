@@ -2,14 +2,14 @@ const paths = {
     '/api/user/validity/email/{email}': {
         get: {
             tags: ['USER API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '이메일 유효성검사',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/email' }],
             responses: {
                 200: {
                     description: 'validate email',
-                    schema: { "$ref": "#/definitions/definition" }
+                    schema: { "$ref": "#/definitions/User" }
                 }
             }
         }
@@ -18,14 +18,14 @@ const paths = {
     '/api/user/new': {
         post: {
             tags: ['USER API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '유저생성',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/new' }],
             responses: {
                 200: {
                     description: 'new user',
-                    schema: { "$ref": "#/definitions/definition" }
+                    schema: { "$ref": "#/definitions/User" }
                 }
             }
         }
@@ -34,14 +34,14 @@ const paths = {
     '/api/user/token/me': {
         post: {
             tags: ['USER API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '로그인',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/tokenMe' }],
             responses: {
                 200: {
                     description: 'tokenMe',
-                    schema: { "$ref": "#/definitions/definition" }
+                    schema: { "$ref": "#/definitions/User" }
                 }
             }
         }
@@ -50,14 +50,14 @@ const paths = {
     '/api/user/token/new': {
         post: {
             tags: ['USER API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '토큰 재발행',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/refreshtoken' }, { $ref: '#/parameters/tokenNew' }],
             responses: {
                 200: {
                     description: 'tokenMe',
-                    schema: { "$ref": "#/definitions/definition" }
+                    schema: { "$ref": "#/definitions/User" }
                 }
             }
         }
@@ -66,14 +66,14 @@ const paths = {
     '/api/user/me': {
         get: {
             tags: ['USER API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '유저정보',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/accesstoken' }],
             responses: {
                 200: {
                     description: 'get user info',
-                    schema: { "$ref": "#/definitions/definition" }
+                    schema: { "$ref": "#/definitions/User" }
                 }
             }
         }
@@ -144,23 +144,25 @@ const parameters = {
 }
 
 const definitions = {
-    definition: {
-        name: 'definition',
-        in: 'body',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                resultCode: {
-                    default: '0001'
-                },
-                body: {
-                    default: {
-                        code: '001',
-                        msg: 'some message',
-                        data: 'some data'
-                    }
-                }
+    User: {
+        required: [
+            'email',
+            'id'
+        ],
+        properties: {
+            id: {
+                type: 'string',
+                uniqueItems: true
+            },
+            email: {
+                type: 'string',
+                uniqueItems: true
+            },
+            passwd: {
+                type: 'string'
+            },
+            name: {
+                type: 'string'
             }
         }
     },

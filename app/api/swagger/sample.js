@@ -3,7 +3,7 @@ const paths = {
     '/api/sample/path/{param1}': {
         get: {
             tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '샘플',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/param1' }],
@@ -19,7 +19,7 @@ const paths = {
     '/api/sample/query': {
         get: {
             tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '샘플',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [
@@ -39,7 +39,7 @@ const paths = {
     '/api/sample/post': {
         post: {
             tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '샘플',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/post' }],
@@ -56,7 +56,7 @@ const paths = {
     '/api/sample/put/{where}': {
         put: {
             tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '샘플',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/where' }, { $ref: '#/parameters/put' }],
@@ -72,7 +72,7 @@ const paths = {
     '/api/sample/delete/{where}': {
         delete: {
             tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '샘플',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/where' }],
@@ -88,7 +88,7 @@ const paths = {
     '/api/sample/dispatch/mail': {
         post: {
             tags: ['SAMPLE API'],
-            summary: 'RESTFUL FORMAT',
+            summary: '샘플',
             operationId: 'jaehunpark',
             produces: ['application/json'],
             parameters: [{ $ref: '#/parameters/dispatchMail' }],
@@ -189,27 +189,7 @@ const parameters = {
 }
 
 const definitions = {
-    definition: {
-        name: 'definition',
-        in: 'body',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                resultCode: {
-                    default: '0001'
-                },
-                body: {
-                    default: {
-                        code: '001',
-                        msg: 'some message',
-                        data: 'some data'
-                    }
-                }
-            }
-        }
-    },
-
+    // ...
 }
 
 module.exports = {    
