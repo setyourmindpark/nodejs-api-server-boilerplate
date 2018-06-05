@@ -26,7 +26,7 @@ const modules = require('@root/app/common/modules');
 const toRouteRouters = require('@root/app/api');
 const rootPath = require('app-root-path').path;
 const path = require('path');
-const assetDir = config.setting.upload.local.assetDir;;
+const assetDir = config.setting.upload.local.assetDir;
 const env = config.env;
 
 async function initialize() {

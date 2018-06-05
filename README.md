@@ -249,6 +249,7 @@ assistant.validate({
 router 등록은 다음과같이 설정할수있다.  
 /app/api에 폴더별 router를 생성하며 적용은 /app/api/index.js에서 설정한다.  
 ``` javascript
+const env = config.env;
 commonRoute : '/api',                                   // => default 첫번쨰 endpoint로 시작 /api
     routers : [
         {
