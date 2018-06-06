@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/server",
-    "start:watch": "nodemon ./bin/server",    
+    "start:watch": "nodemon ./bin/server",
     "build:dev": "webpack --config ./config/webpack.config.dev.js --progress --mode development",
-    "build:prod": "webpack --config ./config/webpack.config.prod.js --progress --mode production",    
+    "build:prod": "webpack --config ./config/webpack.config.prod.js --progress --mode production",
     "test": "$(npm bin)/mocha app/api/**/*.spec.js",
     "init-ddl": "sudo node ./app/query/sequelize/force.js --dev"
   },
