@@ -29,9 +29,8 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 boilerplate는 환경변수기반으로 동작하며  **env.config.dev**와 **env.config.prod**로 작성될수있으며 **/config/** 에 위치한다.  
  **/.env**의 설정값에따라 작성된 **env.config.dev** 또는 **env.config.prod**로 동작한다.  
 ``` javascript
-
 module.exports = {
-    env: '',
+    mode: '',
     base: {
         port: '',
         logger: '',

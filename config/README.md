@@ -6,12 +6,13 @@
 다음과같이 작성한다.  
 webpack build시 해당 경로의 환경변수를 읽어온다.  
 ``` javascript
+
 module.exports = {
     mode: '',
     base: {
         port: '',
         logger: '',
-        db: '',
+        db: [],
         auth: '',
     },
     setting: {
@@ -86,6 +87,5 @@ module.exports = {
 
         }
     }
-
 }
 ```
