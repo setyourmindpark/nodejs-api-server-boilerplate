@@ -35,7 +35,7 @@ module.exports = {
     base: {
         port: '',
         logger: '',
-        db: '',
+        db: [],
         auth: '',
     },
     setting: {
