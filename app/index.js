@@ -17,10 +17,9 @@ const app = express();
 const baseSenderMail = require('@root/base/sender/mail');
 const baseSenderAndorid = require('@root/base/sender/android');
 const baseAuthorizer = require('@root/base/authorizer');
-// const baseQueryHelper = require('@root/base/queryHelper');
 const baseSequelize = require('@root/base/sequelize');
 const baseAssistant = require('@root/base/assistant')
-const baseMysqlPagenation = require('@root/base/queryHelper/pagenation/mysql')
+const basePagenationMysql = require('@root/base/common/pagenationMysql')
 const sqzSync = require('@root/app/query/sequelize/sync');
 const modules = require('@root/app/common/modules');
 const toRouteRouters = require('@root/app/api');
@@ -47,7 +46,7 @@ async function initializeModule() {
     const basePlainModules = {
         assistant: baseAssistant,
         // formatter: baseFormatter,
-        mysqlPagenation: baseMysqlPagenation,
+        pagenationMysql: basePagenationMysql,
         senderMail: baseSenderMail,
         senderAndorid: baseSenderAndorid
     };

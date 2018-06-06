@@ -1,11 +1,11 @@
 const modules ={};
 
-modules.initialize = ({ assistant, formatter, mysqlPagenation, senderMail, senderAndorid },
+modules.initialize = ({ assistant, formatter, pagenationMysql, senderMail, senderAndorid },
                       { queryHelperModules, sequelizeModules, jwtModules }) => {   
 
     modules.assistant = assistant;
     modules.formatter = formatter;
-    modules.mysqlPagenation = mysqlPagenation;
+    modules.pagenationMysql = pagenationMysql;
     modules.senderMail = senderMail;
     modules.senderAndorid = senderAndorid;
 

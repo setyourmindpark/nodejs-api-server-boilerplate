@@ -21,7 +21,7 @@ NODEJS-API-SERVER-BOILERPLATE를 목표로 개발중이다.
 ### sequelize  
 
 ### queryHelper  
-- queryHelper보다는 sequelize를 사용하는게.. 
+- @deprecated
 
 ---
 
