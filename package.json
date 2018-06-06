@@ -4,8 +4,8 @@
   "description": "nodejs-api-server-boilerplate",
   "main": "index.js",
   "scripts": {
-    "build:dev": "node --max_old_space_size=4096 $(npm bin)/webpack --config ./config/webpack.config.dev.js --progress --mode development",
-    "build:prod": "node --max_old_space_size=4096 $(npm bin)/webpack --config ./config/webpack.config.prod.js --progress --mode production",
+    "build:dev": "webpack --config ./config/webpack.config.dev.js --progress --mode development",
+    "build:prod": "webpack --config ./config/webpack.config.prod.js --progress --mode production",
     "start": "node ./bin/server",
     "test": "$(npm bin)/mocha app/api/**/*.spec.js",
     "init-ddl": "sudo node ./app/query/sequelize/force.js --dev"
