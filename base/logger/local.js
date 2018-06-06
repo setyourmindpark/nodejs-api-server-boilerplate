@@ -1,9 +1,10 @@
+exports.getLogger = getLogger;
+
 const winston = require('winston');
 require('winston-daily-rotate-file');
 const moment = require('moment');
 const path = require('path');
 const file = require('@root/base/common/file');
-exports.getLogger = getLogger;
 
 async function getLogger() {
     const { level, dir, fileName, timestamp } = config.setting.logger.local;

@@ -1,5 +1,6 @@
-const winston = require('winston');
 exports.getLogger = getLogger;
+
+const winston = require('winston');
 
 async function getLogger() {
     const settingConfig = config.setting.logger.fluentd;
