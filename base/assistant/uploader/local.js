@@ -3,12 +3,10 @@ exports.fileUpload = fileUpload;
 const sharp = require('sharp');
 const file = require('@root/base/common/file');
 const path = require('path');
-const rootPath = require('app-root-path');
-const appRootPath = rootPath.path;
 const { assetDir, saveDir } = config.setting.upload.local;
 let targetPath = path.join(assetDir, saveDir);
 targetPath = targetPath.charAt(0) === '/' ? targetPath : '/' + targetPath;
-const mainDir = appRootPath + targetPath;
+const mainDir = rootDir + targetPath;
 
 async function fileUpload(fileName, buffer, subDir = '/'){
     let fullPath = undefined;

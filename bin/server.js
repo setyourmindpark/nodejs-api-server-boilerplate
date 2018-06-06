@@ -1,15 +1,16 @@
+global.rootDir = require('app-root-path').path;
 const buildEnv = process.env.buildEnv;
 
-if (buildEnv){
+if (buildEnv) {
     global.config = buildEnv;
-}else{
-    require('module-alias').addAlias('@root', require('app-root-path').path)
+} else {
+    require('module-alias').addAlias('@root', rootDir)
     require('dotenv').config()
     const mode = process.env.mode;
     let env = require('@root/config/env.config.dev');
-    if (mode === 'prod'){
+    if (mode === 'prod') {
         env = require('@root/config/env.config.prod');
-    }else{}
+    } else { }
     global.config = env;
 }
 
@@ -20,16 +21,16 @@ const numCPUs = require('os').cpus().length;
 const app = require('@root/app');
 const port = config.base.port;
 const env = config.env;
-const master = cluster.isMaster;   
+const master = cluster.isMaster;
 
-(async () => {    
+(async () => {
     try {
         // system module initialize        
         loggerHelper.initialize();
-        global.logger = await loggerHelper.getLogger();        
-                
+        global.logger = await loggerHelper.getLogger();
+
         const protocol = await app.initialize();
-        
+
         if (master) {
             cluster.on('online', (worker) => {
                 //logger.info('생성된 워커의 아이디 : ' + worker.process.pid);

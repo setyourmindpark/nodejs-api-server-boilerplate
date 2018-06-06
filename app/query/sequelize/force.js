@@ -7,7 +7,7 @@ const prompt = require('prompt');
 const Sequelize = require('sequelize');
 const isRoot = require('is-root');
 const sqzSync = require('./sync');
-const rootPath = require('app-root-path');
+const rootPath = require('path').resolve(__dirname, '../../../../');
 const system = require('../../common/constant/system')
 require('dotenv').config({ path: rootPath.path + '/env/dev.env' });
 const config = require('../../../config');

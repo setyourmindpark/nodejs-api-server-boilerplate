@@ -1,59 +1,18 @@
+const baseWebpack = require('./webpack.config.base');
 const path = require('path');
-const fs = require('fs');
 const webpack = require('webpack');
 const prodEnv = require('./env.config.prod');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');      // if you want custom
 
-module.exports = {
-    entry: path.resolve(__dirname, '../bin/server.js'),
-    target: 'node',
-    stats: {
-        warnings: false
-    },
-    externals: {
-        'pg-hstore': 'pg-hstore',
-        'tedious': 'tedious',
-        'pg': 'pg',
-        'sqlite3': 'sqlite3'
-    },
-    node: {
-        console: false,
-        global: true,
-        process: false,
-        __filename: true,
-        __dirname: true,
-    },
-    output: {
-        path: path.resolve(__dirname, '../build/prod'),
-        filename: 'prod.bundle.js'
-    },
-    resolve: {
-        alias: { '@root': path.resolve(__dirname, '../') },
-        extensions: ['.js']
-    },
-    // optimization: {
-    //     minimize: true,
-    //     minimizer: [
-    //         new UglifyJsPlugin({        // https://github.com/webpack-contrib/uglifyjs-webpack-plugin
-    //             uglifyOptions: {
-    //                 //.. if you want custom
-    //             }
-    //         })
-    //     ]
-    // },
-    // devtool: '',            
-    module: {
-        rules: [
-            {
-                test: /\.node$/,
-                use: 'node-loader'
-            },
-        ],
+baseWebpack.output = Object.assign(baseWebpack.output, {
+    path: path.resolve(__dirname, '../build/prod'),
+    filename: 'prod.bundle.js'
+})
 
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            buildEnv: JSON.stringify(prodEnv),
-        })
-    ],
-};
+baseWebpack.plugins = baseWebpack.plugins.concat([
+    new webpack.DefinePlugin({
+        buildEnv: JSON.stringify(prodEnv),
+    })
+])
+
+module.exports = baseWebpack;

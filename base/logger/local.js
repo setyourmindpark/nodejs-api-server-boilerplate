@@ -3,14 +3,13 @@ require('winston-daily-rotate-file');
 const moment = require('moment');
 const path = require('path');
 const file = require('@root/base/common/file');
-const rootPath = require('app-root-path');
 exports.getLogger = getLogger;
 
 async function getLogger() {
     const { level, dir, fileName, timestamp } = config.setting.logger.local;
     let path = dir;
 
-    if (!path) path = rootPath.path + '/log';
+    if (!path) path = rootDir + '/log';
     if (!file.isExsistDir(path)) file.mkdir(path);
 
     const dailyConfig = {        

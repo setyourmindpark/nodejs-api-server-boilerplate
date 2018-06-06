@@ -24,7 +24,6 @@ const baseMysqlPagenation = require('@root/base/queryHelper/pagenation/mysql')
 const sqzSync = require('@root/app/query/sequelize/sync');
 const modules = require('@root/app/common/modules');
 const toRouteRouters = require('@root/app/api');
-const rootPath = require('app-root-path').path;
 const path = require('path');
 const assetDir = config.setting.upload.local.assetDir;
 const env = config.env;
@@ -106,7 +105,7 @@ function configureProtocol() {
         }
     });
 
-    if (assetDir) app.use(express.static(path.join(rootPath, assetDir)));
+    if (assetDir) app.use(express.static(path.join(rootDir, assetDir)));
 
     app.use((req, res, next) => {
         res.status(404).send('404 not found');
