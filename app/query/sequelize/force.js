@@ -10,7 +10,7 @@ const sqzSync = require('./sync');
 const rootPath = require('path').resolve(__dirname, '../../../../');
 const system = require('../../common/constant/system')
 require('dotenv').config({ path: rootPath.path + '/env/dev.env' });
-const config = require('../../../config');
+const config = require('../../../config/env.config.dev');
 const { host, port, user, database, password } = config.setting.db.mysql;
 const dialect = 'mysql';
 
@@ -99,29 +99,33 @@ prompt.get([{
                 }
             })
 
-            // 또는 ( join style ) // sequelize association binding이 되었을경우
-
-            // const someone = await syncdModule.models.User.findOne({
-            //     attributes:{
-            //         //include: [[syncdModule.fn('json_extract', syncdModule.col('provision'),'$.id'),'provisionId']],
-            //         exclude: ['typeCode','deviceCode']
-            //     },
-            //     include: [{ 
-            //         model: syncdModule.models.System,
-            //         as : 'type',
-            //         attributes: [['value1','name']]
-            //     },{ 
-            //         model: syncdModule.models.System,
-            //         as : 'device',
-            //         attributes: [['value1','name']]
-            //     }],
-            //     where: {
-            //         email : 'setyourmindpark@gmail.com',
-            //     }
-            // })
-            // where : syncdModule.where(syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'),'=','123')
             if (someone) {
                 console.log(someone.get({ plain: true }));
+            }
+
+            // 또는 ( join style ) // sequelize association binding이 되었을경우
+
+            const someone2 = await syncdModule.models.User.findOne({
+                attributes:{
+                    //include: [[syncdModule.fn('json_extract', syncdModule.col('provision'),'$.id'),'provisionId']],
+                    exclude: ['typeCode','deviceCode']
+                },
+                include: [{ 
+                    model: syncdModule.models.System,
+                    as : 'type',
+                    attributes: [['value1','name']]
+                },{ 
+                    model: syncdModule.models.System,
+                    as : 'device',
+                    attributes: [['value1','name']]
+                }],
+                where: {
+                    email : 'setyourmindpark@gmail.com',
+                }
+            })
+            where : syncdModule.where(syncdModule.fn('json_extract', syncdModule.col('provision'), '$.id'),'=','123')
+            if (someone2) {
+                console.log(someone2.get({ plain: true }));
             }
 
             process.exit(0)
