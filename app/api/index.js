@@ -7,7 +7,7 @@ module.exports = {
             toRoute: '/sample',
             folder: '/sample',
             router: '/router.js',
-            activate: true
+            activate: mode === 'dev' ? true : false
         },        
         {
             toRoute: '/user',
