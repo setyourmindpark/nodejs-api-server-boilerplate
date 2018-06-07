@@ -20,7 +20,6 @@ const loggerHelper = require('@root/base/logger');
 const numCPUs = require('os').cpus().length;
 const app = require('@root/app');
 const port = config.base.port;
-const env = config.env;
 const master = cluster.isMaster;
 
 (async () => {

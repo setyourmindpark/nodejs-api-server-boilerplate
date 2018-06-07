@@ -1,4 +1,4 @@
-const env = config.env;
+const mode = config.mode;
 
 module.exports = {
     commonRoute : '/api',

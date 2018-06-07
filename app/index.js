@@ -25,7 +25,7 @@ const modules = require('@root/app/common/modules');
 const toRouteRouters = require('@root/app/api');
 const path = require('path');
 const assetDir = config.setting.upload.local.assetDir;
-const env = config.env;
+const mode = config.mode;
 
 async function initialize() {
     await initializeModule();
@@ -90,7 +90,7 @@ function configureProtocol() {
     app.use(helmet());
     app.use(cors());
 
-    if (env === 'dev') {
+    if (mode === 'dev') {
         const swaggerUi = require('swagger-ui-express');
         const swaggerDocument = require('@root/app/api/swagger/document');
         app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
