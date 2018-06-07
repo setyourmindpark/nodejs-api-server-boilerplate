@@ -1,5 +1,3 @@
-const mode = config.mode;
-
 module.exports = {
     commonRoute : '/api',
     routers : [        
@@ -7,7 +5,7 @@ module.exports = {
             toRoute: '/sample',
             folder: '/sample',
             router: '/router.js',
-            activate: mode === 'dev' ? true : false
+            activate: true
         },        
         {
             toRoute: '/user',
