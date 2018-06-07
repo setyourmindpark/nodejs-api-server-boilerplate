@@ -1,4 +1,4 @@
-const { queryHelper, senderMail } = require('@root/app/common/modules');
+const { senderMail } = require('@root/app/common/modules');
 const response = require('@root/app/common/constant/response');
 const formatter = require('@root/app/common/formatter');
 const Promise = require('bluebird');

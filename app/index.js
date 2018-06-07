@@ -34,14 +34,11 @@ async function initialize() {
 
 async function initializeModule() {
     // service module initialize. 
-    // initialize module you want to use. 
-    // 기본적으로 sequelize를 사용. sequelize에서 언급에따라 퍼포먼스 이슈있을시(?) queryHelper 사용. 아님 sequelize raw query를 사용하든가 ..
-    // 2개의 모듈 모두 load. 경우에따라 사용하는 모듈이 달라질수있음.
-    // 현재 db1개로만 서비스로직구성시에대한 모듈생성함. 추가 db를 연결하려면 sequelize경우 이곳에서 모듈을 생성하여 models을 바인딩후 modules에 bind할것.    
-    // const { queryHelper1 } = await baseQueryHelper.createModules();
+    // initialize module you want to use.     
+    // sequelize mysql은 현재 db1개로만 서비스로직구성시에대한 모듈생성함. 추가 db를 연결하려면 sequelize경우 이곳에서 모듈을 생성하여 models을 바인딩후 modules에 bind할것.        
     const { sequelize1 } = await baseSequelize.createModules();
     const { jwtAccess, jwtRefresh } = baseAuthorizer.createModules();
-    const syncdSequelize1 = await sqzSync.sync(sequelize1);       // sequelize.models 에 entity binded
+    const syncdSequelize1 = await sqzSync.sync(sequelize1);         // sequelize.models 에 entity binded
 
     const basePlainModules = {
         assistant: baseAssistant,
@@ -51,10 +48,7 @@ async function initializeModule() {
         senderAndorid: baseSenderAndorid
     };
 
-    const baseModules = {
-        // queryHelperModules: {
-        //     queryHelper1: queryHelper1
-        // },
+    const baseModules = {        
         sequelizeModules: {
             syncdSequelize1: syncdSequelize1
         },

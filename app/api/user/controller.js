@@ -1,4 +1,4 @@
-const { queryHelper, sequelize, jwtAccess, jwtRefresh } = require('@root/app/common/modules');
+const { sequelize, jwtAccess, jwtRefresh } = require('@root/app/common/modules');
 const { User, System } = sequelize.models;
 const formatter = require('@root/app/common/formatter');
 const response = require('@root/app/common/constant/response');
