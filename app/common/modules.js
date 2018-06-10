@@ -1,7 +1,7 @@
 const modules ={};
 
 modules.initialize = ({ assistant, formatter, pagenationMysql, senderMail, senderAndorid },
-                      { sequelizeModules, jwtModules }) => {   
+                      { mongooseModules, sequelizeModules, jwtModules }) => {   
 
     modules.assistant = assistant;
     modules.formatter = formatter;
@@ -9,6 +9,7 @@ modules.initialize = ({ assistant, formatter, pagenationMysql, senderMail, sende
     modules.senderMail = senderMail;
     modules.senderAndorid = senderAndorid;
 
+    modules.mongoose = mongooseModules.mongoose1
     modules.sequelize = sequelizeModules.syncdSequelize1;
     modules.jwtAccess = jwtModules.jwtAccess;
     modules.jwtRefresh = jwtModules.jwtRefresh;

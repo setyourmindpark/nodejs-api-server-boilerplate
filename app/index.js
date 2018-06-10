@@ -17,6 +17,7 @@ const app = express();
 const baseSenderMail = require('@root/base/sender/mail');
 const baseSenderAndorid = require('@root/base/sender/android');
 const baseAuthorizer = require('@root/base/authorizer');
+const baseMongoose = require('@root/base/mongoose');
 const baseSequelize = require('@root/base/sequelize');
 const baseAssistant = require('@root/base/assistant')
 const basePagenationMysql = require('@root/base/common/pagenationMysql')
@@ -36,6 +37,7 @@ async function initializeModule() {
     // service module initialize. 
     // initialize module you want to use.     
     // sequelize mysql은 현재 db1개로만 서비스로직구성시에대한 모듈생성함. 추가 db를 연결하려면 sequelize경우 이곳에서 모듈을 생성하여 models을 바인딩후 modules에 bind할것.        
+    const { mongoose1 } = await baseMongoose.createModules();
     const { sequelize1 } = await baseSequelize.createModules();
     const { jwtAccess, jwtRefresh } = baseAuthorizer.createModules();
     const syncdSequelize1 = await sqzSync.sync(sequelize1);         // sequelize.models 에 entity binded
@@ -48,7 +50,10 @@ async function initializeModule() {
         senderAndorid: baseSenderAndorid
     };
 
-    const baseModules = {        
+    const baseModules = {  
+        mongooseModules : {
+            mongoose1: mongoose1
+        },   
         sequelizeModules: {
             syncdSequelize1: syncdSequelize1
         },
